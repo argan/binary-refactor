@@ -30,7 +30,7 @@ public class Renamer {
             ClassMap classMap = buildClassMap(jar);
             // Log.debug("Parsed %s", classMap);
             // Log.debug("Parsed config:\n%s", config.getConfig());
-            classMap.rebuildConfig(config, "com/zeroturnaround/javarebel/");
+            classMap.rebuildConfig(config, null);
             // Log.debug("Rebuild config:\n%s", config.getConfig());
             remapper = new Remapper(config);
 
