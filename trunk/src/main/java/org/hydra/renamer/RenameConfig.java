@@ -48,9 +48,6 @@ public class RenameConfig {
     private String getNewName(String clazzName, String name, String desc, boolean isMethod) {
         if (this.hasClass(clazzName)) {
             ClassRenameInfo classRenameInfo = this.config.get(clazzName);
-            if (isMethod && "d".equals(name) && clazzName.equals("com/zeroturnaround/javarebel/hO")) {
-                Log.debug("hello");
-            }
             String newName;
             // 检查自己
             if (isMethod) {
