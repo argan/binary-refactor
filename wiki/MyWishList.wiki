@@ -1,8 +1,8 @@
 #summary One-sentence summary of this page.
 #labels Phase-Requirements
 
-* 如果能搞一个GUI
-* 如果再集成一个decompiler，期望是jd-gui
-* 如果再能集成一个依赖分析工具，例如 [http://www.dependency-analyzer.org/ CDA]
+  * 如果能搞一个GUI
+  * 如果再集成一个decompiler，期望是jd-gui
+  * 如果再能集成一个依赖分析工具，例如 [http://www.dependency-analyzer.org/ CDA]
 
 那就差不多了
