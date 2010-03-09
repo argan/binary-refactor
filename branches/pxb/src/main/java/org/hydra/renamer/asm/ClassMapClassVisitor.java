@@ -62,9 +62,11 @@ public class ClassMapClassVisitor extends EmptyVisitor {
 	@Override
 	public FieldVisitor visitField(int access, String name, String desc, String signature, Object value) {
 		FieldInfo field = new FieldInfo();
+		clazz.fields.put("field:" + name + desc, field);
 		field.name = name;
-		field.owner = clazz;
-		field.type = map.get(getTypeName(Type.getType(desc)));
+		field.desc = desc;
+		// field.owner = clazz;
+		// field.type = map.get(getTypeName(Type.getType(desc)));
 		return null;
 	}
 
@@ -81,15 +83,17 @@ public class ClassMapClassVisitor extends EmptyVisitor {
 	@Override
 	public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
 		MethodInfo method = new MethodInfo();
+		clazz.methods.put("method:" + name + desc, method);
 		method.name = name;
-		method.owner = clazz;
-		method.ret = map.get(getTypeName(Type.getReturnType(desc)));
-		Type[] argTypes = Type.getArgumentTypes(desc);
-		if (argTypes != null) {
-			for (Type type : argTypes) {
-				method.args.add(map.get(getTypeName(type)));
-			}
-		}
+		method.desc = desc;
+		// method.owner = clazz;
+		// method.ret = map.get(getTypeName(Type.getReturnType(desc)));
+		// Type[] argTypes = Type.getArgumentTypes(desc);
+		// if (argTypes != null) {
+		// for (Type type : argTypes) {
+		// method.args.add(map.get(getTypeName(type)));
+		// }
+		// }
 		return null;
 	}
 
