@@ -1,0 +1,14 @@
+<configuration>
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<layout class="ch.qos.logback.classic.PatternLayout">
+			<!-- %d{HH:mm:ss.SSS} %-5level %logger{30} - %msg%n -->
+			<Pattern>
+			<![CDATA[%d{HH:mm:ss.SSS} %-5level %logger{30} - %msg%n]]>
+			</Pattern>
+		</layout>
+	</appender>
+	<logger name="org.hydra.renamer" level="DEBUG" />
+	<root level="INFO">
+		<appender-ref ref="STDOUT" />
+	</root>
+</configuration>
