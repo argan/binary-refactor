@@ -8,23 +8,45 @@ import org.hydra.renamer.item.FieldInfo;
 import org.hydra.renamer.item.MethodInfo;
 import org.objectweb.asm.FieldVisitor;
 import org.objectweb.asm.MethodVisitor;
-import org.objectweb.asm.Type;
+import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.commons.EmptyVisitor;
 
-/**
- * 
- * @author Panxiaobo [pxb1988@126.com]
- * 
- */
-@SuppressWarnings("serial")
-public class ClassMapClassVisitor extends EmptyVisitor {
-
-	public ClassMapClassVisitor(Map<String, ClassInfo> lib) {
-		super();
-		this.lib = lib;
+public class ScanLibVisitor extends EmptyVisitor {
+	private static void link(ClassInfo parent, ClassInfo child) {
+		if (parent.name == null)
+			return;
+		parent.children.add(child);
+		child.parent.add(parent);
 	}
 
-	Map<String, ClassInfo> lib;
+	@Override
+	public void visit(int version, int access, String name, String signature, String superName, String[] interfaces) {
+		clazz = map.get(name);
+		ClassInfo s = map.get(superName);
+		if (s != null)
+			link(s, clazz);
+
+		if (interfaces != null) {
+			for (String i : interfaces) {
+				s = map.get(i);
+				if (s != null)
+					link(s, clazz);
+			}
+		}
+	}
+
+	ClassInfo clazz;
+
+	@Override
+	public void visitEnd() {
+
+	}
+
+	@Override
+	public FieldVisitor visitField(int access, String name, String desc, String signature, Object value) {
+		return null;
+	}
+
 	Map<String, ClassInfo> map = new HashMap<String, ClassInfo>() {
 
 		@Override
@@ -33,78 +55,32 @@ public class ClassMapClassVisitor extends EmptyVisitor {
 			if (info == null) {
 				info = new ClassInfo();
 				info.name = (String) key;
+				info.newName = info.name;
+				info.renamable = false;
 				this.put((String) key, info);
 			}
 			return info;
 		}
 
 	};
-	ClassInfo clazz;
-
-	private static void link(ClassInfo parent, ClassInfo child) {
-		parent.children.add(child);
-		child.parent.add(parent);
-	}
-
-	@Override
-	public void visit(int version, int access, String name, String signature, String superName, String[] interfaces) {
-
-		clazz = map.get(name);
-		clazz.renamable = true;
-		ClassInfo s = lib.get(superName);
-		if (s == null)
-			s = map.get(superName);
-		link(s, clazz);
-
-		if (interfaces != null) {
-			for (String i : interfaces) {
-				s = lib.get(i);
-				if (s == null)
-					s = map.get(i);
-				link(s, clazz);
-			}
-		}
-	}
-
-	@Override
-	public void visitEnd() {
-		clazz = null;
-	}
-
-	@Override
-	public FieldVisitor visitField(int access, String name, String desc, String signature, Object value) {
-		FieldInfo field = new FieldInfo();
-		clazz.fields.put("field:" + name + desc, field);
-		field.name = name;
-		field.desc = desc;
-		field.value = value;
-		field.access = access;
-		field.renamable = true;
-		// field.owner = clazz;
-		// field.type = map.get(getTypeName(Type.getType(desc)));
-		return null;
-	}
 
 	public Map<String, ClassInfo> getClassMap() {
 		return new HashMap<String, ClassInfo>(this.map);
 	}
 
-	String getTypeName(Type type) {
-		if (Type.VOID_TYPE.equals(type))
-			return "java/lang/void";
-		return type.getInternalName();
-	}
-
 	@Override
 	public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
-		if ("<init>".equals(name) || "<clinit>".equals(name))
+		if ((access & Opcodes.ACC_PRIVATE) != 0 || (access & Opcodes.ACC_FINAL) != 0 || (access & Opcodes.ACC_STATIC) != 0)
+			return null;
+		if ("<init>".equals(name) || "<cinit>".equals(name))
 			return null;
 		MethodInfo method = new MethodInfo();
 		clazz.methods.put("method:" + name + desc, method);
 		method.name = name;
+		method.newName=name;
 		method.desc = desc;
 		method.access = access;
-		method.renamable = true;
+		method.renamable = false;
 		// method.owner = clazz;
 		// method.ret = map.get(getTypeName(Type.getReturnType(desc)));
 		// Type[] argTypes = Type.getArgumentTypes(desc);
@@ -114,6 +90,7 @@ public class ClassMapClassVisitor extends EmptyVisitor {
 		// }
 		// }
 		return null;
+
 	}
 
 }

@@ -1,10 +1,13 @@
 package org.hydra.renamer;
 
 import java.io.BufferedOutputStream;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -14,6 +17,7 @@ import org.hydra.renamer.asm.ClassForNameFixVisitor;
 import org.hydra.renamer.asm.ClassMapClassVisitor;
 import org.hydra.renamer.asm.ClassNameVisitor;
 import org.hydra.renamer.asm.Remapper;
+import org.hydra.renamer.asm.ScanLibVisitor;
 import org.hydra.renamer.impl.DefaultTransformer;
 import org.hydra.renamer.item.ClassInfo;
 import org.objectweb.asm.ClassReader;
@@ -26,17 +30,46 @@ public class Renamer {
 	/**
 	 * 收集信息
 	 * 
+	 * @param 外部包
 	 * @param files
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public Map<String, ClassInfo> collect(String... files) throws Exception {
+	public Map<String, ClassInfo> collect(String[] exlibs, String[] files) throws Exception {
+
 		if (files == null)
 			return Collections.EMPTY_MAP;
-		ClassMapClassVisitor visitor = new ClassMapClassVisitor();
-		for (String file : files) {
+		System.out.println("collecting start");
+
+		ScanLibVisitor scanLibVisitor = new ScanLibVisitor();
+
+		// 自动添加JRE目录下的rt.jar文件
+		String javahome = System.getProperty("java.home");
+		String rt = new File(javahome, "lib/rt.jar").getCanonicalPath();
+
+		List<String> libs = new ArrayList();
+		libs.add(rt);
+
+		if (exlibs != null) {
+			Collections.addAll(libs, exlibs);
+		}
+
+		for (String file : libs) {
+			System.out.println("loading lib: " + file);
 			ZipFile zip = new ZipFile(file);
 
+			for (Enumeration<? extends ZipEntry> entries = zip.entries(); entries.hasMoreElements();) {
+				ZipEntry entry = entries.nextElement();
+				if (entry.getName().endsWith(".class")) {
+					new ClassReader(zip.getInputStream(entry)).accept(scanLibVisitor, ClassReader.SKIP_CODE | ClassReader.SKIP_DEBUG | ClassReader.SKIP_FRAMES);
+				}
+			}
+		}
+
+		ClassMapClassVisitor visitor = new ClassMapClassVisitor(scanLibVisitor.getClassMap());
+		for (String file : files) {
+			System.out.println("loading classmap: " + file);
+			ZipFile zip = new ZipFile(file);
 			for (Enumeration<? extends ZipEntry> entries = zip.entries(); entries.hasMoreElements();) {
 				ZipEntry entry = entries.nextElement();
 				if (entry.getName().endsWith(".class")) {
@@ -44,6 +77,7 @@ public class Renamer {
 				}
 			}
 		}
+		System.out.println("collecting end");
 		return visitor.getClassMap();
 	}
 
@@ -63,7 +97,6 @@ public class Renamer {
 			ZipFile zip = new ZipFile(file);
 			ZipOutputStream zos = new ZipOutputStream(new BufferedOutputStream(new FileOutputStream(newFile)));
 
-			
 			for (Enumeration<? extends ZipEntry> entries = zip.entries(); entries.hasMoreElements();) {
 				ZipEntry entry = entries.nextElement();
 				if (entry.isDirectory()) {
@@ -92,7 +125,6 @@ public class Renamer {
 					zos.closeEntry();
 				}
 			}
-
 			zos.close();
 		}
 	}
@@ -104,8 +136,9 @@ public class Renamer {
 	public static void main(String... args) throws Exception {
 		Renamer renamer = new Renamer();
 		Transformer transformer = new DefaultTransformer();
-		Map<String, ClassInfo> map = renamer.collect(args);
+		Map<String, ClassInfo> map = renamer.collect(null, args);
 		map = transformer.transform(map);
 		renamer.action(map, args);
+		System.out.println("done.");
 	}
 }

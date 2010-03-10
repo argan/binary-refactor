@@ -5,5 +5,6 @@ public abstract class MemberInfo {
 	public String newName;
 	public String desc;
 	public int access;
+	public boolean renamable;
 	// public ClassInfo owner;
 }
