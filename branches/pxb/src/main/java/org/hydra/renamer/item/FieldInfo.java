@@ -1,9 +1,7 @@
 package org.hydra.renamer.item;
 
-public class FieldInfo {
-	public String name;
-	public String newName;
-	public String desc;
-//	public ClassInfo owner;
-//	public ClassInfo type;
+public class FieldInfo extends MemberInfo {
+
+	public Object value;
+	// public ClassInfo type;
 }

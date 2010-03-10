@@ -17,4 +17,15 @@ public class ClassInfo {
 	public Map<String, MethodInfo> methods = new HashMap<String, MethodInfo>();
 	public Map<String, FieldInfo> fields = new HashMap<String, FieldInfo>();
 
+	public String toString() {
+		return name;
+	}
+
+	public boolean equals(Object o){
+		return name.equals(((ClassInfo)o).name);
+	}
+	
+	public int hashCode() {
+		return name.hashCode();
+	}
 }

@@ -14,6 +14,7 @@ import org.hydra.renamer.asm.ClassForNameFixVisitor;
 import org.hydra.renamer.asm.ClassMapClassVisitor;
 import org.hydra.renamer.asm.ClassNameVisitor;
 import org.hydra.renamer.asm.Remapper;
+import org.hydra.renamer.impl.DefaultTransformer;
 import org.hydra.renamer.item.ClassInfo;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassVisitor;
@@ -47,16 +48,6 @@ public class Renamer {
 	}
 
 	/**
-	 * 转换信息
-	 * 
-	 * @param map
-	 * @return
-	 */
-	public Map<String, ClassInfo> transform(Map<String, ClassInfo> map) {
-		return map;
-	}
-
-	/**
 	 * 执行修改
 	 * 
 	 * @param map
@@ -72,10 +63,7 @@ public class Renamer {
 			ZipFile zip = new ZipFile(file);
 			ZipOutputStream zos = new ZipOutputStream(new BufferedOutputStream(new FileOutputStream(newFile)));
 
-			ClassWriter writer = new ClassWriter(0);
-			ClassNameVisitor classNameVisitor = new ClassNameVisitor(writer);
-			ClassVisitor visitor = new ClassForNameFixVisitor(new RemappingClassAdapter(classNameVisitor, remapper), remapper);
-
+			
 			for (Enumeration<? extends ZipEntry> entries = zip.entries(); entries.hasMoreElements();) {
 				ZipEntry entry = entries.nextElement();
 				if (entry.isDirectory()) {
@@ -83,6 +71,9 @@ public class Renamer {
 					zos.putNextEntry(new ZipEntry(entry.getName()));
 					zos.closeEntry();
 				} else if (entry.getName().endsWith(".class")) {
+					ClassWriter writer = new ClassWriter(0);
+					ClassNameVisitor classNameVisitor = new ClassNameVisitor(writer);
+					ClassVisitor visitor = new ClassForNameFixVisitor(new RemappingClassAdapter(classNameVisitor, remapper), remapper);
 					new ClassReader(zip.getInputStream(entry)).accept(visitor, 0);
 					String className = classNameVisitor.getName();
 					ZipEntry newEntry = new ZipEntry(className + ".class");
@@ -112,8 +103,9 @@ public class Renamer {
 	 */
 	public static void main(String... args) throws Exception {
 		Renamer renamer = new Renamer();
+		Transformer transformer = new DefaultTransformer();
 		Map<String, ClassInfo> map = renamer.collect(args);
-		map = renamer.transform(map);
+		map = transformer.transform(map);
 		renamer.action(map, args);
 	}
 }

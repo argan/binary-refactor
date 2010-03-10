@@ -65,6 +65,8 @@ public class ClassMapClassVisitor extends EmptyVisitor {
 		clazz.fields.put("field:" + name + desc, field);
 		field.name = name;
 		field.desc = desc;
+		field.value = value;
+		field.access = access;
 		// field.owner = clazz;
 		// field.type = map.get(getTypeName(Type.getType(desc)));
 		return null;
@@ -86,6 +88,7 @@ public class ClassMapClassVisitor extends EmptyVisitor {
 		clazz.methods.put("method:" + name + desc, method);
 		method.name = name;
 		method.desc = desc;
+		method.access = access;
 		// method.owner = clazz;
 		// method.ret = map.get(getTypeName(Type.getReturnType(desc)));
 		// Type[] argTypes = Type.getArgumentTypes(desc);
