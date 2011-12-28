@@ -1,0 +1,4 @@
+#mvn clean install
+asm_jar=$HOME/.m2/repository/asm/asm-all/3.1/asm-all-3.1.jar
+java -cp $asm_jar:../target/classes org.hydra.renamer.Renamer a.props test.jar 
+java -cp $asm_jar:new_test.jar org.hydra.Mainx
