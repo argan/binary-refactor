@@ -1,155 +1,127 @@
 package org.hydra.renamer;
 
-import java.io.BufferedOutputStream;
-import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Enumeration;
-import java.util.List;
-import java.util.Map;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
-import java.util.zip.ZipOutputStream;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
+import java.util.jar.JarOutputStream;
 
 import org.hydra.renamer.asm.ClassForNameFixVisitor;
-import org.hydra.renamer.asm.ClassMapClassVisitor;
-import org.hydra.renamer.asm.ClassNameVisitor;
+import org.hydra.renamer.asm.CollectClassInfoVisitor;
 import org.hydra.renamer.asm.Remapper;
-import org.hydra.renamer.asm.ScanLibVisitor;
-import org.hydra.renamer.impl.DefaultTransformer;
-import org.hydra.renamer.item.ClassInfo;
 import org.objectweb.asm.ClassReader;
-import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.commons.RemappingClassAdapter;
 
 public class Renamer {
 
-	/**
-	 * 收集信息
-	 * 
-	 * @param 外部包
-	 * @param files
-	 * @return
-	 */
-	@SuppressWarnings("unchecked")
-	public Map<String, ClassInfo> collect(String[] exlibs, String[] files) throws Exception {
+    private static Remapper remapper;
 
-		if (files == null)
-			return Collections.EMPTY_MAP;
-		System.out.println("collecting start");
+    /**
+     * @param args
+     */
+    public static void main(String[] args) {
+        String jarFile = args[1];
+        RenameConfig config = new RenameConfig(args[0]);
 
-		ScanLibVisitor scanLibVisitor = new ScanLibVisitor();
+        try {
+            JarFile jar = new JarFile(jarFile);
+            // 解析整个jar文件，得到ClassMap
+            ClassMap classMap = buildClassMap(jar);
+            // Log.debug("Parsed %s", classMap);
+            // Log.debug("Parsed config:\n%s", config.getConfig());
+            classMap.rebuildConfig(config, null);
+            // Log.debug("Rebuild config:\n%s", config.getConfig());
+            remapper = new Remapper(config);
 
-		// 自动添加JRE目录下的rt.jar文件
-		String rt = findSystemLib();
+            Enumeration<JarEntry> entries = jar.entries();
 
-		List<String> libs = new ArrayList<String>();
-		libs.add(rt);
+            JarOutputStream zos = new JarOutputStream(new FileOutputStream("new_" + jarFile));
+            while (entries.hasMoreElements()) {
+                JarEntry entry = entries.nextElement();
+                // System.out.println("deal with " + entry.getName());
+                if (entry.isDirectory()) {
+                    // 目录就直接写入
+                    zos.putNextEntry(entry);
+                    zos.closeEntry();
+                } else {
+                    String name = entry.getName();
+                    InputStream inputStream = jar.getInputStream(jar.getEntry(name));
+                    if (name.endsWith(".class")) {
+                        // .class 文件就检查并改写
+                        byte[] bytes = renameClazz(inputStream);
+                        int idex = name.lastIndexOf('.');
 
-		if (exlibs != null) {
-			Collections.addAll(libs, exlibs);
-		}
-
-		for (String file : libs) {
-			System.out.println("loading lib: " + file);
-			ZipFile zip = new ZipFile(file);
-
-			for (Enumeration<? extends ZipEntry> entries = zip.entries(); entries.hasMoreElements();) {
-				ZipEntry entry = entries.nextElement();
-				if (entry.getName().endsWith(".class")) {
-					new ClassReader(zip.getInputStream(entry)).accept(scanLibVisitor, ClassReader.SKIP_CODE | ClassReader.SKIP_DEBUG | ClassReader.SKIP_FRAMES);
-				}
-			}
-		}
-
-		ClassMapClassVisitor visitor = new ClassMapClassVisitor(scanLibVisitor.getClassMap());
-		for (String file : files) {
-			System.out.println("loading classmap: " + file);
-			ZipFile zip = new ZipFile(file);
-			for (Enumeration<? extends ZipEntry> entries = zip.entries(); entries.hasMoreElements();) {
-				ZipEntry entry = entries.nextElement();
-				if (entry.getName().endsWith(".class")) {
-					new ClassReader(zip.getInputStream(entry)).accept(visitor, ClassReader.SKIP_CODE | ClassReader.SKIP_DEBUG | ClassReader.SKIP_FRAMES);
-				}
-			}
-		}
-		System.out.println("collecting end");
-		return visitor.getClassMap();
-	}
-
-	private String findSystemLib() throws IOException {
-	    String javahome = System.getProperty("java.home");
-		File rtfile = new File(javahome, "lib/rt.jar");
-		if (!rtfile.exists()) {
-			// maybe on mac
-			rtfile = new File(javahome,"../Classes/classes.jar");
-		}
-		
-	    return rtfile.getCanonicalPath();
+                        JarEntry en = new JarEntry(remapper.map(name.substring(0, idex)) + ".class");
+                        zos.putNextEntry(en);
+                        zos.write(bytes);
+                        zos.closeEntry();
+                    } else {
+                        // 其他资源直接写入
+                        zos.putNextEntry(entry);
+                        byte[] buff = new byte[10240];
+                        int cnt = 0;
+                        while ((cnt = inputStream.read(buff)) > 0) {
+                            zos.write(buff, 0, cnt);
+                        }
+                        zos.closeEntry();
+                    }
+                    inputStream.close();
+                }
+            }
+            zos.close();
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
     }
 
-	/**
-	 * 执行修改
-	 * 
-	 * @param map
-	 * @param files
-	 * @throws Exception
-	 */
-	public void action(Map<String, ClassInfo> map, String... files) throws Exception {
+    private static ClassMap buildClassMap(JarFile jar) {
+        ClassMap map = new ClassMap();
+        Enumeration<JarEntry> entries = jar.entries();
+        while (entries.hasMoreElements()) {
+            JarEntry entry = entries.nextElement();
+            String name = entry.getName();
+            if (name.endsWith(".class")) {
+                InputStream inputStream;
+                try {
+                    inputStream = jar.getInputStream(jar.getEntry(name));
+                    // .class 文件就检查并改写
+                    parseClass(inputStream, map);
+                    inputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return map;
+    }
 
-		Remapper remapper = new Remapper(map);
+    private static void parseClass(InputStream inputStream, ClassMap map) {
+        CollectClassInfoVisitor cv = new CollectClassInfoVisitor(map);
+        ClassReader reader;
+        try {
+            reader = new ClassReader(inputStream);
+            reader.accept(cv, 8);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
-		for (String file : files) {
-			String newFile = file + ".br.jar";// .br for binary-refactor
-			ZipFile zip = new ZipFile(file);
-			ZipOutputStream zos = new ZipOutputStream(new BufferedOutputStream(new FileOutputStream(newFile)));
+    private static byte[] renameClazz(InputStream clazz) {
+        try {
+            ClassWriter writer = new ClassWriter(1);
+            ClassReader reader = new ClassReader(clazz);
+            reader.accept(new ClassForNameFixVisitor(new RemappingClassAdapter(writer, remapper), remapper), 8);
+            return writer.toByteArray();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
-			for (Enumeration<? extends ZipEntry> entries = zip.entries(); entries.hasMoreElements();) {
-				ZipEntry entry = entries.nextElement();
-				if (entry.isDirectory()) {
-					// 目录就直接写入
-					zos.putNextEntry(new ZipEntry(entry.getName()));
-					zos.closeEntry();
-				} else if (entry.getName().endsWith(".class")) {
-					ClassWriter writer = new ClassWriter(0);
-					ClassNameVisitor classNameVisitor = new ClassNameVisitor(writer);
-					ClassVisitor visitor = new ClassForNameFixVisitor(new RemappingClassAdapter(classNameVisitor, remapper), remapper);
-					new ClassReader(zip.getInputStream(entry)).accept(visitor, 0);
-					String className = classNameVisitor.getName();
-					ZipEntry newEntry = new ZipEntry(className + ".class");
-					zos.putNextEntry(newEntry);
-					zos.write(writer.toByteArray());
-					zos.closeEntry();
-				} else {
-					// 其他资源直接写入
-					zos.putNextEntry(new ZipEntry(entry.getName()));
-					byte[] buff = new byte[10240];
-					int cnt = 0;
-					InputStream is = zip.getInputStream(entry);
-					while ((cnt = is.read(buff)) > 0) {
-						zos.write(buff, 0, cnt);
-					}
-					zos.closeEntry();
-				}
-			}
-			zos.close();
-		}
-	}
-
-	/**
-	 * @param args
-	 * @throws Exception
-	 */
-	public static void main(String... args) throws Exception {
-		Renamer renamer = new Renamer();
-		Transformer transformer = new DefaultTransformer();
-		Map<String, ClassInfo> map = renamer.collect(null, args);
-		map = transformer.transform(map);
-		renamer.action(map, args);
-		System.out.println("done.");
-	}
 }
