@@ -1,6 +1,0 @@
-class: org/hydra/Main to org/hydra/Mainx
-class: org/hydra/TestObj to org/hydra/TestObj2
-method: hello ()Ljava/lang/String; to hello2
-field: name Ljava/lang/String; to FROM
-class: org/hydra/TestSuper to org/hydra/TestSuper2
-method: show ()V to display
