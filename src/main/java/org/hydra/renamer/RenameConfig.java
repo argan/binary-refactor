@@ -9,14 +9,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.hydra.utils.Log;
-import org.hydra.utils.Utils;
+import org.hydra.util.Log;
+import org.hydra.util.Utils;
+import org.hydra.util.Lists.Pair;
 
 public class RenameConfig {
     private Map<String, ClassRenameInfo> config = new HashMap<String, ClassRenameInfo>();
 
-    public RenameConfig(String file) {
-        parse(file);
+    public static RenameConfig load(String file) {
+        RenameConfig config = new RenameConfig();
+        parse(config, file);
+        return config;
     }
 
     public Map<String, ClassRenameInfo> getConfig() {
@@ -86,7 +89,7 @@ public class RenameConfig {
         ClassRenameInfo info = this.config.get(oldName);
         if (info == null) {
             info = new ClassRenameInfo();
-            info.setClassInfo(new Pair(oldName, newName));
+            info.setClassInfo(new Pair<String, String>(oldName, newName));
             this.config.put(oldName, info);
         } else {
             Log.error("config error? %s already exists", oldName);
@@ -115,7 +118,7 @@ public class RenameConfig {
         return methodName + ":" + methodDesc;
     }
 
-    private void parse(String file) {
+    private static void parse(RenameConfig config, String file) {
         try {
             BufferedReader reader = new BufferedReader(new FileReader(file));
             String line = null;
@@ -135,11 +138,11 @@ public class RenameConfig {
                      */
                     if ("class:".equalsIgnoreCase(tokens[0])) {
                         currentClass = tokens[1];
-                        this.addClass(currentClass, tokens[3]);
+                        config.addClass(currentClass, tokens[3]);
                     } else if ("method:".equalsIgnoreCase(tokens[0]) && tokens.length > 4) {
-                        this.addMethod(currentClass, tokens[1], tokens[2], tokens[4]);
+                        config.addMethod(currentClass, tokens[1], tokens[2], tokens[4]);
                     } else if ("field:".equalsIgnoreCase(tokens[0]) && tokens.length > 4) {
-                        this.addField(currentClass, tokens[1], tokens[2], tokens[4]);
+                        config.addField(currentClass, tokens[1], tokens[2], tokens[4]);
                     } else if (!line.startsWith("#")) {
                         Log.error("error config line %s", line);
                     }
@@ -158,7 +161,7 @@ public class RenameConfig {
         private String superClassName;
         private List<String> interfaces;
 
-        private Pair classInfo;
+        private Pair<String, String> classInfo;
         /**
          * Key:格式［fieldName:fieldType] Value:newName
          */
@@ -188,11 +191,11 @@ public class RenameConfig {
                     superClassName, interfaces, fieldInfo, methodInfo);
         }
 
-        public Pair getClassInfo() {
+        public Pair<String, String> getClassInfo() {
             return classInfo;
         }
 
-        public void setClassInfo(Pair classInfo) {
+        public void setClassInfo(Pair<String, String> classInfo) {
             this.classInfo = classInfo;
         }
 

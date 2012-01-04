@@ -10,29 +10,27 @@ import java.util.jar.JarFile;
 import java.util.jar.JarOutputStream;
 
 import org.hydra.renamer.asm.ClassForNameFixVisitor;
-import org.hydra.renamer.asm.CollectClassInfoVisitor;
 import org.hydra.renamer.asm.Remapper;
+import org.hydra.util.Log;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.commons.RemappingClassAdapter;
 
 public class Renamer {
 
-    private static Remapper remapper;
-
     /**
      * @param args
      */
-    public static void main(String[] args) {
-        String jarFile = args[1];
-        RenameConfig config = new RenameConfig(args[0]);
+    public static void rename(String configFile, String jarFile) {
+        RenameConfig config = RenameConfig.load(configFile);
+        Remapper remapper;
 
         try {
             JarFile jar = new JarFile(jarFile);
             // 解析整个jar文件，得到ClassMap
-            ClassMap classMap = buildClassMap(jar);
-            // Log.debug("Parsed %s", classMap);
-            // Log.debug("Parsed config:\n%s", config.getConfig());
+            ClassMap classMap = ClassMap.build(jar);
+            Log.debug("Parsed \n%s", classMap);
+            Log.debug("Parsed config:\n%s", config.getConfig());
             classMap.rebuildConfig(config, null);
             // Log.debug("Rebuild config:\n%s", config.getConfig());
             remapper = new Remapper(config);
@@ -52,7 +50,7 @@ public class Renamer {
                     InputStream inputStream = jar.getInputStream(jar.getEntry(name));
                     if (name.endsWith(".class")) {
                         // .class 文件就检查并改写
-                        byte[] bytes = renameClazz(inputStream);
+                        byte[] bytes = renameClazz(remapper, inputStream);
                         int idex = name.lastIndexOf('.');
 
                         JarEntry en = new JarEntry(remapper.map(name.substring(0, idex)) + ".class");
@@ -78,39 +76,7 @@ public class Renamer {
         }
     }
 
-    private static ClassMap buildClassMap(JarFile jar) {
-        ClassMap map = new ClassMap();
-        Enumeration<JarEntry> entries = jar.entries();
-        while (entries.hasMoreElements()) {
-            JarEntry entry = entries.nextElement();
-            String name = entry.getName();
-            if (name.endsWith(".class")) {
-                InputStream inputStream;
-                try {
-                    inputStream = jar.getInputStream(jar.getEntry(name));
-                    // .class 文件就检查并改写
-                    parseClass(inputStream, map);
-                    inputStream.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        return map;
-    }
-
-    private static void parseClass(InputStream inputStream, ClassMap map) {
-        CollectClassInfoVisitor cv = new CollectClassInfoVisitor(map);
-        ClassReader reader;
-        try {
-            reader = new ClassReader(inputStream);
-            reader.accept(cv, 8);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private static byte[] renameClazz(InputStream clazz) {
+    private static byte[] renameClazz(Remapper remapper, InputStream clazz) {
         try {
             ClassWriter writer = new ClassWriter(1);
             ClassReader reader = new ClassReader(clazz);

@@ -1,13 +1,20 @@
 package org.hydra.renamer;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Arrays;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 
 import org.hydra.renamer.RenameConfig.ClassRenameInfo;
-import org.hydra.utils.Log;
-import org.hydra.utils.Utils;
+import org.hydra.renamer.asm.CollectClassInfoVisitor;
+import org.hydra.util.Log;
+import org.hydra.util.Utils;
+import org.objectweb.asm.ClassReader;
 
 public class ClassMap {
     private Map<String, ClassInfo> map = new HashMap<String, ClassInfo>();
@@ -60,4 +67,48 @@ public class ClassMap {
     public String toString() {
         return String.format("ClassMap {%s}", map);
     }
+
+    public static ClassMap build(JarFile jar) {
+        ClassMap map = new ClassMap();
+        Enumeration<JarEntry> entries = jar.entries();
+        while (entries.hasMoreElements()) {
+            JarEntry entry = entries.nextElement();
+            String name = entry.getName();
+            if (name.endsWith(".class")) {
+                InputStream inputStream = null;
+                try {
+                    inputStream = jar.getInputStream(jar.getEntry(name));
+                    // .class 文件就检查并改写
+                    parseClass(inputStream, map);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } finally {
+                    close(inputStream);
+                }
+            }
+        }
+        return map;
+    }
+
+    private static void close(InputStream inputStream) {
+        if (inputStream != null) {
+            try {
+                inputStream.close();
+            } catch (Exception e) {
+                // null
+            }
+        }
+    }
+
+    private static void parseClass(InputStream inputStream, ClassMap map) {
+        CollectClassInfoVisitor cv = new CollectClassInfoVisitor(map);
+        ClassReader reader;
+        try {
+            reader = new ClassReader(inputStream);
+            reader.accept(cv, 8);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

@@ -3,6 +3,8 @@ package org.hydra.renamer;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hydra.util.Lists.Pair;
+
 public class ClassInfo {
     // internalName like java/lang/String
     private String className;
@@ -13,8 +15,8 @@ public class ClassInfo {
     // direct children
     private List<ClassInfo> children;
 
-    private List<Pair> methods;
-    private List<Pair> fields;
+    private List<Pair<String, String>> methods;
+    private List<Pair<String, String>> fields;
 
     private boolean isInterface;
 
@@ -23,8 +25,8 @@ public class ClassInfo {
         this.isInterface = isInterface;
         this.interfaces = new ArrayList<ClassInfo>(0);
         this.children = new ArrayList<ClassInfo>(0);
-        this.methods = new ArrayList<Pair>(0);
-        this.fields = new ArrayList<Pair>(0);
+        this.methods = new ArrayList<Pair<String, String>>(0);
+        this.fields = new ArrayList<Pair<String, String>>(0);
     }
 
     public void setSuperClass(ClassInfo superClass) {
@@ -47,11 +49,11 @@ public class ClassInfo {
         return children;
     }
 
-    public List<Pair> getMethods() {
+    public List<Pair<String, String>> getMethods() {
         return methods;
     }
 
-    public List<Pair> getFields() {
+    public List<Pair<String, String>> getFields() {
         return fields;
     }
 
@@ -74,14 +76,14 @@ public class ClassInfo {
         }
         if (this.fields.size() > 0) {
             buff.append(",fields:[");
-            for (Pair p : this.fields) {
+            for (Pair<String, String> p : this.fields) {
                 buff.append(p.getLeft()).append("/").append(p.getRight()).append(",");
             }
             buff.append("]");
         }
         if (this.methods.size() > 0) {
             buff.append(",methods:[");
-            for (Pair p : this.methods) {
+            for (Pair<String, String> p : this.methods) {
                 buff.append(p.getLeft()).append("/").append(p.getRight()).append(",");
             }
             buff.append("]");
