@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Jars match</title>
+    <script src="/static/js/jquery.min.1.7.1.js"></script>
+    <link rel="shortcut icon" href="http://www.alibaba.com/favicon.ico" />
+    <link href="/static/css/bootstrap-1.4.0.css" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/screen.css" type="text/css" />
+    <link rel="stylesheet" href="/static/css/jquery.treeview.css" type="text/css" />
+    <script type="text/javascript" src="/static/js/jquery.treeview.js"></script>
+  <script>
+  $(document).ready(function(){
+    $("#jar").treeview();
+  });
+  </script>
+  </head>
+  <body>
+
+    <div class="topbar">
+      <div class="topbar-inner">
+        <div class="container-fluid">
+          <a class="brand" href="#">project name</a>
+          <ul class="nav">
+            <li class="active"><a href="#">home</a></li>
+            <li><a href="#about">about</a></li>
+            <li><a href="#contact">contact</a></li>
+          </ul>
+          <p class="pull-right">logged in as <a href="#">username</a></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="container-fluid">
+      <div class="sidebar">
+        <div class="well">
+          <h5>Sidebar</h5>
+          <ul>
+            <li><a href="#">Link</a></li>
+            <li><a href="#">Link</a></li>
+            <li><a href="#">Link</a></li>
+            <li><a href="#">Link</a></li>
+          </ul>
+          <h5>Sidebar</h5>
+          <ul>
+            <li><a href="#">Link</a></li>
+            <li><a href="#">Link</a></li>
+            <li><a href="#">Link</a></li>
+            <li><a href="#">Link</a></li>
+            <li><a href="#">Link</a></li>
+            <li><a href="#">Link</a></li>
+          </ul>
+          <h5>Sidebar</h5>
+          <ul>
+            <li><a href="#">Link</a></li>
+            <li><a href="#">Link</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="content">
+        <!-- Main hero unit for a primary marketing message or call to action -->
+        <div class="hero-unit">
+          <h1>Hello, world!</h1>
+          <p>Vestibulum id ligula porta felis euismod semper. Integer posuere erat a ante venenatis dapibus posuere velit aliquet. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit.</p>
+          <p><a class="btn primary large">Learn more &raquo;</a></p>
+        </div>
+
+        <!-- Example row of columns -->
+        <div class="row">
+          <div class="span6">
+            <h2>Heading</h2>
+            <p>Etiam porta sem malesuada magna mollis euismod. Integer posuere erat a ante venenatis dapibus posuere velit aliquet. Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit.</p>
+            <p><a class="btn" href="#">View details &raquo;</a></p>
+          </div>
+          <div class="span5">
+            <h2>Heading</h2>
+             <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
+            <p><a class="btn" href="#">View details &raquo;</a></p>
+         </div>
+          <div class="span5">
+            <h2>Heading</h2>
+            <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
+            <p><a class="btn" href="#">View details &raquo;</a></p>
+          </div>
+        </div>
+
+        <hr>
+
+        <!-- Example row of columns -->
+        <div class="row">
+          <div class="span6">
+            <h2>Heading</h2>
+            <p>Etiam porta sem malesuada magna mollis euismod. Integer posuere erat a ante venenatis dapibus posuere velit aliquet. Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit.</p>
+            <p><a class="btn" href="#">View details &raquo;</a></p>
+          </div>
+          <div class="span5">
+            <h2>Heading</h2>
+             <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
+            <p><a class="btn" href="#">View details &raquo;</a></p>
+         </div>
+          <div class="span5">
+            <h2>Heading</h2>
+            <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
+            <p><a class="btn" href="#">View details &raquo;</a></p>
+          </div>
+        </div>
+
+        <footer>
+          <p>&copy; Company 2011</p>
+        </footer>
+      </div>
+    </div>
+  #include("/menu.vm")
+
+<ul id="jar" class="filetree">
+<li><span class="folder">All Classes for $origName</span>
+<ul>
+#foreach ($entry in $classMap.tree.entrySet())
+  <li class="closed"><span class="folder">Package $entry.key</span>
+  <ul>
+  #foreach($clazz in $entry.value)
+  	<li class="closed"><span class="folder">Class: ${clazz.className.replace("${entry.key}/","")}</span>
+  	<ul>
+  	#if($clazz.methods.size()>0)
+	  	<li class="closed"><span class="folder">Methods($clazz.methods.size())</span>
+	  	<ul>
+	  		#foreach($method in $clazz.methods)
+	  			<li class="file">$method.left : $method.right</li>
+	  		#end
+	  	</ul>
+	  	</li>
+  	#end
+  	#if($clazz.fields.size()>0)
+	  	<li class="closed"><span class="folder">Fields($clazz.fields.size())</span>
+	  	<ul>
+	  		#foreach($f in $clazz.fields)
+	  			<li class="file">$f.left : $f.right</li>
+	  		#end
+	  	</ul>
+	  	</li>
+  	#end
+  	</ul>
+  	</li>
+  #end
+  </ul>
+  </li>
+#end
+</ul>
+</li>
+</ul>
+</body>
+</html>

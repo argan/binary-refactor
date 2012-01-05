@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Jars match</title>
+    <script src="/static/js/jquery.min.1.7.1.js"></script>
+    <link rel="shortcut icon" href="http://www.alibaba.com/favicon.ico" />
+    <link rel="stylesheet" href="/static/css/screen.css" type="text/css" />
+    <link rel="stylesheet" href="/static/css/jquery.treeview.css" type="text/css" />
+    <script type="text/javascript" src="/static/js/jquery.treeview.js"></script>
+  <script>
+  $(document).ready(function(){
+    $("#jar").treeview();
+  });
+  </script>
+  </head>
+  <body>
+  #include("/menu.vm")
+$date <br>
+
+<ul id="jar" class="filetree">
+<li><span class="folder">All Classes for $jarfile</span>
+#foreach ($entry in $result.result.entrySet())
+  <ul>Matches for $entry.key </br>
+  #foreach($classResult in $entry.value)
+  	<li class="closed"><span class="folder">Class: $classResult.rightName</span>
+  	<ul>
+  	#if($classResult.fields.size()>0)
+  	<li><span class="folder">Fields($classResult.fields.size())</span>
+  	<ul>
+  		#foreach($field in $classResult.fields)
+  			<li class="file">$field.left = $field.right</li>
+  		#end
+  	</ul>
+  	</li>
+  	#end
+  	</ul>
+  	<ul>
+  	#if($classResult.methods.size()>0)
+  	<li><span class="folder">Methods($classResult.methods.size())</span>
+  	<ul>
+  		#foreach($method in $classResult.methods)
+  			<li class="file">$method.left = $method.right</li>
+  		#end
+  	</ul>
+  	</li>
+  	#end
+  	</ul>
+  	</li>
+  #end
+  </ul>
+#end
+</li>
+</ul>
+</body>
+</html>
