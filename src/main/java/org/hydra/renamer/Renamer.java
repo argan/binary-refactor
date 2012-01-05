@@ -18,13 +18,13 @@ import org.objectweb.asm.commons.RemappingClassAdapter;
 
 public class Renamer {
 
-    /**
-     * @param args
-     */
     public static void rename(String configFile, String jarFile) {
         RenameConfig config = RenameConfig.load(configFile);
-        Remapper remapper;
 
+        rename(config, jarFile, "new_" + jarFile);
+    }
+
+    public static void rename(RenameConfig config, String jarFile, String destFile) {
         try {
             JarFile jar = new JarFile(jarFile);
             // 解析整个jar文件，得到ClassMap
@@ -33,11 +33,11 @@ public class Renamer {
             Log.debug("Parsed config:\n%s", config.getConfig());
             classMap.rebuildConfig(config, null);
             // Log.debug("Rebuild config:\n%s", config.getConfig());
-            remapper = new Remapper(config);
+            Remapper remapper = new Remapper(config);
 
             Enumeration<JarEntry> entries = jar.entries();
 
-            JarOutputStream zos = new JarOutputStream(new FileOutputStream("new_" + jarFile));
+            JarOutputStream zos = new JarOutputStream(new FileOutputStream(destFile));
             while (entries.hasMoreElements()) {
                 JarEntry entry = entries.nextElement();
                 // System.out.println("deal with " + entry.getName());

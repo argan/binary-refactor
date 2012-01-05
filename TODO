@@ -1,2 +1,4 @@
 * implement MethodSignatureCollector,add some insn code to signature
-
+* web interface
+* rename class/method/field in ClassMap
+* 

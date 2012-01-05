@@ -2,23 +2,25 @@ package org.hydra.matcher;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.hydra.util.Lists.Pair;
 
 public class MatchResult {
 
-    private Map<String, List<ClassMatchResult>> map = new HashMap<String, List<ClassMatchResult>>();
+    private Map<String, Set<ClassMatchResult>> map = new HashMap<String, Set<ClassMatchResult>>();
 
-    public Map<String, List<ClassMatchResult>> getResult() {
+    public Map<String, Set<ClassMatchResult>> getResult() {
         return map;
     }
 
     public void addClassMatchResult(ClassMatchResult clzz) {
-        List<ClassMatchResult> result = this.map.get(clzz.getLeftName());
+        Set<ClassMatchResult> result = this.map.get(clzz.getLeftName());
         if (result == null) {
-            result = new ArrayList<ClassMatchResult>();
+            result = new HashSet<ClassMatchResult>();
             map.put(clzz.getLeftName(), result);
         }
         result.add(clzz);
@@ -33,7 +35,7 @@ public class MatchResult {
             this.name = new Pair<String, String>(left, right);
         }
 
-        String getLeftName() {
+        public String getLeftName() {
             return this.name.getLeft();
         }
 
@@ -55,6 +57,31 @@ public class MatchResult {
 
         public String getRightName() {
             return this.name.getRight();
+        }
+
+        @Override
+        public int hashCode() {
+            final int prime = 31;
+            int result = 1;
+            result = prime * result + ((name == null) ? 0 : name.hashCode());
+            return result;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj)
+                return true;
+            if (obj == null)
+                return false;
+            if (getClass() != obj.getClass())
+                return false;
+            ClassMatchResult other = (ClassMatchResult) obj;
+            if (name == null) {
+                if (other.name != null)
+                    return false;
+            } else if (!name.equals(other.name))
+                return false;
+            return true;
         }
 
     }

@@ -37,6 +37,12 @@ public class ClassInfo {
         return className;
     }
 
+    public String getClassShortName() {
+        int index = className.lastIndexOf("/");
+
+        return className.substring(index + 1);
+    }
+
     public ClassInfo getSuperClass() {
         return superClass;
     }
@@ -55,6 +61,10 @@ public class ClassInfo {
 
     public List<Pair<String, String>> getFields() {
         return fields;
+    }
+
+    public boolean hasMethod(String name, String desc) {
+        return this.methods.contains(new Pair<String, String>(name, desc));
     }
 
     public String toString() {
@@ -89,11 +99,6 @@ public class ClassInfo {
             buff.append("]");
         }
         buff.append("}");
-        // return
-        // String.format("ClassInfo [%s],superClass [%s],interfaces [%s],children [%s]",
-        // className,
-        // superClass == null ? null : superClass.getClassName(), interfaces,
-        // children);
         return buff.toString();
     }
 }

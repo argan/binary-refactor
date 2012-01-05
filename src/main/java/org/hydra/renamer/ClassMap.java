@@ -2,11 +2,13 @@ package org.hydra.renamer;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
@@ -21,6 +23,36 @@ public class ClassMap {
 
     public ClassInfo getClassInfo(String name) {
         return this.map.get(name);
+    }
+
+    public Map<String, List<ClassInfo>> getTree() {
+        Map<String, List<ClassInfo>> result = new TreeMap<String, List<ClassInfo>>();
+
+        for (Map.Entry<String, ClassInfo> entry : map.entrySet()) {
+            String pkg = getPkg(entry.getKey());
+            List<ClassInfo> list = result.get(pkg);
+            if (list == null) {
+                list = new ArrayList<ClassInfo>();
+                result.put(pkg, list);
+            }
+            list.add(entry.getValue());
+        }
+        return result;
+    }
+
+    private String getPkg(String key) {
+        int index = key.lastIndexOf("/");
+        String fullName = key.substring(0, index);
+        StringBuilder shortName = new StringBuilder();
+
+        String[] arr = fullName.split("/");
+        // 除了最后一层包名外，前面的都只取第一个字符
+        for (int i = 0; i < arr.length - 1; i++) {
+            shortName.append(arr[i].charAt(0)).append("/");
+        }
+
+        shortName.append(arr[arr.length - 1]);
+        return shortName.toString();
     }
 
     public void addClassInfo(ClassInfo info) {

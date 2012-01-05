@@ -1,7 +1,7 @@
 package org.hydra.matcher;
 
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.hydra.matcher.MatchResult.ClassMatchResult;
 import org.hydra.matcher.MatchResult.FieldMatchResult;
@@ -18,17 +18,17 @@ public class Main {
 
         Log.debug("Match count: %d ", result.getResult().size());
 
-//        for (Map.Entry<String, List<ClassMatchResult>> c : result.getResult().entrySet()) {
-//            Log.debug("=== matches for %s ===", c.getKey());
-//            for (ClassMatchResult cc : c.getValue()) {
-//                Log.debug("  class : %s = %s", cc.getLeftName(), cc.getRightName());
-//                for (Pair<FieldMatchResult, FieldMatchResult> fp : cc.getFields()) {
-//                    Log.debug("    F : %s = %s ", fp.getLeft(), fp.getRight());
-//                }
-//                for (Pair<MethodMatchResult, MethodMatchResult> fp : cc.getMethods()) {
-//                    Log.debug("    M : %s = %s ", fp.getLeft(), fp.getRight());
-//                }
-//            }
-//        }
+        for (Map.Entry<String, Set<ClassMatchResult>> c : result.getResult().entrySet()) {
+            Log.debug("=== matches for %s ===", c.getKey());
+            for (ClassMatchResult cc : c.getValue()) {
+                Log.debug("  class : %s = %s", cc.getLeftName(), cc.getRightName());
+                for (Pair<FieldMatchResult, FieldMatchResult> fp : cc.getFields()) {
+                    Log.debug("    F : %s = %s ", fp.getLeft(), fp.getRight());
+                }
+                for (Pair<MethodMatchResult, MethodMatchResult> fp : cc.getMethods()) {
+                    Log.debug("    M : %s = %s ", fp.getLeft(), fp.getRight());
+                }
+            }
+        }
     }
 }

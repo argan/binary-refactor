@@ -1,5 +1,6 @@
 package org.hydra.renamer.asm;
 
+import org.hydra.util.Log;
 import org.objectweb.asm.MethodAdapter;
 import org.objectweb.asm.MethodVisitor;
 
@@ -21,8 +22,7 @@ public class ClassForNameFixMethodVistor extends MethodAdapter {
             String newName = remapper.map(oldName);
             if (newName != null && !oldName.equals(newName)) {
                 newName = newName.replace('/', '.');
-                // Log.debug("change constant loading from %s to %s", cst,
-                // newName);
+                Log.debug("change constant loading from %s to %s", cst, newName);
                 super.visitLdcInsn(newName);
                 return;
             }

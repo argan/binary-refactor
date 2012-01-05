@@ -1,5 +1,6 @@
 package org.hydra.util;
 
+import java.io.Closeable;
 import java.util.StringTokenizer;
 
 public class Utils {
@@ -14,5 +15,15 @@ public class Utils {
             result[i++] = token.nextToken();
         }
         return result;
+    }
+
+    public static void close(Closeable os) {
+        if (os != null) {
+            try {
+                os.close();
+            } catch (Throwable t) {
+
+            }
+        }
     }
 }
