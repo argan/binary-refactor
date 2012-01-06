@@ -1,6 +1,7 @@
 package org.hydra.renamer;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.hydra.util.Lists.Pair;
@@ -15,8 +16,8 @@ public class ClassInfo {
     // direct children
     private List<ClassInfo> children;
 
-    private List<Pair<String, String>> methods;
-    private List<Pair<String, String>> fields;
+    private List<MethodInfo> methods;
+    private List<FieldInfo> fields;
 
     private boolean isInterface;
 
@@ -25,8 +26,8 @@ public class ClassInfo {
         this.isInterface = isInterface;
         this.interfaces = new ArrayList<ClassInfo>(0);
         this.children = new ArrayList<ClassInfo>(0);
-        this.methods = new ArrayList<Pair<String, String>>(0);
-        this.fields = new ArrayList<Pair<String, String>>(0);
+        this.methods = new ArrayList<MethodInfo>(0);
+        this.fields = new ArrayList<FieldInfo>(0);
     }
 
     public void setSuperClass(ClassInfo superClass) {
@@ -48,19 +49,19 @@ public class ClassInfo {
     }
 
     public List<ClassInfo> getInterfaces() {
-        return interfaces;
+        return Collections.unmodifiableList(interfaces);
     }
 
     public List<ClassInfo> getChildren() {
-        return children;
+        return Collections.unmodifiableList(children);
     }
 
-    public List<Pair<String, String>> getMethods() {
-        return methods;
+    public List<MethodInfo> getMethods() {
+        return Collections.unmodifiableList(methods);
     }
 
-    public List<Pair<String, String>> getFields() {
-        return fields;
+    public List<FieldInfo> getFields() {
+        return Collections.unmodifiableList(fields);
     }
 
     public boolean hasMethod(String name, String desc) {
@@ -86,19 +87,37 @@ public class ClassInfo {
         }
         if (this.fields.size() > 0) {
             buff.append(",fields:[");
-            for (Pair<String, String> p : this.fields) {
-                buff.append(p.getLeft()).append("/").append(p.getRight()).append(",");
+            for (FieldInfo p : this.fields) {
+                buff.append(p.getName()).append("/").append(p.getDesc()).append(",");
             }
             buff.append("]");
         }
         if (this.methods.size() > 0) {
             buff.append(",methods:[");
-            for (Pair<String, String> p : this.methods) {
-                buff.append(p.getLeft()).append("/").append(p.getRight()).append(",");
+            for (MethodInfo p : this.methods) {
+                buff.append(p.getName()).append("/").append(p.getDesc()).append(",");
             }
             buff.append("]");
         }
         buff.append("}");
         return buff.toString();
+    }
+
+    public void addMethod(MethodInfo methodInfo) {
+        this.methods.add(methodInfo);
+        methodInfo.setEnclosedClass(this);
+    }
+
+    public void addField(FieldInfo fieldInfo) {
+        this.fields.add(fieldInfo);
+        fieldInfo.setEnclosedClass(this);
+    }
+
+    public void addInterface(ClassInfo classInfo) {
+        this.interfaces.add(classInfo);
+    }
+
+    public void addChild(ClassInfo info) {
+        this.children.add(info);
     }
 }

@@ -2,7 +2,8 @@ package org.hydra.renamer.asm;
 
 import org.hydra.renamer.ClassInfo;
 import org.hydra.renamer.ClassMap;
-import org.hydra.util.Lists.Pair;
+import org.hydra.renamer.FieldInfo;
+import org.hydra.renamer.MethodInfo;
 import org.objectweb.asm.FieldVisitor;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.commons.EmptyVisitor;
@@ -21,7 +22,7 @@ public class CollectClassInfoVisitor extends EmptyVisitor {
         ClassInfo info = new ClassInfo(name, isInterface);
         if (interfaces != null) {
             for (String a : interfaces) {
-                info.getInterfaces().add(new ClassInfo(a, true));
+                info.addInterface(new ClassInfo(a, true));
             }
         }
         if (!"java/lang/Object".equals(superName)) {
@@ -35,7 +36,7 @@ public class CollectClassInfoVisitor extends EmptyVisitor {
     @Override
     public FieldVisitor visitField(int access, String name, String desc, String signature, Object value) {
         if (!"serialVersionUID".equals(name)) {
-            this.map.getClassInfo(this.className).getFields().add(new Pair<String, String>(name, desc));
+            this.map.getClassInfo(this.className).addField(new FieldInfo(name, desc));
         }
         return super.visitField(access, name, desc, signature, value);
     }
@@ -43,7 +44,7 @@ public class CollectClassInfoVisitor extends EmptyVisitor {
     @Override
     public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
         if (!name.startsWith("<")) {
-            this.map.getClassInfo(this.className).getMethods().add(new Pair<String, String>(name, desc));
+            this.map.getClassInfo(this.className).addMethod(new MethodInfo(name, desc));
         }
         return super.visitMethod(access, name, desc, signature, exceptions);
     }

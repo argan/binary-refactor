@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>Bootstrap, from Twitter</title>
+    <title>View uploaded jar or class</title>
     <meta name="author" content="Argan Wang">
 
     <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
@@ -35,7 +35,8 @@
     #include("/menu.vm")
 #macro(showClassName $map $name $id)
 #set ($info = false)
-#set($info = $map.getClassInfo($name))
+#set ($namex = $name.replace('[',' ').replace(']',' ').trim())
+#set($info = $map.getClassInfo($namex))
 #if($info)<a href="/jarviewer/view.htm?id=$id&clz=$info.className">$name</a>#else $name #end
 #end
     <div class="container-fluid">
@@ -45,7 +46,7 @@
 			<li><span class="folder">$origName</span>
 				<ul>
 				#foreach ($entry in $classMap.tree.entrySet())
-				  <li class="closed"><span class="folder">$entry.key</span>
+				  <li class="#if($entry.key.equals("$openPkg"))  #else closed #end"><span class="folder">$entry.key</span>
 					  <ul>
 					  #foreach($clazz in $entry.value)
 					  	<li class="file"><a href="/jarviewer/view.htm?id=$id&clz=${clazz.className}">${clazz.classShortName}</a></li>
@@ -107,11 +108,12 @@
             <h2>属性</h2>
             #if($clzInfo.fields.size()>0)
             <p>属性列表</p>
-            <ul>
+            <table>
+            <tr><td>属性名</td><td>类型</td><td>描述</td></tr>
               #foreach($i in $clzInfo.fields)
-              <li>$i.left $i.right</li>
+              <tr><td>$i.name</td><td>#showClassName($classMap $i.type $id)</td><td>$i.desc</td></tr>
               #end
-            </ul>
+            </table>
             #else
             <p>属性：无</p>
             #end
@@ -123,15 +125,28 @@
             <h2>方法</h2>
             #if($clzInfo.fields.size()>0)
             <p>方法列表</p>
-            <ul>
+            <table>
+            <tr><td>方法名</td><td>返回类型</td><td>参数列表类型</td></tr>
               #foreach($i in $clzInfo.methods)
-              <li>$i.left $i.right</li>
+              <tr><td>$i.name</td><td>#showClassName($classMap $i.returnType $id)</td><td>
+                <ul>
+	              #foreach($x in $i.parameterTypes)
+	              <li>#showClassName($classMap $x $id)</li>
+	              #end
+	            </ul>
+              </td></tr>
               #end
-            </ul>
+            </table>
             #else
             <p>方法：无</p>
             #end
           </div>
+        </div>
+       #else
+       <div class="row">
+          <div class="span6">
+            <h2>请选择一个类查看...</h2>
+         </div>
         </div>
        #end
         <hr>

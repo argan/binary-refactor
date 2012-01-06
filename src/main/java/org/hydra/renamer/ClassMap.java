@@ -22,7 +22,7 @@ public class ClassMap {
     private Map<String, ClassInfo> map = new HashMap<String, ClassInfo>();
 
     public ClassInfo getClassInfo(String name) {
-        return this.map.get(name);
+        return this.map.get(name.replace('.', '/'));
     }
 
     public Map<String, List<ClassInfo>> getTree() {
@@ -40,7 +40,7 @@ public class ClassMap {
         return result;
     }
 
-    private String getPkg(String key) {
+    public String getPkg(String key) {
         int index = key.lastIndexOf("/");
         String fullName = key.substring(0, index);
         StringBuilder shortName = new StringBuilder();
@@ -64,10 +64,10 @@ public class ClassMap {
         for (Map.Entry<String, ClassInfo> entry : map.entrySet()) {
             ClassInfo info = entry.getValue();
             if (info.getSuperClass() != null) {
-                info.getSuperClass().getChildren().add(info);
+                info.getSuperClass().addChild(info);
             }
             for (ClassInfo intf : info.getInterfaces()) {
-                intf.getChildren().add(info);
+                intf.addChild(info);
             }
         }
         List<String> addPkgsList = Arrays.asList(Utils.tokens(addPkgs));

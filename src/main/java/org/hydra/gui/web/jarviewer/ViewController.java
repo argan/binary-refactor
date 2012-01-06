@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.jar.JarFile;
 
 import org.hydra.gui.web.Database;
+import org.hydra.renamer.ClassInfo;
 import org.hydra.renamer.ClassMap;
 import org.hydra.renamer.RenameConfig;
 import org.springframework.stereotype.Controller;
@@ -25,10 +26,16 @@ public class ViewController {
                     + ".upload").getCanonicalPath()));
 
             classMap.rebuildConfig(new RenameConfig(), null);
+
             model.addAttribute("clzName", clazzName);
             model.addAttribute("id", jar);
             model.addAttribute("classMap", classMap);
             model.addAttribute("origName", path);
+
+            // to find which package should open
+            if (clazzName != null) {
+                model.addAttribute("openPkg", classMap.getPkg(clazzName));
+            }
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
