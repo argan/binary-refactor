@@ -17,12 +17,14 @@ public class Utils {
         return result;
     }
 
-    public static void close(Closeable os) {
-        if (os != null) {
-            try {
-                os.close();
-            } catch (Throwable t) {
+    public static void close(Closeable... oss) {
+        for (Closeable os : oss) {
+            if (os != null) {
+                try {
+                    os.close();
+                } catch (Throwable t) {
 
+                }
             }
         }
     }

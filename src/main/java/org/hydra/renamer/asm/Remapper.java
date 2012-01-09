@@ -32,7 +32,7 @@ public class Remapper extends org.objectweb.asm.commons.Remapper {
     public String mapMethodName(String owner, String name, String desc) {
         String newName = this.config.getMethodNewName(owner, name, desc);
         if (name.equals(newName) == false) {
-            Log.debug("rename method %s in to %s", name, owner, newName);
+            Log.debug("rename method %s in %s to %s", name, owner, newName);
         }
         return newName;
     }

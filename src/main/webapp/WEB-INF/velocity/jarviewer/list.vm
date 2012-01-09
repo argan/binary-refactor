@@ -9,35 +9,81 @@
     <!--[if lt IE 9]>
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-
+    
+    <script type="text/javascript" src="/static/js/jquery.min.1.7.1.js"></script>
+    <script type="text/javascript" src="/static/js/jquery-ui.min-1.8.9.js"></script>
+    
     <!-- Le styles -->
     <link href="/static/css/bootstrap-1.4.0.css" rel="stylesheet">
     <style type="text/css">
       body {
         padding-top: 60px;
       }
+      #fromJars { float: right; width: 300px; height: 50px; background: #ccc; font-size:16px}
+      #toJars { float: right; width: 300px; height: 100px; border: 1px solid #999; font-size:16px}
     </style>
     <!-- Le fav and touch icons -->
     <link rel="shortcut icon" href="images/favicon.ico">
+    
+	<script language="javascript">
+	function dropFunc(e,ui) {
+        var ele = ui.draggable;
+        $(this).html($(ele).html());
+        $(this).attr("jarid",$(ele).attr("id"));
+	}
+	function dropFunc2(e,ui) {
+        var ele = ui.draggable;   
+        var append = $("<li class='toJars'></li>");
+        append.html($(ele).html()).appendTo(this);
+        append.attr("jarid",$(ele).attr("id"));
+	}
+	$(document).ready(function(){     
+	    $(".draggable").each(function() {   
+	      $(this).draggable({helper:"clone"});      
+	      });    
+	    $("#fromJars").droppable({drop:dropFunc});      
+	    $("#toJars").droppable({drop:dropFunc2});      
+	                                            
+	});//ready
+	</script>
   </head>
   <body>
     #include("/menu.vm")
 	    <div class="content">
+	    <div class="row">
         <!-- Main hero unit for a primary marketing message or call to action -->
         <div class="hero-unit">
           <h3>Uploaded files</h3>
         <table>
         <tr>
-          <td>id</td><td>type</td><td>name</td>
+          <td>序号</td><td>文件名</td><td>版本</td><td>操作</td>
         </tr>
         #if($list && $list.size()>0)
         #foreach($f in $list)
-		 <tr><td>$velocityCount</td><td>$f.type</td><td><a href="/jarviewer/view.htm?id=$f.id">$f.obj.origName</a></td></tr>
+		 <tr>
+		   <td>$velocityCount</td>
+		   <td><div><a href="/jarviewer/view.htm?id=$f.id" id="$f.id" class="draggable">$f.obj.origName</a></div></td>
+		   <td>$f.obj.version</td>
+		   <td><a href="/jarviewer/download.htm?id=$f.id">下载</a></td>
+		 </tr>
 		#end
 		#else
 		 <tr><td>No files yet. <a href="/jarviewer/form.htm">Upload</a></td></tr>
 		#end
 		</table>
+        </div>
+        </div>
+        <div class="row">
+          <div class="span6">
+            <h2>扫描</h2>
+           <div id="fromJars">待扫描的jar放这里。</div>
+           <div id="toJars">Drop here</div>
+         </div>
+         <div class="span6">
+            <h2>&nbsp;</h2>
+            <p><a class="btn primary" href="#">开始扫描</a></p>
+         </div>
+        </div>
         </div>
         #include("/footer.vm")
     </body>

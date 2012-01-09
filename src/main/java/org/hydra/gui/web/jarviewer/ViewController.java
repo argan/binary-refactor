@@ -1,17 +1,21 @@
 package org.hydra.gui.web.jarviewer;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.jar.JarFile;
 
 import org.hydra.gui.web.Database;
 import org.hydra.gui.web.FileItem;
+import org.hydra.gui.web.StreamView;
 import org.hydra.renamer.ClassMap;
 import org.hydra.renamer.RenameConfig;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.View;
 
 @Controller
 @RequestMapping(value = "jarviewer")
@@ -43,6 +47,21 @@ public class ViewController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
 
+    @RequestMapping(value = "download")
+    public View download(@RequestParam("id") String jarid) {
+        FileItem path = (FileItem) Database.get(jarid).getObj();
+        StreamView view = null;
+        try {
+            File file = new File(path.getFulleName());
+            view = new StreamView("application/x-jar", new FileInputStream(file));
+            view.setBufferSize(4 * 1024);
+            view.setContentDisposition("attachment; filename=\"" + path.getOrigName() + "\"");
+        } catch (FileNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return view;
     }
 }

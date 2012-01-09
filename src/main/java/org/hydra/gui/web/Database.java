@@ -1,5 +1,7 @@
 package org.hydra.gui.web;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -33,7 +35,16 @@ public class Database {
 
     public static class Config {
         public String getUploadPath() {
-            return "/tmp";
+            String home = System.getProperty("user.home");
+            File workdir = new File(home, ".bf_workdir");
+            if (workdir.exists() == false) {
+                workdir.mkdirs();
+            }
+            try {
+                return workdir.getCanonicalPath();
+            } catch (IOException e) {
+                return home;
+            }
         }
     }
 
@@ -68,7 +79,13 @@ public class Database {
     }
 
     private static class DB {
+        /**
+         * id -> Record
+         */
         private Map<String, Record> db = new ConcurrentHashMap<String, Record>();
+        /**
+         * type -> list of ids
+         */
         private Map<String, List<String>> index = new ConcurrentHashMap<String, List<String>>();
 
         public void save(String type, String id, Object obj) {
