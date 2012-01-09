@@ -32,15 +32,13 @@
         </tr>
         #if($list && $list.size()>0)
         #foreach($f in $list)
-		 <tr><td>$velocityCount</td><td>$f.type</td><td><a href="/jarviewer/view.htm?id=$f.id">$f.obj</a></td></tr>
+		 <tr><td>$velocityCount</td><td>$f.type</td><td><a href="/jarviewer/view.htm?id=$f.id">$f.obj.origName</a></td></tr>
 		#end
 		#else
 		 <tr><td>No files yet. <a href="/jarviewer/form.htm">Upload</a></td></tr>
 		#end
 		</table>
         </div>
-        <footer>
-          <p>&copy; Company 2011</p>
-        </footer>
+        #include("/footer.vm")
     </body>
 </html>

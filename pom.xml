@@ -101,6 +101,12 @@
             <artifactId>commons-io</artifactId>
             <version>${commonsio-version}</version>
         </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <version>${servletapi-version}</version>
+            <scope>provided</scope>
+        </dependency>
 
     </dependencies>
     <properties>
@@ -110,6 +116,7 @@
         <velocity-version>1.7</velocity-version>
         <fileupload-version>1.2.2</fileupload-version>
         <commonsio-version>2.1</commonsio-version>
+        <servletapi-version>2.5</servletapi-version>
 
         <jetty-version>6.1.18</jetty-version>
         <jetty-port>9090</jetty-port>

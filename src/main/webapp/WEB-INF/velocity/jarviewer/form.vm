@@ -32,8 +32,6 @@
 	            <input type="submit"/>
 	        </form>
         </div>
-        <footer>
-          <p>&copy; Company 2011</p>
-        </footer>
+        #include("/footer.vm")
     </body>
 </html>

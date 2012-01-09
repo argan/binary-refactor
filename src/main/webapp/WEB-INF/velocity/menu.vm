@@ -1,14 +1,14 @@
     <div class="topbar">
       <div class="topbar-inner">
         <div class="container-fluid">
-          <a class="brand" href="#">Project name</a>
+          <a class="brand" href="#">Binary Refactor</a>
           <ul class="nav">
             <li class="active"><a href="/jarviewer/list.htm">File List</a></li>
             <li><a href="/jarviewer/form.htm">Upload File</a></li>
             <li><a href="#about">About</a></li>
             <li><a href="#contact">Contact</a></li>
           </ul>
-          <p class="pull-right">Logged in as <a href="#">username</a></p>
+          <p class="pull-right">No login needed.</p>
         </div>
       </div>
     </div>

@@ -97,7 +97,7 @@ public class BinaryMatcher {
                 Log.error("TODO : dumplicated matches found for %s", c.getName());
             }
         }
-        Log.debug("Match count:" + count);
+        Log.debug("Match count:%d ", count);
     }
 
     /**

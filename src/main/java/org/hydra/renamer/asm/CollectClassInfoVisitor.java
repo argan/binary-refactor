@@ -19,14 +19,14 @@ public class CollectClassInfoVisitor extends EmptyVisitor {
     @Override
     public void visit(int version, int access, String name, String signature, String superName, String[] interfaces) {
         boolean isInterface = (access & 0x0200) == 1;
-        ClassInfo info = new ClassInfo(name, isInterface);
+        ClassInfo info = new ClassInfo(this.map, name, isInterface);
         if (interfaces != null) {
             for (String a : interfaces) {
-                info.addInterface(new ClassInfo(a, true));
+                info.addInterface(a);
             }
         }
         if (!"java/lang/Object".equals(superName)) {
-            info.setSuperClass(new ClassInfo(superName, isInterface));
+            info.setSuperClass(superName);
         }
         this.className = name;
         this.map.addClassInfo(info);

@@ -19,7 +19,7 @@ import org.objectweb.asm.commons.RemappingClassAdapter;
 public class Renamer {
 
     public static void rename(String configFile, String jarFile) {
-        RenameConfig config = RenameConfig.load(configFile);
+        RenameConfig config = RenameConfig.loadFromFile(configFile);
 
         rename(config, jarFile, "new_" + jarFile);
     }
@@ -29,7 +29,6 @@ public class Renamer {
             JarFile jar = new JarFile(jarFile);
             // 解析整个jar文件，得到ClassMap
             ClassMap classMap = ClassMap.build(jar);
-            Log.debug("Parsed \n%s", classMap);
             Log.debug("Parsed config:\n%s", config.getConfig());
             classMap.rebuildConfig(config, null);
             // Log.debug("Rebuild config:\n%s", config.getConfig());

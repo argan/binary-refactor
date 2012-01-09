@@ -11,7 +11,7 @@ public class Log {
     private static boolean debug, error;
 
     static {
-        String logLevel = System.getProperty("Log.Level", "none");
+        String logLevel = System.getProperty("Log.Level", "debug");
         debug = "debug".equalsIgnoreCase(logLevel);
         error = debug || "error".equalsIgnoreCase(logLevel);
     }

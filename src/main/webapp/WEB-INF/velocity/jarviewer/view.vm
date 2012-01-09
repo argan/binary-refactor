@@ -15,7 +15,8 @@
     ##<link rel="stylesheet" href="/static/css/screen.css" type="text/css" />
     <link rel="stylesheet" href="/static/css/jquery.treeview.css" type="text/css" />
     <script src="/static/js/jquery.min.1.7.1.js"></script>
-    <script type="text/javascript" src="/static/js/jquery.treeview.js"></script>
+    <script type="text/javascript" src="/static/js/jquery.jeditable-1.7.2.js"></script>
+    <script type="text/javascript" src="/static/js/jquery.treeview-1.4.1.js"></script>
     <style type="text/css">
       body {
         padding-top: 60px;
@@ -24,7 +25,32 @@
   <script>
   $(document).ready(function(){
     $("#jar").treeview();
+    $('.editable').editable(function(value, settings) { 
+         $(this).css({backgroundColor: '#ffe', color:'red',fontSize:'16px'});
+         var type = $(this).attr("ftype");
+         if ("class" == type) {
+         	$("#newClassName").val(value);
+         } else {
+	         var ovalue = $(this).attr("origValue");
+	         var desc = $(this).attr("fdesc");
+	         var oldInfo = $("#renameInfo").val();
+	         $("#renameInfo").val( oldInfo+"\n"+type+": "+ovalue+" "+desc+" to "+ value+" ");
+         }
+	     return(value);
+	  }, { 
+	     type    : 'text',
+	     submit  : 'OK',
+	     tooltip : 'Click to edit',
+	 });
   });
+  
+  /**
+   * 提交修改信息
+   */
+  function submitForm() {
+	$("#renameConfig").val($("#renameInfo").val());
+    $("#rename_form").submit();
+  }
   </script>
     <!-- Le fav and touch icons -->
     <link rel="shortcut icon" href="images/favicon.ico">
@@ -39,6 +65,7 @@
 #set($info = $map.getClassInfo($namex))
 #if($info)<a href="/jarviewer/view.htm?id=$id&clz=$info.className">$name</a>#else $name #end
 #end
+
     <div class="container-fluid">
       <div class="sidebar">
         <div class="well">
@@ -61,45 +88,59 @@
       </div>
       
       <div class="content">
-        <!-- Main hero unit for a primary marketing message or call to action -->
-        <div class="hero-unit">
-        #if($clzName)
-          #set($clzInfo = $classMap.getClassInfo($clzName))
-          <h3>ClassInfo:$clzInfo.className</h3>
-          <p><a class="btn primary large">修改</a></p>
-        #end
-        </div>
-
+        
+       #set($clzInfo = $classMap.getClassInfo($clzName))
        #if($clzInfo)
+       
+<form id="rename_form" method="POST" action="/renamer/edit.htm?id=$id">
+   <input type="hidden" name="className" value="$clzInfo.className" id="className">
+   <input type="hidden" name="newClassName" value="$clzInfo.className" id="newClassName">
+   <input type="hidden" name="renameConfig" value="" id="renameConfig">
+</form>
+
         <!-- Example row of columns -->
         <div class="row">
           <div class="span6">
-            <h2>基类及接口</h2>
+            <h2>基本信息</h2>
+            <table>
+              <tr><td>类名(E)</td><td><div id="clazzName" class="editable" ftype="class" fdesc="" origValue="$clzInfo.className">$clzInfo.className</div></td></tr>
             #if($clzInfo.superClass)
-            <p>基类：#showClassName($classMap $clzInfo.superClass.className $id)</p>
+            <tr><td>基类</td><td class="editable">#showClassName($classMap $clzInfo.superClass.className $id)</td></tr>
             #else
-            <p>基类：java/lang/Object</p>
+            <tr><td>基类</td><td>java/lang/Object</td>
             #end
             #if($clzInfo.interfaces.size()>0)
-            <p>接口列表</p>
-            <ul>
+            <tr><td>接口列表</td>
+            <td>
+            <ol>
               #foreach($i in $clzInfo.interfaces)
               <li>#showClassName($classMap $i.className $id)</li>
               #end
-            </ul>
+            </ol>
+            </td>
+            </tr>
             #else
-            <p>接口：无</p>
+            <tr><td>接口</td><td>无</td></tr>
             #end
             #if($clzInfo.children.size()>0)
-            <p>子类列表</p>
-            <ul>
+            <tr><td>子类列表</td>
+            <td>
+            <ol>
               #foreach($i in $clzInfo.children)
               <li>#showClassName($classMap $i.className $id)</li>
               #end
-            </ul>
+            </ol>
+            </td></tr>
             #else
-            <p>子类：无</p>
+            <tr><td>子类</td><td>无</td></tr>
             #end
+            </table>
+            <p><a class="btn primary" href="#" onclick="return submitForm();">保存修改</a></p>
+            <p>Bug:修改class的名字只能修改一次，并且必须在第一个。</p>
+          </div>
+          <div class="span5">
+             <h2>编辑信息</h2>
+             <textarea name="renameInfo" id="renameInfo" cols="150" readonly></textarea>
           </div>
         </div>
         <hr>
@@ -109,9 +150,9 @@
             #if($clzInfo.fields.size()>0)
             <p>属性列表</p>
             <table>
-            <tr><td>属性名</td><td>类型</td><td>描述</td></tr>
+            <tr><td>属性名(E)</td><td>类型</td><td>描述</td></tr>
               #foreach($i in $clzInfo.fields)
-              <tr><td>$i.name</td><td>#showClassName($classMap $i.type $id)</td><td>$i.desc</td></tr>
+              <tr><td class="editable" ftype="field" fdesc="$i.desc" origValue="$i.name" id="f_$velocityCount">$i.name</td><td>#showClassName($classMap $i.type $id)</td><td id="f_${velocityCount}_desc">$i.desc</td></tr>
               #end
             </table>
             #else
@@ -126,15 +167,17 @@
             #if($clzInfo.fields.size()>0)
             <p>方法列表</p>
             <table>
-            <tr><td>方法名</td><td>返回类型</td><td>参数列表类型</td></tr>
+            <tr><td nowrap>方法名(E)</td><td>返回类型</td><td>参数列表类型</td><td>描述</td></tr>
               #foreach($i in $clzInfo.methods)
-              <tr><td>$i.name</td><td>#showClassName($classMap $i.returnType $id)</td><td>
-                <ul>
+              <tr><td class="editable" ftype="method" fdesc="$i.desc" origValue="$i.name" id="m_$velocityCount">$i.name</td><td>#showClassName($classMap $i.returnType $id)</td><td>
+                <ol>
 	              #foreach($x in $i.parameterTypes)
 	              <li>#showClassName($classMap $x $id)</li>
 	              #end
-	            </ul>
-              </td></tr>
+	            </ol>
+              </td>
+              <td id="m_${velocityCount}_desc">$i.desc</td>
+              </tr>
               #end
             </table>
             #else
@@ -151,9 +194,7 @@
        #end
         <hr>
 
-        <footer>
-          <p>&copy; Company 2011</p>
-        </footer>
+        #include("/footer.vm")
       </div>
     </div>
 

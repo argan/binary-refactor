@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.OutputStream;
 
 import org.hydra.gui.web.Database;
+import org.hydra.gui.web.FileItem;
 import org.hydra.util.Utils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -35,7 +36,8 @@ public class UploadController {
             os = new FileOutputStream(f);
             os.write(file.getBytes());
             os.flush();
-            Database.save("file", id, file.getOriginalFilename());
+            FileItem item = new FileItem(f.getCanonicalPath(), file.getOriginalFilename(), file.getContentType());
+            Database.save("file", id, item);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

@@ -22,6 +22,9 @@ public class ClassMap {
     private Map<String, ClassInfo> map = new HashMap<String, ClassInfo>();
 
     public ClassInfo getClassInfo(String name) {
+        if (name == null) {
+            return null;
+        }
         return this.map.get(name.replace('.', '/'));
     }
 
@@ -29,7 +32,7 @@ public class ClassMap {
         Map<String, List<ClassInfo>> result = new TreeMap<String, List<ClassInfo>>();
 
         for (Map.Entry<String, ClassInfo> entry : map.entrySet()) {
-            String pkg = getPkg(entry.getKey());
+            String pkg = getShortPackage(entry.getKey());
             List<ClassInfo> list = result.get(pkg);
             if (list == null) {
                 list = new ArrayList<ClassInfo>();
@@ -40,7 +43,7 @@ public class ClassMap {
         return result;
     }
 
-    public String getPkg(String key) {
+    public String getShortPackage(String key) {
         int index = key.lastIndexOf("/");
         String fullName = key.substring(0, index);
         StringBuilder shortName = new StringBuilder();
@@ -64,10 +67,10 @@ public class ClassMap {
         for (Map.Entry<String, ClassInfo> entry : map.entrySet()) {
             ClassInfo info = entry.getValue();
             if (info.getSuperClass() != null) {
-                info.getSuperClass().addChild(info);
+                info.getSuperClass().addChild(info.getClassName());
             }
             for (ClassInfo intf : info.getInterfaces()) {
-                intf.addChild(info);
+                intf.addChild(info.getClassName());
             }
         }
         List<String> addPkgsList = Arrays.asList(Utils.tokens(addPkgs));

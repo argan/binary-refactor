@@ -36,7 +36,7 @@
 
 		<!-- if you want to use the Spring Velocity macros, set this property to 
 			true -->
-		<property name="exposeSpringMacroHelpers" value="true" />
+		<property name="exposeSpringMacroHelpers" value="false" />
 
 	</bean>
 </beans>

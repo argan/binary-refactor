@@ -7,31 +7,33 @@ import java.util.List;
 import org.hydra.util.Lists.Pair;
 
 public class ClassInfo {
+    private ClassMap map;
     // internalName like java/lang/String
     private String className;
     // direct superClass
-    private ClassInfo superClass;
+    private String superClassName;
     // all interfaces
-    private List<ClassInfo> interfaces;
+    private List<String> interfaceNames = new ArrayList<String>();
     // direct children
-    private List<ClassInfo> children;
+    private List<String> childrenNames = new ArrayList<String>();
 
-    private List<MethodInfo> methods;
-    private List<FieldInfo> fields;
+    private List<MethodInfo> methods = new ArrayList<MethodInfo>(0);
+    private List<FieldInfo> fields = new ArrayList<FieldInfo>(0);
 
     private boolean isInterface;
 
-    public ClassInfo(String name, boolean isInterface) {
-        this.className = name;
-        this.isInterface = isInterface;
-        this.interfaces = new ArrayList<ClassInfo>(0);
-        this.children = new ArrayList<ClassInfo>(0);
-        this.methods = new ArrayList<MethodInfo>(0);
-        this.fields = new ArrayList<FieldInfo>(0);
+    public boolean isInterface() {
+        return isInterface;
     }
 
-    public void setSuperClass(ClassInfo superClass) {
-        this.superClass = superClass;
+    public ClassInfo(ClassMap map, String name, boolean isInterface) {
+        this.map = map;
+        this.className = name;
+        this.isInterface = isInterface;
+    }
+
+    public void setSuperClass(String superClass) {
+        this.superClassName = superClass;
     }
 
     public String getClassName() {
@@ -45,15 +47,25 @@ public class ClassInfo {
     }
 
     public ClassInfo getSuperClass() {
-        return superClass;
+        return this.map.getClassInfo(this.superClassName);
     }
 
     public List<ClassInfo> getInterfaces() {
-        return Collections.unmodifiableList(interfaces);
+        return str2info(this.interfaceNames);
+    }
+
+    private List<ClassInfo> str2info(List<String> names) {
+        List<ClassInfo> info = new ArrayList<ClassInfo>(names.size());
+        for (String s : names) {
+            if (this.map.getClassInfo(s) != null) {
+                info.add(this.map.getClassInfo(s));
+            }
+        }
+        return info;
     }
 
     public List<ClassInfo> getChildren() {
-        return Collections.unmodifiableList(children);
+        return str2info(this.childrenNames);
     }
 
     public List<MethodInfo> getMethods() {
@@ -71,17 +83,17 @@ public class ClassInfo {
     public String toString() {
         StringBuilder buff = new StringBuilder();
         buff.append("ClassInfo{").append(isInterface ? "interface" : "class").append(":").append(this.className);
-        if (this.superClass != null) {
-            buff.append(",super:").append(superClass.getClassName());
+        if (this.superClassName != null) {
+            buff.append(",super:").append(superClassName);
         }
-        if (this.interfaces.size() > 0) {
+        if (this.interfaceNames.size() > 0) {
             if (isInterface) {
                 buff.append(",superInterfaces[");
             } else {
                 buff.append(",interfaces[");
             }
-            for (ClassInfo info : this.interfaces) {
-                buff.append(info.getClassName()).append(",");
+            for (String info : this.interfaceNames) {
+                buff.append(info).append(",");
             }
             buff.append("]");
         }
@@ -113,11 +125,11 @@ public class ClassInfo {
         fieldInfo.setEnclosedClass(this);
     }
 
-    public void addInterface(ClassInfo classInfo) {
-        this.interfaces.add(classInfo);
+    public void addInterface(String classInfo) {
+        this.interfaceNames.add(classInfo);
     }
 
-    public void addChild(ClassInfo info) {
-        this.children.add(info);
+    public void addChild(String info) {
+        this.childrenNames.add(info);
     }
 }

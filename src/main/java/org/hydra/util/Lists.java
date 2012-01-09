@@ -68,10 +68,15 @@ public class Lists {
             return true;
         }
 
+        @Override
+        public String toString() {
+            return "Pair [left=" + left + ", right=" + right + "]";
+        }
+
 	}
 
 	/**
-	 * map function ��һ������һ��listת������һ��list
+	 * map function 
 	 * 
 	 * @param <In>
 	 * @param <Out>
@@ -88,7 +93,7 @@ public class Lists {
 	}
 
 	/**
-	 * filter function ����ṩ���жϺ�����˳�����Ҫ���Ԫ���б�
+	 * filter function
 	 * 
 	 * @param <In>
 	 * @param in

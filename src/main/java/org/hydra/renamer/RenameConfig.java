@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.Reader;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -16,9 +18,19 @@ import org.hydra.util.Lists.Pair;
 public class RenameConfig {
     private Map<String, ClassRenameInfo> config = new HashMap<String, ClassRenameInfo>();
 
-    public static RenameConfig load(String file) {
+    public static RenameConfig loadFromFile(String file) {
         RenameConfig config = new RenameConfig();
-        parse(config, file);
+        try {
+            parse(config, new FileReader(file));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        return config;
+    }
+
+    public static RenameConfig loadFromString(String content) {
+        RenameConfig config = new RenameConfig();
+        parse(config, new StringReader(content));
         return config;
     }
 
@@ -118,9 +130,9 @@ public class RenameConfig {
         return methodName + ":" + methodDesc;
     }
 
-    private static void parse(RenameConfig config, String file) {
+    private static void parse(RenameConfig config, Reader readerx) {
         try {
-            BufferedReader reader = new BufferedReader(new FileReader(file));
+            BufferedReader reader = new BufferedReader(readerx);
             String line = null;
             String currentClass = null;
             while ((line = reader.readLine()) != null) {
