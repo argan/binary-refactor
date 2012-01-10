@@ -3,3 +3,4 @@ target
 .project
 .classpath
 test/new_test.jar
+run
