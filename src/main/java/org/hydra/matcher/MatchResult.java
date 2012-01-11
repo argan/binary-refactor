@@ -94,6 +94,14 @@ public class MatchResult {
             this.desc = desc;
         }
 
+        public String getDesc() {
+            return this.desc;
+        }
+
+        public String getName() {
+            return this.name;
+        }
+
         public String toString() {
             return "Field[" + this.name + "]" + this.desc;
         }
@@ -105,6 +113,14 @@ public class MatchResult {
         public MethodMatchResult(String name, String desc) {
             this.name = name;
             this.desc = desc;
+        }
+
+        public String getDesc() {
+            return this.desc;
+        }
+
+        public String getName() {
+            return this.name;
         }
 
         public String toString() {

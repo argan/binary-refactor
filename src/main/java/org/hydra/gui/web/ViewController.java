@@ -1,4 +1,4 @@
-package org.hydra.gui.web.jarviewer;
+package org.hydra.gui.web;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -6,9 +6,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.jar.JarFile;
 
-import org.hydra.gui.web.Database;
-import org.hydra.gui.web.FileItem;
-import org.hydra.gui.web.StreamView;
 import org.hydra.renamer.ClassMap;
 import org.hydra.renamer.RenameConfig;
 import org.springframework.stereotype.Controller;

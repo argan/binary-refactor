@@ -1,10 +1,8 @@
-package org.hydra.gui.web.jarviewer;
+package org.hydra.gui.web;
 
 import java.io.File;
 import java.io.IOException;
 
-import org.hydra.gui.web.Database;
-import org.hydra.gui.web.FileItem;
 import org.hydra.renamer.RenameConfig;
 import org.hydra.renamer.Renamer;
 import org.springframework.stereotype.Controller;

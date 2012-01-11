@@ -19,8 +19,9 @@
       body {
         padding-top: 60px;
       }
-      #fromJars { float: right; width: 300px; height: 50px; background: #ccc; font-size:16px}
-      #toJars { float: right; width: 300px; height: 100px; border: 1px solid #999; font-size:16px}
+      #fromJar { float: right; width: 300px; height: 50px; background: #ccc; font-size:16px}
+      #libJars { float: right; width: 300px; height: 100px; border: 1px solid #999; font-size:16px}
+      #btnSubmit {float:right}
     </style>
     <!-- Le fav and touch icons -->
     <link rel="shortcut icon" href="images/favicon.ico">
@@ -29,21 +30,22 @@
 	function dropFunc(e,ui) {
         var ele = ui.draggable;
         $(this).html($(ele).html());
-        $(this).attr("jarid",$(ele).attr("id"));
+        $("<input type='hidden' name='fromJar' value='"+$(ele).attr("id")+"'>").appendTo($(this));
+        // $(this).attr("jarid",$(ele).attr("id"));
 	}
 	function dropFunc2(e,ui) {
         var ele = ui.draggable;   
-        var append = $("<li class='toJars'></li>");
+        var append = $("<li class='libJars'></li>");
         append.html($(ele).html()).appendTo(this);
-        append.attr("jarid",$(ele).attr("id"));
+        //append.attr("jarid",$(ele).attr("id"));
+        $("<input type='hidden' name='libJars' value='"+$(ele).attr("id")+"'>").appendTo($(this));
 	}
 	$(document).ready(function(){     
 	    $(".draggable").each(function() {   
 	      $(this).draggable({helper:"clone"});      
 	      });    
-	    $("#fromJars").droppable({drop:dropFunc});      
-	    $("#toJars").droppable({drop:dropFunc2});      
-	                                            
+	    $("#fromJar").droppable({drop:dropFunc});      
+	    $("#libJars").droppable({drop:dropFunc2});      
 	});//ready
 	</script>
   </head>
@@ -68,21 +70,24 @@
 		 </tr>
 		#end
 		#else
-		 <tr><td>No files yet. <a href="/jarviewer/form.htm">Upload</a></td></tr>
+		 <tr><td>No files yet. </td></tr>
 		#end
+		 <tr><td colspan="3"><a href="/jarviewer/form.htm">Upload More Files...</a></td></tr>
 		</table>
         </div>
         </div>
         <div class="row">
+            <form id="matcherForm" method="POST" action="/matcher/result.htm">
           <div class="span6">
             <h2>扫描</h2>
-           <div id="fromJars">待扫描的jar放这里。</div>
-           <div id="toJars">Drop here</div>
+           <div id="fromJar">待扫描的jar放这里。</div>
+           <div id="libJars">用来匹配的类库放这里。</div>
+            <div><input id="btnSubmit" type="submit" class="btn primary" value="开始扫描"></div>
          </div>
          <div class="span6">
             <h2>&nbsp;</h2>
-            <p><a class="btn primary" href="#">开始扫描</a></p>
          </div>
+           </form>
         </div>
         </div>
         #include("/footer.vm")

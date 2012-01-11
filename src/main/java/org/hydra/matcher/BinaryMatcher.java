@@ -21,6 +21,7 @@ import org.hydra.util.Log;
 import org.objectweb.asm.ClassReader;
 
 public class BinaryMatcher {
+
     public static MatchResult match(String jarFile, String jarsDir) {
         File[] jarFiles = new File(jarsDir).listFiles(new FilenameFilter() {
 
@@ -29,10 +30,14 @@ public class BinaryMatcher {
             }
         });
 
+        return match(new File(jarFile), jarFiles);
+    }
+
+    public static MatchResult match(File jarFile, File[] libs) {
         try {
             MatchResult matchResult = new MatchResult();
-            List<ClassSignature> srcJar = collect(new File(jarFile));
-            for (File jar : jarFiles) {
+            List<ClassSignature> srcJar = collect(jarFile);
+            for (File jar : libs) {
                 List<ClassSignature> result = collect(jar);
 
                 // print(result);

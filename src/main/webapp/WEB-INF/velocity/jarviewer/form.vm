@@ -29,7 +29,7 @@
           <h3>Please upload a file</h3>
 	        <form method="post" action="/jarviewer/upload.htm" enctype="multipart/form-data">
 	            <input type="file" name="file"/>
-	            <input type="submit"/>
+	            <input type="submit" class="btn primary" value="上传"/>
 	        </form>
         </div>
         #include("/footer.vm")

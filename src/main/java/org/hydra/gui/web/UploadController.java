@@ -1,11 +1,9 @@
-package org.hydra.gui.web.jarviewer;
+package org.hydra.gui.web;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 
-import org.hydra.gui.web.Database;
-import org.hydra.gui.web.FileItem;
 import org.hydra.util.Utils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

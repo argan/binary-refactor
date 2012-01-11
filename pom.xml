@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.hydra</groupId>
@@ -20,21 +19,53 @@
                     <include>**/*.xml</include>
                 </includes>
             </resource>
+            <resource>
+                <directory>src/main/scala</directory>
+                <includes>
+                    <include>**/*.xml</include>
+                </includes>
+            </resource>
         </resources>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <artifactId>maven-compiler-plugin</artifactId>
-                    <inherited>true</inherited>
-                    <configuration>
-                        <source>1.5</source>
-                        <target>1.5</target>
-                    </configuration>
-                </plugin>
-            </plugins>
-        </pluginManagement>
         <plugins>
-             <plugin>
+            <plugin>
+                <groupId>org.scala-tools</groupId>
+                <artifactId>maven-scala-plugin</artifactId>
+                <version>2.15.2</version>
+                <executions>
+                    <execution>
+                        <id>compile</id>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                        <phase>process-resources</phase>
+                    </execution>
+                    <execution>
+                        <id>test-compile</id>
+                        <goals>
+                            <goal>testCompile</goal>
+                        </goals>
+                        <phase>process-test-resources</phase>
+                    </execution>
+                </executions>
+                <configuration>
+                    <scalaVersion>${scala-version}</scalaVersion>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.3.2</version>
+                <configuration>
+                    <source>1.6</source>
+                    <target>1.6</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>2.5</version>
+            </plugin>
+            <plugin>
                 <artifactId>maven-war-plugin</artifactId>
             </plugin>
             <plugin>
@@ -51,8 +82,7 @@
                     </webXml>
                     <scanIntervalSeconds>10</scanIntervalSeconds>
                     <connectors>
-                        <connector
-                            implementation="org.mortbay.jetty.nio.SelectChannelConnector">
+                        <connector implementation="org.mortbay.jetty.nio.SelectChannelConnector">
                             <port>${jetty-port}</port>
                             <maxIdleTime>60000</maxIdleTime>
                         </connector>
@@ -62,18 +92,23 @@
         </plugins>
     </build>
     <repositories>
-       <repository>
-          <id>maven-repos</id>
-          <url>http://repo1.maven.org/maven2/</url>
-       </repository>
-       <repository>
-          <id>spring-milestone</id>
-          <url>http://repo.springsource.org/release</url>
-       </repository>
-       <repository>
-          <id>jboss-repos</id>
-          <url>http://repository.jboss.org/maven2/</url>
-       </repository>
+        <repository>
+            <id>scala-tools.org</id>
+            <name>Scala-Tools Maven2 Repository</name>
+            <url>http://scala-tools.org/repo-releases</url>
+        </repository>
+        <repository>
+            <id>maven-repos</id>
+            <url>http://repo1.maven.org/maven2/</url>
+        </repository>
+        <repository>
+            <id>spring-milestone</id>
+            <url>http://repo.springsource.org/release</url>
+        </repository>
+        <repository>
+            <id>jboss-repos</id>
+            <url>http://repository.jboss.org/maven2/</url>
+        </repository>
     </repositories>
     <dependencies>
         <dependency>
@@ -102,6 +137,12 @@
             <version>${commonsio-version}</version>
         </dependency>
         <dependency>
+            <groupId>org.scala-lang</groupId>
+            <artifactId>scala-library</artifactId>
+            <version>${scala-version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>servlet-api</artifactId>
             <version>${servletapi-version}</version>
@@ -117,6 +158,7 @@
         <fileupload-version>1.2.2</fileupload-version>
         <commonsio-version>2.1</commonsio-version>
         <servletapi-version>2.5</servletapi-version>
+        <scala-version>2.9.1</scala-version>
 
         <jetty-version>6.1.18</jetty-version>
         <jetty-port>9090</jetty-port>
