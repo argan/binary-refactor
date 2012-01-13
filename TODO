@@ -1,5 +1,7 @@
-* implement MethodSignatureCollector,add some insn code to signature
-* web interface
-* rename class/method/field in ClassMap
-* find same classes from jars by signature
-* view asm-dump
+* implement MethodSignatureCollector,add some insn code to signature 
+* web interface _done_
+* rename class/method/field in ClassMap _done_
+* find same classes from jars by signature _done_
+* view asm-dump _done_
+* batch rename from match result
+* class dependency graph
