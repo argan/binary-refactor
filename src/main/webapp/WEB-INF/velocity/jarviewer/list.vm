@@ -53,30 +53,30 @@
     #include("/menu.vm")
 	    <div class="content">
 	    <div class="row">
-        <!-- Main hero unit for a primary marketing message or call to action -->
         <div class="hero-unit">
-          <h3>Uploaded files</h3>
-        <table>
-        <tr>
-          <td>序号</td><td>文件名</td><td>版本</td><td>操作</td>
-        </tr>
-        #if($list && $list.size()>0)
-        #foreach($f in $list)
-		 <tr>
-		   <td>$velocityCount</td>
-		   <td><div><a href="/jarviewer/view.htm?id=$f.id" id="$f.id" class="draggable">$f.obj.origName</a></div></td>
-		   <td>$f.obj.version</td>
-		   <td><a href="/jarviewer/download.htm?id=$f.id">下载</a></td>
-		 </tr>
-		#end
-		#else
-		 <tr><td>No files yet. </td></tr>
-		#end
-		 <tr><td colspan="3"><a href="/jarviewer/form.htm">Upload More Files...</a></td></tr>
-		</table>
+            <h3>Uploaded files</h3>
+	        <table>
+	        <tr>
+	          <td>序号</td><td>文件名</td><td>版本</td><td>操作</td>
+	        </tr>
+	        #if($list && $list.size()>0)
+	        #foreach($f in $list)
+			 <tr>
+			   <td>$velocityCount</td>
+			   <td><div><a href="/jarviewer/view.htm?id=$f.id" id="$f.id" class="draggable">$f.obj.origName</a></div></td>
+			   <td>$f.obj.version</td>
+			   <td><a href="/jarviewer/download.htm?id=$f.id">下载</a></td>
+			 </tr>
+			#end
+			#else
+			 <tr><td>No files yet. </td></tr>
+			#end
+			 <tr><td colspan="5"><a href="/jarviewer/form.htm">Upload More Files...</a></td></tr>
+			</table>
         </div>
         </div>
         <div class="row">
+        <div class="hero-unit">
             <form id="matcherForm" method="POST" action="/matcher/result.htm">
           <div class="span6">
             <h2>扫描</h2>
@@ -88,6 +88,7 @@
             <h2>&nbsp;</h2>
          </div>
            </form>
+        </div>
         </div>
         </div>
         #include("/footer.vm")

@@ -11,7 +11,7 @@ public class FileItem {
         this.version = 1;
     }
 
-    public String getFulleName() {
+    public String getFullName() {
         return fulleName;
     }
 

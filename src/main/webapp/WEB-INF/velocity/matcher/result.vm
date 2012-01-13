@@ -32,7 +32,7 @@
 	    <div class="row">
         <!-- Main hero unit for a primary marketing message or call to action -->
         <div class="hero-unit">
-          <h3>$fromJar.origName</h3>
+          <h3>在$fromJar.origName 中扫描 #foreach($lib in $libJars)$lib.origName #end</h3>
         #if($matchResult.result.size()>0)
         #foreach($f in $matchResult.result.entrySet())
         <hr style="height:3px;color:#f00;background-color:#f00">

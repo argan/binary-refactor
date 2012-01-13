@@ -114,13 +114,20 @@
         <dependency>
             <groupId>asm</groupId>
             <artifactId>asm-all</artifactId>
-            <version>${asm-version}</version>
+            <version>3.1</version>
         </dependency>
         <dependency>
             <groupId>org.apache.velocity</groupId>
             <artifactId>velocity</artifactId>
-            <version>${velocity-version}</version>
+            <version>1.7</version>
         </dependency>
+        <!--
+        <dependency>
+            <groupId>org.apache.velocity</groupId>
+            <artifactId>velocity-tools</artifactId>
+            <version>${velocity-tools-version}</version>
+        </dependency>
+        -->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-webmvc</artifactId>
@@ -137,11 +144,18 @@
             <version>${commonsio-version}</version>
         </dependency>
         <dependency>
+            <groupId>de.java2html</groupId>
+            <artifactId>java2html</artifactId>
+            <version>5.0</version>
+        </dependency>
+        <!--
+        <dependency>
             <groupId>org.scala-lang</groupId>
             <artifactId>scala-library</artifactId>
             <version>${scala-version}</version>
             <scope>compile</scope>
         </dependency>
+        -->
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>servlet-api</artifactId>
@@ -152,9 +166,8 @@
     </dependencies>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <asm-version>3.1</asm-version>
         <spring-version>3.1.0.RELEASE</spring-version>
-        <velocity-version>1.7</velocity-version>
+        <velocity-tools-version>2.0</velocity-tools-version>
         <fileupload-version>1.2.2</fileupload-version>
         <commonsio-version>2.1</commonsio-version>
         <servletapi-version>2.5</servletapi-version>

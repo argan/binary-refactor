@@ -2,3 +2,4 @@
 * web interface
 * rename class/method/field in ClassMap
 * find same classes from jars by signature
+* view asm-dump

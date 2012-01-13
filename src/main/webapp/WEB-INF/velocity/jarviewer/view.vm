@@ -103,7 +103,9 @@
           <div class="span6">
             <h2>基本信息</h2>
             <table>
-              <tr><td>类名(E)</td><td><div id="clazzName" class="editable" ftype="class" fdesc="" origValue="$clzInfo.className">$clzInfo.className</div></td></tr>
+              <tr><td>类名(E)</td><td><div id="clazzName" class="editable" ftype="class" fdesc="" origValue="$clzInfo.className">$clzInfo.className</div>
+              <a href="/jarviewer/asmdump.htm?id=$id&clz=${clzInfo.className}.class" target="_blank">查看ASMDump</a>
+              </td></tr>
             #if($clzInfo.superClass)
             <tr><td>基类</td><td class="editable">#showClassName($classMap $clzInfo.superClass.className $id)</td></tr>
             #else

@@ -22,7 +22,7 @@ public class MatcherController {
             FileItem fromJarItem = (FileItem) (rec.getObj());
             if (fromJarItem != null) {
                 model.addAttribute("fromJar", fromJarItem);
-                fromJar = new File(fromJarItem.getFulleName());
+                fromJar = new File(fromJarItem.getFullName());
             }
         }
 
@@ -32,7 +32,7 @@ public class MatcherController {
         for (int i = 0; i < libjarids.length; i++) {
             FileItem item = (FileItem) Database.get(libjarids[i]).getObj();
             libJarItems[i] = item;
-            libJars[i] = new File(item.getFulleName());
+            libJars[i] = new File(item.getFullName());
         }
 
         model.addAttribute("libJars", libJarItems);

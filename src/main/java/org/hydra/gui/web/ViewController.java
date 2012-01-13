@@ -4,10 +4,15 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
 import org.hydra.renamer.ClassMap;
 import org.hydra.renamer.RenameConfig;
+import org.objectweb.asm.ClassReader;
+import org.objectweb.asm.util.ASMifierClassVisitor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,7 +35,7 @@ public class ViewController {
 
         FileItem path = (FileItem) Database.get(jar).getObj();
         try {
-            ClassMap classMap = ClassMap.build(new JarFile(new File(path.getFulleName()).getCanonicalPath()));
+            ClassMap classMap = ClassMap.build(new JarFile(new File(path.getFullName()).getCanonicalPath()));
 
             classMap.rebuildConfig(new RenameConfig(), null);
 
@@ -46,12 +51,37 @@ public class ViewController {
         }
     }
 
+    @RequestMapping("/asmdump")
+    public void asmdump(Model model, @RequestParam("id") String jarid, @RequestParam("clz") String clazzName) {
+        model.addAttribute("clzName", clazzName);
+        model.addAttribute("id", jarid);
+
+        if (Database.get(jarid) == null) {
+            return;
+        }
+
+        FileItem path = (FileItem) Database.get(jarid).getObj();
+        model.addAttribute("jarFile",path);
+        StringWriter writer = new StringWriter();
+        try {
+            JarFile jarFile = new JarFile(path.getFullName());
+            JarEntry entry = jarFile.getJarEntry(clazzName);
+            ClassReader reader = new ClassReader(jarFile.getInputStream(entry));
+            reader.accept(new ASMifierClassVisitor(new PrintWriter(writer)), 0);
+            model.addAttribute("code", writer.toString().trim());
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+    }
+
     @RequestMapping(value = "download")
     public View download(@RequestParam("id") String jarid) {
         FileItem path = (FileItem) Database.get(jarid).getObj();
         StreamView view = null;
         try {
-            File file = new File(path.getFulleName());
+            File file = new File(path.getFullName());
             view = new StreamView("application/x-jar", new FileInputStream(file));
             view.setBufferSize(4 * 1024);
             view.setContentDisposition("attachment; filename=\"" + path.getOrigName() + "\"");

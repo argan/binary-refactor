@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>View ASM dump</title>
+    <meta name="author" content="Argan Wang">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Le styles -->
+    <link href="/static/css/bootstrap-1.4.0.css" rel="stylesheet">
+    <style type="text/css">
+      body {
+        padding-top: 60px;
+      }
+    </style>
+    
+    <!-- Include required JS files -->
+	<script type="text/javascript" src="/static/js/sh/shCore.js"></script>
+	 
+	<!--
+	    At least one brush, here we choose JS. You need to include a brush for every 
+	    language you want to highlight
+	-->
+	<script type="text/javascript" src="/static/js/sh/shBrushJava.js"></script>
+	 
+	<!-- Include *at least* the core style and default theme -->
+	<link href="/static/css/sh/shCore.css" rel="stylesheet" type="text/css" />
+	<link href="/static/css/sh/shThemeDefault.css" rel="stylesheet" type="text/css" />
+
+    <!-- Le fav and touch icons -->
+    <link rel="shortcut icon" href="images/favicon.ico">
+  </head>
+
+  <body>
+    #include("/menu.vm")
+	    <div class="content">
+        <!-- Main hero unit for a primary marketing message or call to action -->
+        <div class="hero-unit">
+          <h3>View ASM dump for $clzName in $jarFile.origName</h3>
+	        <!-- You also need to add some content to highlight, but that is covered elsewhere. -->
+			<script type="syntaxhighlighter" class="brush: java"><![CDATA[$code]]></script>
+			 
+			<!-- Finally, to actually run the highlighter, you need to include this JS on your page -->
+			<script type="text/javascript">
+			     SyntaxHighlighter.all()
+			</script>
+        </div>
+        #include("/footer.vm")
+    </body>
+</html>
