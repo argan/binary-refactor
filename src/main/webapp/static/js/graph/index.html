@@ -1,0 +1,33 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+   "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>arbor.js » halfviz</title>
+	<meta name="generator" content="TextMate http://macromates.com/">
+	<meta name="author" content="Christian Swinehart">
+	<!-- Date: 2010-12-20 -->
+</head>
+<body>
+
+  <div id="halfviz">
+    <canvas id="viewport" width="1200" height="700"></canvas>
+  </div>  
+
+  <script src="../jquery.min.1.7.1.js"></script>
+  <script src="./arbor.js"></script>
+  <script src="./graphics.js"></script>
+
+  <!-- the halfviz source, broken out one ‘class’ per file -->
+  <script src="./parseur.js"></script>
+  <script src="./renderer.js"></script>
+  
+  <!-- the main driver code: start here -->
+  <script language="javascript">
+    var GraphConfig = {canvasId:"#viewport",dataUrl:"a-new-hope.json"}
+  </script>
+  
+  <script src="./halfviz.js"></script> 
+</body>
+</html>

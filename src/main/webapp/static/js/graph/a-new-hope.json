@@ -1,0 +1,3 @@
+{
+"src":"; choices\n1 -> 14\n1 -> 69\n5 -> 2\n5 -> 97\n7 -> 52\n7 -> 95\n16 -> 5\n16 -> 33\n19 -> 67\n19 -> 20\n20 -> 103\n20 -> 16\n26 -> 85\n26 -> 7\n33 -> 37\n33 -> 116\n69 -> 6\n69 -> 26\n72 -> 84\n72 -> 23\n72 -> 93\n85 -> 59\n85 -> 19\n93 -> 87\n93 -> 94\n95 -> 10\n95 -> 117\n117 -> 109\n117 -> 72\n\n; endings\n1 {color:#444, shape:dot, label:\u00b7}\n2 {color:#95cde5}\n6 {color:#db8e3c}\n10 {color:#c6531e}\n14 {color:#c6531e}\n23 {color:#ffe35f}\n37 {color:#95cde5}\n52 {color:#db8e3c}\n59 {color:#db8e3c}\n67 {color:#95cde5}\n84 {color:#c6531e}\n87 {color:#db8e3c}\n94 {color:#c6531e}\n97 {color:#b01700}\n103 {color:#b01700}\n109 {color:#95cde5}\n116 {color:#95cde5}"
+}
