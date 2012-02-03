@@ -12,8 +12,8 @@
   var parse = Parseur().parse
 
   var HalfViz = function(canvasId,dataUrl){
-    //sys = arbor.ParticleSystem(2600, 512, 0.5)
-    sys = arbor.ParticleSystem()
+    sys = arbor.ParticleSystem(2600, 512, 0.5)
+    // sys = arbor.ParticleSystem()
     sys.renderer = Renderer(canvasId) // our newly created renderer will have its .init() method called shortly by sys...
     sys.screenPadding(20)
     

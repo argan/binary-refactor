@@ -1,19 +1,32 @@
 package org.hydra.gui.web;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.hydra.util.Log;
+import org.hydra.util.Utils;
+
 public class Database {
 
     private static Config config = new Config();
-    private static DB db = new DB();
+    private static DB db;
 
-    public static void save(String type, String id, Object obj) {
+    static {
+        db = DB.load(config.getUploadPath());
+        
+    }
+
+    public static void save(String type, String id, Serializable obj) {
         db.save(type, id, obj);
     }
 
@@ -48,11 +61,12 @@ public class Database {
         }
     }
 
-    public static class Record {
+    public static class Record implements Serializable {
+        private static final long serialVersionUID = -8089946506185400983L;
         private String id, type;
-        private Object obj;
+        private Serializable obj;
 
-        public Record(String id, String type, Object obj) {
+        public Record(String id, String type, Serializable obj) {
             this.id = id;
             this.type = type;
             this.obj = obj;
@@ -66,10 +80,9 @@ public class Database {
             return type;
         }
 
-        public Object getObj() {
+        public Serializable getObj() {
             return obj;
         }
-
     }
 
     public static class Util {
@@ -79,6 +92,11 @@ public class Database {
     }
 
     private static class DB {
+
+        private static String dbFile = "simpledb.bin";
+
+        private String path;
+
         /**
          * id -> Record
          */
@@ -88,7 +106,11 @@ public class Database {
          */
         private Map<String, List<String>> index = new ConcurrentHashMap<String, List<String>>();
 
-        public void save(String type, String id, Object obj) {
+        public DB(String path2) {
+            this.path = path2;
+        }
+
+        public void save(String type, String id, Serializable obj) {
             List<String> indexByType = this.index.get(type);
             if (indexByType == null) {
                 indexByType = new ArrayList<String>();
@@ -98,6 +120,40 @@ public class Database {
                 indexByType.add(id);
             }
             db.put(id, new Record(id, type, obj));
+            store();
+        }
+
+        private void store() {
+            File f = new File(path, dbFile);
+            ObjectOutputStream oos = null;
+            try {
+                oos = new ObjectOutputStream(new FileOutputStream(f));
+
+                oos.writeObject(this.db);
+                oos.writeObject(this.index);
+                oos.flush();
+            } catch (Exception e) {
+                Log.error(e.toString());
+                Utils.close(oos);
+            }
+        }
+
+        public static DB load(String path) {
+            File f = new File(path, dbFile);
+            if (f.exists()) {
+                ObjectInputStream ois = null;
+                try {
+                    ois = new ObjectInputStream(new FileInputStream(f));
+                    DB db = new DB(path);
+                    db.db = (Map<String, Record>) ois.readObject();
+                    db.index = (Map<String, List<String>>) ois.readObject();
+                    return db;
+                } catch (Exception e) {
+                    Log.error(e.toString());
+                    Utils.close(ois);
+                }
+            }
+            return new DB(path);
         }
 
         public Record get(String id) {
@@ -124,6 +180,7 @@ public class Database {
                 indexByType.remove(id);
             }
             db.remove(id);
+            store();
         }
 
     }

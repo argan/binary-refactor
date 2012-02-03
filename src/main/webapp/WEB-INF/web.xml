@@ -23,6 +23,10 @@
 		<servlet-name>BinaryRefactorApp</servlet-name>
 		<url-pattern>*.htm</url-pattern>
 	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>BinaryRefactorApp</servlet-name>
+		<url-pattern>*.json</url-pattern>
+	</servlet-mapping>
 	<filter>
 		<filter-name>encoding</filter-name>
 		<filter-class>org.springframework.web.filter.CharacterEncodingFilter

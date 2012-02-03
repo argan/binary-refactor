@@ -28,6 +28,10 @@ public class ClassMap {
         return this.map.get(name.replace('.', '/'));
     }
 
+    public boolean contains(String name) {
+        return this.getClassInfo(name) != null;
+    }
+
     public Map<String, List<ClassInfo>> getTree() {
         Map<String, List<ClassInfo>> result = new TreeMap<String, List<ClassInfo>>();
 

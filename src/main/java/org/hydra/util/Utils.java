@@ -28,4 +28,11 @@ public class Utils {
             }
         }
     }
+
+    public static String getShortName(String className) {
+        className = className.replace('.', '/');
+        int index = className.lastIndexOf("/");
+
+        return className.substring(index + 1);
+    }
 }

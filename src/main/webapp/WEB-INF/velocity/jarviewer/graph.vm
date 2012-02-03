@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>View uploaded jar or class</title>
+    <meta name="author" content="Argan Wang">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Le styles -->
+    <link href="/static/css/bootstrap-1.4.0.css" rel="stylesheet">
+
+    <!-- Le fav and touch icons -->
+    <link rel="shortcut icon" href="images/favicon.ico">
+  </head>
+
+<body>
+
+  <div id="halfviz">
+    <canvas id="viewport" width="1200" height="800"></canvas>
+  </div>  
+
+  <script src="/static/js/jquery.min.1.7.1.js"></script>
+  <script src="/static/js/graph/arbor.js"></script>
+  <script src="/static/js/graph/graphics.js"></script>
+
+  <!-- the halfviz source, broken out one ‘class’ per file -->
+  <script src="/static/js/graph/parseur.js"></script>
+  <script src="/static/js/graph/renderer.js"></script>
+  
+  <!-- the main driver code: start here -->
+  <script language="javascript">
+    var GraphConfig = {canvasId:"#viewport",dataUrl:"./graphdata.json?id=$id"}
+  </script>
+  
+  <script src="/static/js/graph/halfviz.js?asldkfjasd"></script> 
+</body>
+</html>

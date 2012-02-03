@@ -1,6 +1,10 @@
 package org.hydra.gui.web;
 
-public class FileItem {
+import java.io.Serializable;
+
+public class FileItem implements Serializable {
+
+    private static final long serialVersionUID = 6258813137889505933L;
     private String fulleName, origName, mimeType;
     private int version;
 

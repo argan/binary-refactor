@@ -5,3 +5,6 @@
 * view asm-dump _done_
 * batch rename from match result
 * class dependency graph ,use arbor.js
+* partial graph
+* db store & load
+
