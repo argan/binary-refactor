@@ -17,6 +17,7 @@
     <script type="text/javascript" src="/static/js/jquery.min.1.7.1.js"></script>
     <script type="text/javascript" src="/static/js/jquery.jeditable-1.7.2.js"></script>
     <script type="text/javascript" src="/static/js/jquery.treeview-1.4.1.js"></script>
+    <script type="text/javascript" src="/static/js/bootstrap-tab.js"></script>
     <style type="text/css">
       body {
         padding-top: 60px;
@@ -88,23 +89,31 @@
       </div>
       
       <div class="content">
-        
-       #set($clzInfo = $classMap.getClassInfo($clzName))
-       #if($clzInfo)
-       
-<form id="rename_form" method="POST" action="/renamer/edit.htm?id=$id">
-   <input type="hidden" name="className" value="$clzInfo.className" id="className">
-   <input type="hidden" name="newClassName" value="$clzInfo.className" id="newClassName">
-   <input type="hidden" name="renameConfig" value="" id="renameConfig">
-</form>
-
-        <!-- Example row of columns -->
-        <div class="row">
-          <div class="span6">
+		#set($clzInfo = $classMap.getClassInfo($clzName))
+        #if($clzInfo)
+        <!--
+       <ul class="tabs">
+		  <li class="active"><a href="#baseinfo"  data-toggle="tab">基本信息</a></li>
+		  <li><a href="#fields" data-toggle="tab">属性</a></li>
+		  <li><a href="#methods" data-toggle="tab">方法</a></li>
+		  <li><a href="#asmdump" data-toggle="tab">ASM汇编</a></li>
+		  <li><a href="#depgraph" data-toggle="tab">我的依赖</a></li>
+		  <li><a href="#depsonme" data-toggle="tab">依赖我的</a></li>
+		</ul>
+		-->
+		<form id="rename_form" method="POST" action="/renamer/edit.htm?id=$id">
+		   <input type="hidden" name="className" value="$clzInfo.className" id="className">
+		   <input type="hidden" name="newClassName" value="$clzInfo.className" id="newClassName">
+		   <input type="hidden" name="renameConfig" value="" id="renameConfig">
+		</form>
+		<div class="tab-pane" id="baseinfo"><!-- tab baseinfo -->
+          <div class="span9">
             <h2>基本信息</h2>
             <table>
               <tr><td>类名(E)</td><td><div id="clazzName" class="editable" ftype="class" fdesc="" origValue="$clzInfo.className">$clzInfo.className</div>
-              <a href="/jarviewer/asmdump.htm?id=$id&clz=${clzInfo.className}.class" target="_blank">查看ASMDump</a>
+              <a href="/jarviewer/asmdump.htm?id=$id&clz=${clzInfo.className}.class" target="_blank">ASMDump</a>
+              <a href="/jarviewer/graph.htm?id=$id&clz=${clzInfo.className}&type=mydeps" target="_blank">我的依赖</a>
+              <a href="/jarviewer/graph.htm?id=$id&clz=${clzInfo.className}&type=depsonme" target="_blank">依赖我的</a>
               </td></tr>
             #if($clzInfo.superClass)
             <tr><td>基类</td><td class="editable">#showClassName($classMap $clzInfo.superClass.className $id)</td></tr>
@@ -139,14 +148,13 @@
             </table>
             <p><a class="btn primary" href="#" onclick="return submitForm();">保存修改</a></p>
           </div>
-          <div class="span5">
+          <div style="display:none">
              <h2>编辑信息</h2>
              <textarea name="renameInfo" id="renameInfo" cols="150" readonly></textarea>
           </div>
         </div>
-        <hr>
-        <div class="row">
-          <div class="span6">
+        <div class="tab-pane" id="fields"><!-- tab fields -->
+          <div class="span9">
             <h2>属性</h2>
             #if($clzInfo.fields.size()>0)
             <p>属性列表</p>
@@ -161,14 +169,13 @@
             #end
          </div>
         </div>
-        <hr>
-        <div class="row">
-          <div class="span5">
+        <div class="tab-pane" id="methods"><!-- tab methods -->
+          <div class="span9">
             <h2>方法</h2>
             #if($clzInfo.fields.size()>0)
             <p>方法列表</p>
             <table>
-            <tr><td nowrap>方法名(E)</td><td>返回类型</td><td>参数列表类型</td><td>描述</td></tr>
+            <tr><td nowrap>方法名(E)</td><td nowrap>返回类型</td><td>参数列表类型</td><td>描述</td></tr>
               #foreach($i in $clzInfo.methods)
               <tr><td class="editable" ftype="method" fdesc="$i.desc" origValue="$i.name" id="m_$velocityCount">$i.name</td><td>#showClassName($classMap $i.returnType $id)</td><td>
                 <ol>
@@ -186,6 +193,16 @@
             #end
           </div>
         </div>
+        </div><!-- end of tab baseinfo -->
+        
+        <div class="span6 tab-pane fade" id="asmdump"><!-- tab asmdump -->
+        asmdump
+        </div><!-- end of tab asmdump -->
+        
+        <div class="span6 tab-pane fade" id="depgraph"><!-- tab depgraph -->
+        depgraph
+        </div><!-- end of depgraph -->
+        
        #else
        <div class="row">
           <div class="span6">

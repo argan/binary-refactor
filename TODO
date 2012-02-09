@@ -4,7 +4,6 @@
 * find same classes from jars by signature _done_
 * view asm-dump _done_
 * batch rename from match result
-* class dependency graph ,use arbor.js
-* partial graph
-* db store & load
-
+* class dependency graph ,use arbor.js _done_
+* partial graph _done_
+* db store & load _done_

@@ -20,7 +20,7 @@
 <body>
 
   <div id="halfviz">
-    <canvas id="viewport" width="1200" height="800"></canvas>
+    <canvas id="viewport" width="1280" height="800"></canvas>
   </div>  
 
   <script src="/static/js/jquery.min.1.7.1.js"></script>
@@ -33,9 +33,9 @@
   
   <!-- the main driver code: start here -->
   <script language="javascript">
-    var GraphConfig = {canvasId:"#viewport",dataUrl:"./graphdata.json?id=$id"}
+    var GraphConfig = {canvasId:"#viewport",dataUrl:"./graphdata.json?id=$!id&clz=$!clz&type=$!type"}
   </script>
   
-  <script src="/static/js/graph/halfviz.js?asldkfjasd"></script> 
+  <script src="/static/js/graph/halfviz.js"></script> 
 </body>
 </html>

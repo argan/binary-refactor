@@ -7,6 +7,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.io.Writer;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -62,12 +63,18 @@ public class ViewController {
     }
 
     @RequestMapping("/graph")
-    public void graph(Model model, @RequestParam("id") String jar) {
+    public void graph(Model model, @RequestParam("id") String jar,
+            @RequestParam(value = "clz", required = false) String clz,
+            @RequestParam(value = "type", required = false) final String type) {
         model.addAttribute("id", jar);
+        model.addAttribute("clz", clz);
+        model.addAttribute("type", type);
     }
 
     @RequestMapping("/graphdata")
-    public View graphdata(@RequestParam("id") final String jar) {
+    public View graphdata(@RequestParam("id") final String jar,
+            @RequestParam(value = "clz", required = false) final String clz,
+            @RequestParam(value = "type", required = false) final String type) {
         FileItem path = (FileItem) Database.get(jar).getObj();
         try {
             final ClassMap classMap = ClassMap.build(new JarFile(new File(path.getFullName()).getCanonicalPath()));
@@ -88,23 +95,43 @@ public class ViewController {
                     int count = 0;
                     Set<String> allObj = new HashSet<String>();
                     writer.write("{\"src\":\"");
-                    for (Map.Entry<String, List<ClassInfo>> e : tree.entrySet()) {
-                        writer.write(";" + e.getKey() + "\\n");
-                        for (ClassInfo clazz : e.getValue()) {
-                            for (String dep : clazz.getDependencies()) {
+                    ClassInfo clzInfo = classMap.getClassInfo(clz);
+                    if (clzInfo != null) {
+                        // partial dep-graph
+                        if ("mydeps".equals(type)) {
+                            // deps of clz
+                            for (String dep : clzInfo.getDependencies()) {
                                 if (classMap.contains(dep)) {
-                                    allObj.add(clazz.getClassName());
-                                    allObj.add(dep);
-
-                                    writer.write(clazz.getClassShortName());
-                                    writer.write(" -> ");
-                                    writer.write(Utils.getShortName(dep));
-                                    writer.write("\\n");
-                                    count++;
+                                    writeDep(writer, clz, dep);
+                                }
+                            }
+                        } else if ("depsonme".equals(type)) {
+                            // who depends on me ?
+                            for (Map.Entry<String, List<ClassInfo>> e : tree.entrySet()) {
+                                for (ClassInfo info : e.getValue()) {
+                                    if (info.getDependencies().contains(clz)) {
+                                        writeDep(writer, info.getClassName(), clz);
+                                    }
                                 }
                             }
                         }
-                        writer.write(";// end of package " + e.getKey() + "\\n");
+                        writer.write(clz + " {color:red,link:'/'}");
+                    } else {
+                        // all data
+                        for (Map.Entry<String, List<ClassInfo>> e : tree.entrySet()) {
+                            writer.write(";" + e.getKey() + "\\n");
+                            for (ClassInfo clazz : e.getValue()) {
+                                for (String dep : clazz.getDependencies()) {
+                                    if (classMap.contains(dep)) {
+                                        allObj.add(clazz.getClassName());
+                                        allObj.add(dep);
+                                        writeDep(writer, clazz.getClassShortName(), Utils.getShortName(dep));
+                                        count++;
+                                    }
+                                }
+                            }
+                            writer.write(";// end of package " + e.getKey() + "\\n");
+                        }
                     }
                     writer.write("; totally " + count + " edges.\\n");
                     // TODO link doesn't work,why?
@@ -115,6 +142,13 @@ public class ViewController {
                     writer.write("\"}\n");
                     writer.flush();
                     Utils.close(writer);
+                }
+
+                private void writeDep(Writer writer, final String src, String dest) throws IOException {
+                    writer.write(src);
+                    writer.write(" -> ");
+                    writer.write(dest);
+                    writer.write("\\n");
                 }
 
             };
