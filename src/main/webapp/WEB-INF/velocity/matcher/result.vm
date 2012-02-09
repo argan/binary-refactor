@@ -26,6 +26,9 @@
     <!-- Le fav and touch icons -->
     <link rel="shortcut icon" href="images/favicon.ico">
   </head>
+#macro(esc $name)
+$name.replace("<","&lt;").replace(">","&gt;")
+#end
   <body>
     #include("/menu.vm")
 	    <div class="content">
@@ -51,7 +54,7 @@
 		   </td>
 		   <td>
 		      #foreach($mtd in $clz.methods)
-		        <li title="$mtd.left.desc - $mtd.right.desc">$mtd.left.name - $mtd.right.name</li>
+		        <li title="$mtd.left.desc - $mtd.right.desc">#esc($mtd.left.name) - #esc($mtd.right.name)</li>
 		      #end
 		   </td>
 		 </tr>

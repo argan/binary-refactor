@@ -7,3 +7,4 @@
 * class dependency graph ,use arbor.js _done_
 * partial graph _done_
 * db store & load _done_
+* delete a class from a jar
