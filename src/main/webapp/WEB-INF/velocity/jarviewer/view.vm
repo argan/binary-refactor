@@ -64,7 +64,7 @@
 #set ($info = false)
 #set ($namex = $name.replace('[',' ').replace(']',' ').trim())
 #set($info = $map.getClassInfo($namex))
-#if($info)<a href="/jarviewer/view.htm?id=$id&clz=$info.className">$name</a>#else $name #end
+#if($info)<a href="/jarviewer/view.htm?id=$id&clz=$namex">$name</a>#else $name #end
 #end
 
     <div class="container-fluid">
@@ -116,7 +116,7 @@
               <a href="/jarviewer/graph.htm?id=$id&clz=${clzInfo.className}&type=depsonme" target="_blank">依赖我的</a>
               </td></tr>
             #if($clzInfo.superClass)
-            <tr><td>基类</td><td class="editable">#showClassName($classMap $clzInfo.superClass.className $id)</td></tr>
+            <tr><td>基类</td><td>#showClassName($classMap $clzInfo.superClass.className $id)</td></tr>
             #else
             <tr><td>基类</td><td>java/lang/Object</td>
             #end

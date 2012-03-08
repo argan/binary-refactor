@@ -114,7 +114,7 @@
         <dependency>
             <groupId>asm</groupId>
             <artifactId>asm-all</artifactId>
-            <version>3.1</version>
+            <version>3.3.1</version>
         </dependency>
         <dependency>
             <groupId>org.apache.velocity</groupId>
@@ -164,7 +164,7 @@
     </dependencies>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <spring-version>3.1.0.RELEASE</spring-version>
+        <spring-version>3.1.1.RELEASE</spring-version>
         <servletapi-version>2.5</servletapi-version>
         <scala-version>2.9.1</scala-version>
 
