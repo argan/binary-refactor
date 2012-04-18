@@ -138,7 +138,8 @@ public class Database {
             }
         }
 
-        public static DB load(String path) {
+        @SuppressWarnings("unchecked")
+		public static DB load(String path) {
             File f = new File(path, dbFile);
             if (f.exists()) {
                 ObjectInputStream ois = null;

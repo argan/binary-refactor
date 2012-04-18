@@ -46,7 +46,8 @@ public class Lists {
             return result;
         }
 
-        @Override
+        @SuppressWarnings("unchecked")
+		@Override
         public boolean equals(Object obj) {
             if (this == obj)
                 return true;
@@ -54,7 +55,7 @@ public class Lists {
                 return false;
             if (getClass() != obj.getClass())
                 return false;
-            Pair other = (Pair) obj;
+            Pair<Left,Right> other = (Pair<Left, Right>) obj;
             if (left == null) {
                 if (other.left != null)
                     return false;
