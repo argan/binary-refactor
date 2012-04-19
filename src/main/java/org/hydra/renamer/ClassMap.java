@@ -5,7 +5,6 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Enumeration;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -19,7 +18,7 @@ import org.hydra.util.Utils;
 import org.objectweb.asm.ClassReader;
 
 public class ClassMap {
-    private Map<String, ClassInfo> map = new HashMap<String, ClassInfo>();
+    private Map<String, ClassInfo> map = new TreeMap<String, ClassInfo>();
 
     public ClassInfo getClassInfo(String name) {
         if (name == null) {

@@ -177,7 +177,7 @@
             <table>
             <tr><td nowrap>方法名(E)</td><td nowrap>返回类型</td><td>参数列表类型</td><td>描述</td></tr>
               #foreach($i in $clzInfo.methods)
-              <tr><td class="editable" ftype="method" fdesc="$i.desc" origValue="$i.name" id="m_$velocityCount">$i.name</td><td>#showClassName($classMap $i.returnType $id)</td><td>
+              <tr><td class="#if($i.name.indexOf("<") == -1)editable#end" ftype="method" fdesc="$i.desc" origValue="$i.name" id="m_$velocityCount">$i.name.replaceAll("<","&lt;").replaceAll(">","&gt;")</td><td>#showClassName($classMap $i.returnType $id)</td><td>
                 <ol>
 	              #foreach($x in $i.parameterTypes)
 	              <li>#showClassName($classMap $x $id)</li>
