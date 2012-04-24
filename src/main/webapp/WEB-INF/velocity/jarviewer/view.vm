@@ -172,7 +172,7 @@
         <div class="tab-pane" id="methods"><!-- tab methods -->
           <div class="span9">
             <h2>方法</h2>
-            #if($clzInfo.fields.size()>0)
+            #if($clzInfo.methods.size()>0)
             <p>方法列表</p>
             <table>
             <tr><td nowrap>方法名(E)</td><td nowrap>返回类型</td><td>参数列表类型</td><td>描述</td></tr>

@@ -37,6 +37,9 @@ public class ViewController {
     @RequestMapping("/view")
     public void view(Model model, @RequestParam("id") String jar,
             @RequestParam(value = "clz", required = false) String clazzName) {
+
+        clazzName = clazzName != null ? clazzName.replace('.', '/') : null;
+
         model.addAttribute("clzName", clazzName);
         model.addAttribute("id", jar);
 
