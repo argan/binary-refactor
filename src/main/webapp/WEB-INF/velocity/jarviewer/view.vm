@@ -111,6 +111,7 @@
             <h2>基本信息</h2>
             <table>
               <tr><td>类名(E)</td><td><div id="clazzName" class="editable" ftype="class" fdesc="" origValue="$clzInfo.className">$clzInfo.className</div>
+              #if($clzInfo.isInterface())<font color="red">接口</font>#end
               <a href="/jarviewer/asmdump.htm?id=$id&clz=${clzInfo.className}.class" target="_blank">ASMDump</a>
               <a href="/jarviewer/graph.htm?id=$id&clz=${clzInfo.className}&type=mydeps" target="_blank">我的依赖</a>
               <a href="/jarviewer/graph.htm?id=$id&clz=${clzInfo.className}&type=depsonme" target="_blank">依赖我的</a>

@@ -20,10 +20,7 @@ public class FieldSignature {
 
 	@Override
 	public String toString() {
-		if (this.ignore) {
-			return "FieldSignature [" + name + "]\n";
-		}
-		return "FieldSignature [name=" + name + ", flags=" + flags + ", type=" + type + ", value=" + value + "]\n";
+		return this.getLevel0Sig();
 	}
 
 	public String getLevel0Sig() {

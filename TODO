@@ -1,11 +1,12 @@
-* implement MethodSignatureCollector,add some insn code to signature 
+* implement MethodSignatureCollector,add some insn code to signature _done_
 * web interface _done_
 * rename class/method/field in ClassMap _done_
 * find same classes from jars by signature _done_
 * view asm-dump _done_
-* batch rename from match result
+* batch rename from match result _done_
 * class dependency graph ,use arbor.js _done_
 * partial graph _done_
 * db store & load _done_
 * delete a class from a jar
 * link on graph node
+* modify all method name in class/interface hiberarchy

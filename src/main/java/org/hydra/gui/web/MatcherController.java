@@ -22,6 +22,7 @@ public class MatcherController {
             FileItem fromJarItem = (FileItem) (rec.getObj());
             if (fromJarItem != null) {
                 model.addAttribute("fromJar", fromJarItem);
+                model.addAttribute("fromJarId",fromJarId);
                 fromJar = new File(fromJarItem.getFullName());
             }
         }

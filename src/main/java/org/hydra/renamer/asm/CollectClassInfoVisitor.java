@@ -1,5 +1,7 @@
 package org.hydra.renamer.asm;
 
+import java.lang.reflect.Modifier;
+
 import org.hydra.renamer.ClassInfo;
 import org.hydra.renamer.ClassMap;
 import org.hydra.renamer.FieldInfo;
@@ -20,7 +22,8 @@ public class CollectClassInfoVisitor extends EmptyVisitor {
 
     @Override
     public void visit(int version, int access, String name, String signature, String superName, String[] interfaces) {
-        boolean isInterface = (access & 0x0200) == 1;
+        boolean isInterface = Modifier.isInterface(access);
+        
         info = new ClassInfo(this.map, name, isInterface);
         if (interfaces != null) {
             for (String a : interfaces) {

@@ -1,10 +1,12 @@
 package org.hydra.matcher;
 
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.hydra.util.Lists;
 import org.hydra.util.Lists.AccFunc;
+import org.hydra.util.Log;
 
 public class MethodSignature {
     public MethodSignature(String name2) {
@@ -16,14 +18,16 @@ public class MethodSignature {
     private int flags;
     private List<ClassSignature> params = new ArrayList<ClassSignature>();
     private List<ClassSignature> exceptions = new ArrayList<ClassSignature>();
-    private int insnCode = 47;
+    private int insnCode = 0;
+    private boolean isAbstract = false;
 
     public void addInsn(int code) {
-        this.insnCode &= code;
+        this.insnCode += insnCode * 47 + code;
     }
 
     public void setFlags(int access) {
         this.flags = access;
+        this.isAbstract = Modifier.isAbstract(access);
     }
 
     public void setReturnType(ClassSignature classSignature) {
@@ -40,11 +44,7 @@ public class MethodSignature {
 
     @Override
     public String toString() {
-        if (this.ignore) {
-            return "MethodSignature [" + name + "]\n";
-        }
-        return "MethodSignature [name=" + name + ", returnType=" + returnType + ", flags=" + flags + ", params="
-                + params + ", exceptions=" + exceptions + "]\n";
+        return this.getLevel0Sig();
     }
 
     private boolean ignore = false;
@@ -63,6 +63,7 @@ public class MethodSignature {
      */
     public String getLevel0Sig() {
         StringBuilder sb = new StringBuilder();
+        sb.append(this.isAbstract).append("|");
         sb.append(Types.qualify(this.returnType.getName())).append(" ");
         if ("<init>".equals(this.name) || "<clinit>".equals(this.name)) {
             sb.append(this.name);
@@ -71,7 +72,7 @@ public class MethodSignature {
         }
         sb.append("(").append(join(this.params)).append(")");
         sb.append("").append(join(this.exceptions));
-        sb.append("INSN").append(this.insnCode);
+        sb.append("INSN ").append(this.insnCode);
         return sb.toString();
     }
 

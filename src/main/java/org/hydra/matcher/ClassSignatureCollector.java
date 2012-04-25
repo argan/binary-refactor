@@ -25,6 +25,8 @@ public class ClassSignatureCollector implements ClassVisitor {
         ClassSignature parent = this.getClassSignature(superName);
 
         clazz.setSuper(parent);
+        clazz.setFlags(access);
+        
         if (interfaces != null) {
             for (String s : interfaces) {
                 clazz.addInterface(this.getClassSignature(s));

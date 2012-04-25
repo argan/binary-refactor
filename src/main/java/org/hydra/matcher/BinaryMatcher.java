@@ -140,7 +140,7 @@ public class BinaryMatcher {
             JarEntry entry = entries.nextElement();
             if (entry.getName().endsWith(".class")) {
                 ClassReader reader = new ClassReader(jarFile.getInputStream(entry));
-                reader.accept(extractor, ClassReader.SKIP_CODE | ClassReader.SKIP_DEBUG | ClassReader.SKIP_FRAMES);
+                reader.accept(extractor, 0);
             }
         }
         // get the result

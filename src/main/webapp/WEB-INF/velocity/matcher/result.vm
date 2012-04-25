@@ -12,7 +12,43 @@
     
     <script type="text/javascript" src="/static/js/jquery.min.1.7.1.js"></script>
     <script type="text/javascript" src="/static/js/jquery-ui.min-1.8.9.js"></script>
-    
+    <script language="javascript">
+        function applyChanges(type,clzz,match) {
+            var fromName = $("#from_" + clzz).html();
+            var toName = $("#to_" + clzz+"_"+match).html();
+            // var renameConfig = "class: "+fromName+" to "+toName;
+            var renameConfig = "";
+            if(type == 'all' || type == 'field') {
+                // collect field rename config
+                $('.field_'+clzz+"_"+match).each(function(i,ele) {
+                        var oName = $(ele).attr("ovalue");
+                        var nName = $(ele).attr("nvalue"); 
+                        if (oName != nName ){
+                            renameConfig = renameConfig + "field: " + $(ele).attr("ovalue") + " " + $(ele).attr("desc") + " to "+ $(ele).attr("nvalue")+"\n";
+                        } 
+                    });
+            }
+            if(type == 'all' || type == 'method') {
+                // collect method rename config
+                $('.method_'+clzz+"_"+match).each(function(i,ele) {
+                        var oName = $(ele).attr("ovalue");
+                        var nName = $(ele).attr("nvalue"); 
+                        if (oName != nName ){
+                            renameConfig = renameConfig + "method: " + $(ele).attr("ovalue") + " " + $(ele).attr("desc") + " to "+ $(ele).attr("nvalue")+"\n";
+                        } 
+                    });
+            }
+            $('#renameClassName').val(fromName);
+            $('#newClassName').val(toName);
+            $("#renameConfig").val(renameConfig);
+            
+            if(renameConfig != "" || fromName != toName ) {
+                $('#rename_form').submit();
+            }
+            
+            return false;
+        }
+    </script>
     <!-- Le styles -->
     <link href="/static/css/bootstrap-1.4.0.css" rel="stylesheet">
     <style type="text/css">
@@ -37,36 +73,55 @@ $name.replace("<","&lt;").replace(">","&gt;")
         <div class="hero-unit">
           <h3>在$fromJar.origName 中扫描 #foreach($lib in $libJars)$lib.origName #end</h3>
         #if($matchResult.result.size()>0)
-        #foreach($f in $matchResult.result.entrySet())
-        <hr style="height:3px;color:#f00;background-color:#f00">
-        <p>$f.key</p>
-        <table>
-        <tr>
-          <td width="25%">匹配的类</td><td width="30%">匹配的属性</td><td width="45%">匹配的方法</td>
-        </tr>
-        #foreach($clz in $f.value)
-		 <tr>
-		   <td>$clz.rightName</td>
-		   <td>
-		      #foreach($fld in $clz.fields)
-		        <li title="$fld.left.desc - $fld.right.desc">$fld.left.name - $fld.right.name</li>
-		      #end
-		   </td>
-		   <td>
-		      #foreach($mtd in $clz.methods)
-		        <li title="$mtd.left.desc - $mtd.right.desc">#esc($mtd.left.name) - #esc($mtd.right.name)</li>
-		      #end
-		   </td>
-		 </tr>
-		 #end
-		#end
+            #foreach($f in $matchResult.result.entrySet())
+            <hr style="height:3px;color:#f00;background-color:#f00">
+            #set($clazzId = $velocityCount )
+            <p><span id="from_$clazzId">$f.key</span> &nbsp; <a href="/jarviewer/view.htm?id=$fromJarId&clz=${f.key}" title="Edit class $f.key" target="blank">Edit</a></p>
+            #if($f.value.size() >0)
+            <table>
+            <tr>
+              <td width="25%">匹配的类</td><td width="30%">匹配的属性</td><td width="45%">匹配的方法</td>
+            </tr>
+                #foreach($clz in $f.value)
+                #set($matchCount = $velocityCount)
+        		 <tr>
+        		   <td><span id="to_${clazzId}_${matchCount}">$clz.rightName</span><br><a href="#" onclick="return applyChanges('all',$clazzId,$matchCount);">Apply All Changes</a></td>
+        		   <td>
+        		   #if($clz.fields.size()>0)
+        		      #foreach($fld in $clz.fields)
+        		        <li class="field_${clazzId}_${matchCount}" ovalue="$fld.left.name" nvalue="$fld.right.name" desc="$fld.left.desc" title="$fld.left.desc">$fld.left.name - $fld.right.name</li>
+        		      #end
+        		      <li title="Apply all field changes."><a href="#" onclick="return applyChanges('field',$clazzId,$matchCount);">Apply Field Changes</a></li>
+        		   #end
+        		   </td>
+        		   <td>
+        		   #if($clz.methods.size()>0)
+        		      <ul>
+        		      #foreach($mtd in $clz.methods)
+        		        <li class="method_${clazzId}_${matchCount}" ovalue="$mtd.left.name" nvalue="$mtd.right.name" desc="$mtd.left.desc" title="$mtd.left.desc">#esc($mtd.left.name) - #esc($mtd.right.name)</li>
+        		      #end
+        		      <li title="Apply all method changes."><a href="#" onclick="return applyChanges('method',$clazzId,$matchCount);">Apply Method Changes</a></li>
+        		      </ul>
+        		   #end
+        		   </td>
+        		 </tr>
+        		#end
+		    </table>
+		    #else
+		      <div>No matches yet for class $!f.key </div>
+		    #end
+		    #end
 		#else
-		 <tr><td>No files yet. </td></tr>
+		 <div>No matches yet. </div>
 		#end
-		</table>
         </div>
         </div>
         </div>
+        <form id="rename_form" method="POST" action="/renamer/edit.htm?id=$fromJarId" target="_blank">
+           <input type="hidden" name="className" value="" id="renameClassName">
+           <input type="hidden" name="newClassName" value="" id="newClassName">
+           <input type="hidden" name="renameConfig" value="" id="renameConfig">
+        </form>
         #include("/footer.vm")
     </body>
 </html>

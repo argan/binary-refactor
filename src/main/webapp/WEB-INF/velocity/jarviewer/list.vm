@@ -77,7 +77,7 @@
         </div>
         <div class="row">
         <div class="hero-unit">
-            <form id="matcherForm" method="POST" action="/matcher/result.htm">
+            <form id="matcherForm" method="GET" action="/matcher/result.htm">
           <div class="span6">
             <h2>扫描</h2>
            <div id="fromJar">待扫描的jar放这里。</div>
