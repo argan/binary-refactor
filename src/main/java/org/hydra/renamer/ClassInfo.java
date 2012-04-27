@@ -51,6 +51,9 @@ public class ClassInfo implements Comparable<ClassInfo> {
 	public ClassInfo getSuperClass() {
 		return this.map.getClassInfo(this.superClassName);
 	}
+	public String getSuperClassName() {
+	    return this.superClassName;
+	}
 
 	public Set<ClassInfo> getInterfaces() {
 		return str2info(this.interfaceNames);

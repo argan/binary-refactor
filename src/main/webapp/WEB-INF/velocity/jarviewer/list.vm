@@ -65,7 +65,12 @@
 			   <td>$velocityCount</td>
 			   <td><div><a href="/jarviewer/view.htm?id=$f.id" id="$f.id" class="draggable">$f.obj.origName</a></div></td>
 			   <td>$f.obj.version</td>
-			   <td><a href="/jarviewer/download.htm?id=$f.id">下载</a>&nbsp;<a href="/jarviewer/graph.htm?id=$f.id" target="blank">依赖图</a></td>
+			   <td>
+			     <a href="/jarviewer/download.htm?id=$f.id">下载</a>&nbsp;
+			     <a href="/jarviewer/graph.htm?id=$f.id" target="blank">依赖图</a>&nbsp;
+			     <a href="/jarviewer/delete.htm?id=$f.id" onclick="return confirm('真的要删除$!f.obj.origName么？');">删除</a>&nbsp;
+			     
+			   </td>
 			 </tr>
 			#end
 			#else

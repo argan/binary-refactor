@@ -10,3 +10,6 @@
 * delete a class from a jar
 * link on graph node
 * modify all method name in class/interface hiberarchy
+* delete upload files _done_
+* BUG: doesn't show JDK class as base class _done_
+

@@ -25,6 +25,12 @@ public class UploadController {
         model.addAttribute("list", Database.list("file"));
     }
 
+    @RequestMapping(value = "delete", method = RequestMethod.GET)
+    public String delete(@RequestParam("id") String jarId) {
+        Database.delete(jarId);
+        return "redirect:list.htm";
+    }
+    
     @RequestMapping(value = "upload", method = RequestMethod.POST)
     public String upload(Model model, @RequestParam("file") MultipartFile file) {
         String id = Database.Util.nextId();
