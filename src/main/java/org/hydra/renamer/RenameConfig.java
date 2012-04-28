@@ -136,7 +136,8 @@ public class RenameConfig {
             String line = null;
             String currentClass = null;
             while ((line = reader.readLine()) != null) {
-                line = line.trim();
+                line = line.trim().replace('.', '/');
+                
                 if (line.length() == 0)
                     continue;
                 String[] tokens = Utils.tokens(line);

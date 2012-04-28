@@ -99,8 +99,12 @@
             <url>http://scala-tools.org/repo-releases</url>
         </repository>
         <repository>
-            <id>maven-repos</id>
+            <id>maven-repos1</id>
             <url>http://repo1.maven.org/maven2/</url>
+        </repository>
+        <repository>
+            <id>maven-repos2</id>
+            <url>http://repo2.maven.org/maven2/</url>
         </repository>
         <repository>
             <id>spring-milestone</id>
@@ -168,9 +172,9 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>bouncycastle</groupId>
+            <groupId>org.bouncycastle</groupId>
             <artifactId>bcprov-jdk14</artifactId>
-            <version>136</version>
+            <version>1.38</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

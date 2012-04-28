@@ -12,4 +12,7 @@
 * modify all method name in class/interface hiberarchy
 * delete upload files _done_
 * BUG: doesn't show JDK class as base class _done_
-
+* compare to class trees and modify classes associate the tree
+* integrate a decompiler
+* add a rename script console _done_ 
+* 

@@ -8,6 +8,7 @@ import org.hydra.renamer.Renamer;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
@@ -36,8 +37,37 @@ public class RenamerController {
         renameConfig = renameConfig.trim();
         renameConfig = "class: " + clazzName + " to " + newClassName + "\n" + renameConfig;
 
-        Database.save("changelog-" + jar, Database.Util.nextId(), renameConfig);
+        executeRename(jar, renameConfig);
+        return "redirect:/jarviewer/view.htm";// ?id=" + jar + "&clz=" +
+                                              // newClassName;
+    }
 
+    @RequestMapping(value = "/script", method = RequestMethod.GET)
+    public void script(Model model, @RequestParam("id") String jar) {
+        model.addAttribute("id", jar);
+
+        if (Database.get(jar) != null) {
+            FileItem path = (FileItem) Database.get(jar).getObj();
+            model.addAttribute("jarFile", path);
+        }
+    }
+
+    @RequestMapping(value = "/batch", method = RequestMethod.POST)
+    public String batch(Model model, @RequestParam("id") String jar, @RequestParam("renameConfig") String renameConfig) {
+        model.addAttribute("id", jar);
+
+        if (Database.get(jar) != null) {
+            FileItem path = (FileItem) Database.get(jar).getObj();
+            model.addAttribute("jarFile", path);
+        }
+        if (renameConfig != null && renameConfig.length() > 0) {
+            RenameConfig config = executeRename(jar, renameConfig);
+            model.addAttribute("renameConfig", config);
+        }
+        return "/renamer/script";
+    }
+
+    private RenameConfig executeRename(String jar, String renameConfig) {
         RenameConfig config = RenameConfig.loadFromString(renameConfig);
 
         FileItem path = (FileItem) Database.get(jar).getObj();
@@ -55,8 +85,9 @@ public class RenamerController {
         }
         Renamer.rename(config, oldjar, filePath);
         path.setFulleName(filePath);
+        Database.save("changelog-" + jar, Database.Util.nextId(), renameConfig);
         Database.save("file", jar, path);
-        return "redirect:/jarviewer/view.htm";// ?id=" + jar + "&clz=" +
-                                              // newClassName;
+
+        return config;
     }
 }

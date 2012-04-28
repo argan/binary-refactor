@@ -69,6 +69,7 @@
 			     <a href="/jarviewer/download.htm?id=$f.id">下载</a>&nbsp;
 			     <a href="/jarviewer/graph.htm?id=$f.id" target="blank">依赖图</a>&nbsp;
 			     <a href="/jarviewer/delete.htm?id=$f.id" onclick="return confirm('真的要删除$!f.obj.origName么？');">删除</a>&nbsp;
+			     <a href="/renamer/script.htm?id=$f.id" target="blank">执行脚本</a>&nbsp;
 			     
 			   </td>
 			 </tr>
