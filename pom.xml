@@ -165,6 +165,7 @@
             <version>${servletapi-version}</version>
             <scope>provided</scope>
         </dependency>
+        <!--
         <dependency>
             <groupId>commons-httpclient</groupId>
             <artifactId>commons-httpclient</artifactId>
@@ -194,6 +195,7 @@
             <artifactId>nanoxml</artifactId>
             <version>2.2.3</version>
         </dependency>
+        -->
     </dependencies>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

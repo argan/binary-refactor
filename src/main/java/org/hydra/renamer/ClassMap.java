@@ -27,6 +27,12 @@ public class ClassMap {
         return this.map.get(name.replace('.', '/'));
     }
 
+    public void walk(ClassWalker walker) {
+        for (Map.Entry<String, ClassInfo> entry : map.entrySet()) {
+            walker.walk(entry.getValue());
+        }
+    }
+
     public boolean contains(String name) {
         return this.getClassInfo(name) != null;
     }
@@ -147,6 +153,10 @@ public class ClassMap {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public static interface ClassWalker {
+        public void walk(ClassInfo classInfo);
     }
 
 }

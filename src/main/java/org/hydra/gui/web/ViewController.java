@@ -12,6 +12,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
@@ -20,6 +21,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.hydra.renamer.ClassInfo;
 import org.hydra.renamer.ClassMap;
+import org.hydra.renamer.ClassMap.ClassWalker;
 import org.hydra.renamer.RenameConfig;
 import org.hydra.util.Utils;
 import org.objectweb.asm.ClassReader;
@@ -203,4 +205,44 @@ public class ViewController {
         }
         return view;
     }
+
+    @RequestMapping(value = "search")
+    public void search(Model model, @RequestParam("id") String jarid, @RequestParam("q") final String query) {
+        model.addAttribute("id", jarid);
+        model.addAttribute("query", query);
+
+        if (Database.get(jarid) == null) {
+            return;
+        }
+
+        FileItem path = (FileItem) Database.get(jarid).getObj();
+        model.addAttribute("jarFile", path);
+        try {
+            ClassMap classMap = ClassMap.build(new JarFile(new File(path.getFullName()).getCanonicalPath()));
+
+            classMap.rebuildConfig(new RenameConfig(), null);
+
+            model.addAttribute("classMap", classMap);
+
+            final Set<String> matches = new TreeSet<String>();
+            ClassWalker walker = new ClassWalker() {
+
+                @Override
+                public void walk(ClassInfo classInfo) {
+                    if (classInfo.getClassShortName().equals(query)) {
+                        matches.add(classInfo.getClassName());
+                    }
+                }
+            };
+
+            classMap.walk(walker);
+
+            model.addAttribute("matches", matches);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
 }

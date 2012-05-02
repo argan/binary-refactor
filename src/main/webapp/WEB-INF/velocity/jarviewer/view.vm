@@ -52,6 +52,11 @@
 	$("#renameConfig").val($("#renameInfo").val());
     $("#rename_form").submit();
   }
+  function search() {
+    var clazz = $('#matchClass').val();
+    window.location="search.htm?id=$!{id}&q="+clazz;
+    return false;
+  }
   </script>
     <!-- Le fav and touch icons -->
     <link rel="shortcut icon" href="images/favicon.ico">
@@ -89,6 +94,7 @@
       </div>
       
       <div class="content">
+      <form onSubmit="return search();">Goto:<input type="text" id="matchClass"><input type="button" onclick="search();" value="Go"></form>
 		#set($clzInfo = $classMap.getClassInfo($clzName))
         #if($clzInfo)
         <!--
