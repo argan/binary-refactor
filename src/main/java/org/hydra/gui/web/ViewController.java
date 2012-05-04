@@ -207,12 +207,12 @@ public class ViewController {
     }
 
     @RequestMapping(value = "search")
-    public void search(Model model, @RequestParam("id") String jarid, @RequestParam("q") final String query) {
+    public String search(Model model, @RequestParam("id") String jarid, @RequestParam("q") final String query) {
         model.addAttribute("id", jarid);
         model.addAttribute("query", query);
 
         if (Database.get(jarid) == null) {
-            return;
+            return null;
         }
 
         FileItem path = (FileItem) Database.get(jarid).getObj();
@@ -237,12 +237,16 @@ public class ViewController {
 
             classMap.walk(walker);
 
+            if (matches.size() == 1) {
+                model.addAttribute("clz", matches.iterator().next());
+                return "redirect:/jarviewer/view.htm";
+            }
             model.addAttribute("matches", matches);
 
         } catch (IOException e) {
             e.printStackTrace();
         }
-
+        return "/jarviewer/search";
     }
 
 }
