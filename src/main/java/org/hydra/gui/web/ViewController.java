@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.Writer;
@@ -25,12 +26,17 @@ import org.hydra.renamer.ClassMap.ClassWalker;
 import org.hydra.renamer.RenameConfig;
 import org.hydra.util.Utils;
 import org.objectweb.asm.ClassReader;
-import org.objectweb.asm.util.ASMifierClassVisitor;
+import org.objectweb.asm.util.TraceClassVisitor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.View;
+
+import ru.andrew.jclazz.core.Clazz;
+import ru.andrew.jclazz.core.ClazzException;
+import ru.andrew.jclazz.decompiler.ClazzSourceView;
+import ru.andrew.jclazz.decompiler.ClazzSourceViewFactory;
 
 @Controller
 @RequestMapping("/jarviewer")
@@ -165,8 +171,9 @@ public class ViewController {
         return null;
     }
 
-    @RequestMapping("/asmdump")
-    public void asmdump(Model model, @RequestParam("id") String jarid, @RequestParam("clz") String clazzName) {
+    @RequestMapping("/source")
+    public void asmdump(Model model, @RequestParam("id") String jarid, @RequestParam("clz") String clazzName,
+            @RequestParam(value = "type", required = false, defaultValue = "asmdump") String type) {
         model.addAttribute("clzName", clazzName);
         model.addAttribute("id", jarid);
 
@@ -176,18 +183,46 @@ public class ViewController {
 
         FileItem path = (FileItem) Database.get(jarid).getObj();
         model.addAttribute("jarFile", path);
-        StringWriter writer = new StringWriter();
         try {
             JarFile jarFile = new JarFile(path.getFullName());
+            String code = "";
+
             JarEntry entry = jarFile.getJarEntry(clazzName);
-            ClassReader reader = new ClassReader(jarFile.getInputStream(entry));
-            reader.accept(new ASMifierClassVisitor(new PrintWriter(writer)), 0);
-            model.addAttribute("code", writer.toString().trim());
+            InputStream inputStream = jarFile.getInputStream(entry);
+
+            if (type.equals("asmdump")) {
+                code = asmDump(inputStream);
+            } else if (type.equals("decomp")) {
+                code = jclazzDecomp(clazzName, inputStream);
+            }
+            model.addAttribute("code", code);
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
+    }
+
+    private String asmDump(InputStream inputStream) throws IOException {
+        ClassReader reader = new ClassReader(inputStream);
+
+        StringWriter writer = new StringWriter();
+        reader.accept(new TraceClassVisitor(new PrintWriter(writer)), 0);
+        String code1 = writer.toString().trim();
+        return code1;
+    }
+
+    private String jclazzDecomp(String clazzName, InputStream inputStream) {
+        try {
+            Clazz clazz = new Clazz(clazzName,inputStream);
+            ClazzSourceView csv = ClazzSourceViewFactory.getClazzSourceView(clazz);
+            return csv.getSource();
+        } catch (ClazzException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @RequestMapping(value = "download")

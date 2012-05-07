@@ -27,6 +27,7 @@
             </resource>
         </resources>
         <plugins>
+        <!--
             <plugin>
                 <groupId>org.scala-tools</groupId>
                 <artifactId>maven-scala-plugin</artifactId>
@@ -51,6 +52,7 @@
                     <scalaVersion>${scala-version}</scalaVersion>
                 </configuration>
             </plugin>
+            -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -122,6 +124,12 @@
             <version>3.3.1</version>
         </dependency>
         <dependency>
+            <groupId>jclazz</groupId>
+            <artifactId>jclazz-full</artifactId>
+            <version>1.2.2</version>
+        </dependency>
+        
+        <dependency>
             <groupId>org.apache.velocity</groupId>
             <artifactId>velocity</artifactId>
             <version>1.7</version>
@@ -165,18 +173,30 @@
             <version>${servletapi-version}</version>
             <scope>provided</scope>
         </dependency>
-        <!--
         <dependency>
             <groupId>commons-httpclient</groupId>
             <artifactId>commons-httpclient</artifactId>
             <version>3.1</version>
             <scope>test</scope>
         </dependency>
+        <!--
         <dependency>
             <groupId>commons-collections</groupId>
             <artifactId>commons-collections</artifactId>
             <version>2.1</version>
             <scope>test</scope>
+        </dependency>
+        -->
+        <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+            <version>1.4</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+            <version>2.6</version>
         </dependency>
         <dependency>
             <groupId>org.bouncycastle</groupId>
@@ -194,8 +214,19 @@
             <groupId>be.cyberelf.nanoxml</groupId>
             <artifactId>nanoxml</artifactId>
             <version>2.2.3</version>
+            <scope>test</scope>
         </dependency>
-        -->
+        <dependency>
+            <groupId>org.mortbay.jetty</groupId>
+            <artifactId>jetty</artifactId>
+            <version>6.1.25</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.6.1</version>
+        </dependency>
     </dependencies>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

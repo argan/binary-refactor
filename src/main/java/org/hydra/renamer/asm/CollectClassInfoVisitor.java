@@ -1,7 +1,5 @@
 package org.hydra.renamer.asm;
 
-import java.lang.reflect.Modifier;
-
 import org.hydra.renamer.ClassInfo;
 import org.hydra.renamer.ClassMap;
 import org.hydra.renamer.FieldInfo;
@@ -22,9 +20,8 @@ public class CollectClassInfoVisitor extends EmptyVisitor {
 
     @Override
     public void visit(int version, int access, String name, String signature, String superName, String[] interfaces) {
-        boolean isInterface = Modifier.isInterface(access);
-        
-        info = new ClassInfo(this.map, name, isInterface);
+
+        info = new ClassInfo(this.map, name, access);
         if (interfaces != null) {
             for (String a : interfaces) {
                 info.addInterface(a);
@@ -39,14 +36,14 @@ public class CollectClassInfoVisitor extends EmptyVisitor {
     @Override
     public FieldVisitor visitField(int access, String name, String desc, String signature, Object value) {
         if (!"serialVersionUID".equals(name)) {
-            this.map.getClassInfo(this.className).addField(new FieldInfo(name, desc));
+            this.map.getClassInfo(this.className).addField(new FieldInfo(name, desc, access));
         }
         return null;
     }
 
     @Override
     public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
-        MethodInfo methodInfo = new MethodInfo(name, desc);
+        MethodInfo methodInfo = new MethodInfo(name, desc, access, exceptions);
         methodInfo.setExceptions(exceptions);
         this.map.getClassInfo(this.className).addMethod(methodInfo);
         return new CollectDepsMethodVisitor(methodInfo);

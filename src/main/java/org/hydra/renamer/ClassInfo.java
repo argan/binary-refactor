@@ -6,7 +6,7 @@ import java.util.TreeSet;
 
 import org.hydra.util.Utils;
 
-public class ClassInfo implements Comparable<ClassInfo> {
+public class ClassInfo extends AccessableNode implements Comparable<ClassInfo> {
 	private ClassMap map;
 	// internalName like java/lang/String
 	private String className;
@@ -23,16 +23,10 @@ public class ClassInfo implements Comparable<ClassInfo> {
 	private Set<MethodInfo> methods = new TreeSet<MethodInfo>();
 	private Set<FieldInfo> fields = new TreeSet<FieldInfo>();
 
-	private boolean isInterface;
-
-	public boolean isInterface() {
-		return isInterface;
-	}
-
-	public ClassInfo(ClassMap map, String name, boolean isInterface) {
+	public ClassInfo(ClassMap map, String name, int  access) {
+	    super(access);
 		this.map = map;
 		this.className = name;
-		this.isInterface = isInterface;
 		this.map.addClassInfo(this);
 	}
 
@@ -83,13 +77,13 @@ public class ClassInfo implements Comparable<ClassInfo> {
 
 	public String toString() {
 		StringBuilder buff = new StringBuilder();
-		buff.append("ClassInfo{").append(isInterface ? "interface" : "class")
+		buff.append("ClassInfo{").append(this.isInterface() ? "interface" : "class")
 				.append(":").append(this.className);
 		if (this.superClassName != null) {
 			buff.append(",super:").append(superClassName);
 		}
 		if (this.interfaceNames.size() > 0) {
-			if (isInterface) {
+			if (this.isInterface()) {
 				buff.append(",superInterfaces[");
 			} else {
 				buff.append(",interfaces[");
