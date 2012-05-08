@@ -86,15 +86,7 @@
 			</table>
         </div>
         </div>
-        <div id="floatlayer" style="
-    width: 50px;
-    height: 50px;
-    border: solid 1px #cccccc; 
-    background-color: #d0d0ff;
-    z-index: 100;
-    display: none">
-    <!-- Place your content here -->
-</div>
+
         <div id="floating" style="border: solid 1px #ccc; width: 300px">
             <form id="matcherForm" method="GET" action="/matcher/result.htm">
           <div>
