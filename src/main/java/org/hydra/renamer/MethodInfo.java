@@ -10,7 +10,6 @@ public class MethodInfo extends AccessableNode implements Comparable<MethodInfo>
     private String name;
     private String desc;
     private String[] exceptions;
-    private ClassInfo enclosedClass;
 
     // dependencies in code and signature
     private Set<String> dependencies = new HashSet<String>();
@@ -22,20 +21,12 @@ public class MethodInfo extends AccessableNode implements Comparable<MethodInfo>
         this.exceptions = exceptions;
     }
 
-    public void setEnclosedClass(ClassInfo enclosedClass) {
-        this.enclosedClass = enclosedClass;
-    }
-
     public String getName() {
         return name;
     }
 
     public String getDesc() {
         return desc;
-    }
-
-    public ClassInfo getEnclosedClass() {
-        return enclosedClass;
     }
 
     public String getReturnType() {

@@ -12,6 +12,7 @@
     
     <script type="text/javascript" src="/static/js/jquery.min.1.7.1.js"></script>
     <script type="text/javascript" src="/static/js/jquery-ui.min-1.8.9.js"></script>
+    <script type="text/javascript" src="/static/js/jquery.floatinglayer.min.js"></script>
     
     <!-- Le styles -->
     <link href="/static/css/bootstrap-1.4.0.css" rel="stylesheet">
@@ -19,7 +20,7 @@
       body {
         padding-top: 60px;
       }
-      #fromJar { float: right; width: 300px; height: 50px; background: #ccc; font-size:16px}
+      #fromJar { float: right; width: 300px; height: 50px; border: 1px solid #999;background: #ccc; font-size:16px}
       #libJars { float: right; width: 300px; height: 100px; border: 1px solid #999; font-size:16px}
       #btnSubmit {float:right}
     </style>
@@ -27,6 +28,7 @@
     <link rel="shortcut icon" href="images/favicon.ico">
     
 	<script language="javascript">
+	
 	function dropFunc(e,ui) {
         var ele = ui.draggable;
         $(this).html($(ele).html());
@@ -45,7 +47,10 @@
 	      $(this).draggable({helper:"clone"});      
 	      });    
 	    $("#fromJar").droppable({drop:dropFunc});      
-	    $("#libJars").droppable({drop:dropFunc2});      
+	    $("#libJars").droppable({drop:dropFunc2});  
+	    $('#floating').makeFloating({
+	       position: { x: 'right', y: 'center' }
+	    });    
 	});//ready
 	</script>
   </head>
@@ -81,20 +86,24 @@
 			</table>
         </div>
         </div>
-        <div class="row">
-        <div class="hero-unit">
+        <div id="floatlayer" style="
+    width: 50px;
+    height: 50px;
+    border: solid 1px #cccccc; 
+    background-color: #d0d0ff;
+    z-index: 100;
+    display: none">
+    <!-- Place your content here -->
+</div>
+        <div id="floating" style="border: solid 1px #ccc; width: 300px">
             <form id="matcherForm" method="GET" action="/matcher/result.htm">
-          <div class="span6">
+          <div>
             <h2>扫描</h2>
            <div id="fromJar">待扫描的jar放这里。</div>
            <div id="libJars">用来匹配的类库放这里。</div>
             <div><input id="btnSubmit" type="submit" class="btn primary" value="开始扫描"></div>
          </div>
-         <div class="span6">
-            <h2>&nbsp;</h2>
-         </div>
            </form>
-        </div>
         </div>
         </div>
         #include("/footer.vm")

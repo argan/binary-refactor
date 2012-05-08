@@ -6,16 +6,11 @@ public class FieldInfo extends AccessableNode implements Comparable<FieldInfo> {
 
     private String name;
     private String desc;
-    private ClassInfo enclosedClass;
 
     public FieldInfo(String name, String desc, int access) {
         super(access);
         this.name = name;
         this.desc = desc;
-    }
-
-    public void setEnclosedClass(ClassInfo enclosedClass) {
-        this.enclosedClass = enclosedClass;
     }
 
     public String getName() {
@@ -24,10 +19,6 @@ public class FieldInfo extends AccessableNode implements Comparable<FieldInfo> {
 
     public String getDesc() {
         return desc;
-    }
-
-    public ClassInfo getEnclosedClass() {
-        return enclosedClass;
     }
 
     public String getType() {

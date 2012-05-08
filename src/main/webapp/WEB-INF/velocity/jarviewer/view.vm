@@ -134,7 +134,7 @@
               </td></tr>
             <tr><td>标识</td><td>
                 #if($clzInfo.public)#red("public")#end
-                #if($clzInfo.abstract)#red("abstract")#end
+                #if($clzInfo.abstract && !$clzInfo.interface)#red("abstract")#end
                 #if($clzInfo.final)#red("final")#end
                 #if($clzInfo.static)#red("static")#end
                 #if($clzInfo.interface)#red("interface")#else #red("class") #end

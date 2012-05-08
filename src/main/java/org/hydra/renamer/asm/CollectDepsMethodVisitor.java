@@ -70,7 +70,6 @@ public class CollectDepsMethodVisitor extends EmptyVisitor {
     @Override
     public void visitLdcInsn(Object cst) {
         // TODO to detecet name for 'Class.forName' ?
-
     }
 
     @Override

@@ -5,9 +5,18 @@ import java.lang.reflect.Modifier;
 public abstract class AccessableNode {
 
     private int access;
+    private ClassInfo enclosedClass;
 
     public AccessableNode(int access) {
         this.access = access;
+    }
+
+    public void setEnclosedClass(ClassInfo enclosedClass) {
+        this.enclosedClass = enclosedClass;
+    }
+
+    public ClassInfo getEnclosedClass() {
+        return enclosedClass;
     }
 
     public boolean isPublic() {
