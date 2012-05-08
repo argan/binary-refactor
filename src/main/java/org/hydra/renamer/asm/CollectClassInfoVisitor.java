@@ -20,7 +20,6 @@ public class CollectClassInfoVisitor extends EmptyVisitor {
 
     @Override
     public void visit(int version, int access, String name, String signature, String superName, String[] interfaces) {
-
         info = new ClassInfo(this.map, name, access);
         if (interfaces != null) {
             for (String a : interfaces) {

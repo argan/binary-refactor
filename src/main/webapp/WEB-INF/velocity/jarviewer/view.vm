@@ -106,7 +106,7 @@
       <form onSubmit="return search();">Goto:<input type="text" id="matchClass"><input type="button" onclick="search();" value="Go"></form>
 		#set($clzInfo = $classMap.getClassInfo($clzName))
         #if($clzInfo)
-        <!--
+        #* <!--
        <ul class="tabs">
 		  <li class="active"><a href="#baseinfo"  data-toggle="tab">基本信息</a></li>
 		  <li><a href="#fields" data-toggle="tab">属性</a></li>
@@ -115,7 +115,8 @@
 		  <li><a href="#depgraph" data-toggle="tab">我的依赖</a></li>
 		  <li><a href="#depsonme" data-toggle="tab">依赖我的</a></li>
 		</ul>
-		-->
+		--> *#
+		
 		<form id="rename_form" method="POST" action="/renamer/edit.htm?id=$id">
 		   <input type="hidden" name="className" value="$clzInfo.className" id="className">
 		   <input type="hidden" name="newClassName" value="$clzInfo.className" id="newClassName">
@@ -146,12 +147,12 @@
             #else
             <tr><td>基类</td><td>java/lang/Object</td>
             #end
-            #if($clzInfo.interfaces.size()>0)
+            #if($clzInfo.interfaceNames.size()>0)
             <tr><td>接口列表</td>
             <td>
             <ol>
-              #foreach($i in $clzInfo.interfaces)
-              <li>#showClassName($classMap $i.className $id)</li>
+              #foreach($i in $clzInfo.interfaceNames)
+              <li>#showClassName($classMap $i $id)</li>
               #end
             </ol>
             </td>
@@ -159,12 +160,12 @@
             #else
             <tr><td>接口</td><td>无</td></tr>
             #end
-            #if($clzInfo.children.size()>0)
+            #if($clzInfo.childrenNames.size()>0)
             <tr><td>子类列表</td>
             <td>
             <ol>
-              #foreach($i in $clzInfo.children)
-              <li>#showClassName($classMap $i.className $id)</li>
+              #foreach($i in $clzInfo.childrenNames)
+              <li>#showClassName($classMap $i $id)</li>
               #end
             </ol>
             </td></tr>
