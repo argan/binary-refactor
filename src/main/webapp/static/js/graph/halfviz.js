@@ -30,8 +30,13 @@
         that.resize()
         that.updateLayout(Math.max(1, $(window).width()-340))
 
+        that.initMouseHandler()
         that.getDoc(dataUrl)
         return that
+      },
+      
+      initMouseHandler:function(){
+      
       },
       
       getDoc:function(e){

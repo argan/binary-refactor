@@ -172,7 +172,7 @@ public class ViewController {
     }
 
     @RequestMapping("/source")
-    public void asmdump(Model model, @RequestParam("id") String jarid, @RequestParam("clz") String clazzName,
+    public void source(Model model, @RequestParam("id") String jarid, @RequestParam("clz") String clazzName,
             @RequestParam(value = "type", required = false, defaultValue = "asmdump") String type) {
         model.addAttribute("clzName", clazzName);
         model.addAttribute("id", jarid);
@@ -208,8 +208,8 @@ public class ViewController {
 
         StringWriter writer = new StringWriter();
         reader.accept(new TraceClassVisitor(new PrintWriter(writer)), 0);
-        String code1 = writer.toString().trim();
-        return code1;
+        String code = writer.toString().trim();
+        return code;
     }
 
     private String jclazzDecomp(String clazzName, InputStream inputStream) {
