@@ -6,7 +6,6 @@ import java.util.List;
 
 import org.hydra.util.Lists;
 import org.hydra.util.Lists.AccFunc;
-import org.hydra.util.Log;
 
 public class MethodSignature {
     public MethodSignature(String name2) {
