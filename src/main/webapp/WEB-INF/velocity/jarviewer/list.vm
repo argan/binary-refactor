@@ -62,7 +62,7 @@
             <h3>Uploaded files</h3>
 	        <table>
 	        <tr>
-	          <td>序号</td><td>文件名</td><td>版本</td><td>操作</td>
+	          <td>No.</td><td>File Name</td><td>Version</td><td>Operations</td>
 	        </tr>
 	        #if($list && $list.size()>0)
 	        #foreach($f in $list)
@@ -71,10 +71,10 @@
 			   <td><div><a href="/jarviewer/view.htm?id=$f.id" id="$f.id" class="draggable">$f.obj.origName</a></div></td>
 			   <td>$f.obj.version</td>
 			   <td>
-			     <a href="/jarviewer/download.htm?id=$f.id">下载</a>&nbsp;
-			     <a href="/jarviewer/graph.htm?id=$f.id" target="blank">依赖图</a>&nbsp;
-			     <a href="/jarviewer/delete.htm?id=$f.id" onclick="return confirm('真的要删除$!f.obj.origName么？');">删除</a>&nbsp;
-			     <a href="/renamer/script.htm?id=$f.id" target="blank">执行脚本</a>&nbsp;
+			     <a href="/jarviewer/download.htm?id=$f.id">Download</a>&nbsp;
+			     <a href="/jarviewer/graph.htm?id=$f.id" target="blank">DepsGraph</a>&nbsp;
+			     <a href="/jarviewer/delete.htm?id=$f.id" onclick="return confirm('Are you sure to delete $!f.obj.origName?');">Delete</a>&nbsp;
+			     <a href="/renamer/script.htm?id=$f.id" target="blank">Script</a>&nbsp;
 			     
 			   </td>
 			 </tr>
@@ -90,10 +90,10 @@
         <div id="floating" style="border: solid 1px #ccc; width: 300px">
             <form id="matcherForm" method="GET" action="/matcher/result.htm">
           <div>
-            <h2>扫描</h2>
-           <div id="fromJar">待扫描的jar放这里。</div>
-           <div id="libJars">用来匹配的类库放这里。</div>
-            <div><input id="btnSubmit" type="submit" class="btn primary" value="开始扫描"></div>
+            <h2>Scan&Match</h2>
+           <div id="fromJar">Drop your jar here.</div>
+           <div id="libJars">Drop the library jars here.</div>
+            <div><input id="btnSubmit" type="submit" class="btn primary" value="Scan"></div>
          </div>
            </form>
         </div>

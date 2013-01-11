@@ -71,7 +71,7 @@ $name.replace("<","&lt;").replace(">","&gt;")
 	    <div class="row">
         <!-- Main hero unit for a primary marketing message or call to action -->
         <div class="hero-unit">
-          <h3>在$fromJar.origName 中扫描 #foreach($lib in $libJars)$lib.origName #end</h3>
+          <h3> Scan #foreach($lib in $libJars)$lib.origName #end in $fromJar.origName </h3>
         #if($matchResult.result.size()>0)
             #foreach($f in $matchResult.result.entrySet())
             <hr style="height:3px;color:#f00;background-color:#f00">
@@ -80,7 +80,7 @@ $name.replace("<","&lt;").replace(">","&gt;")
             #if($f.value.size() >0)
             <table>
             <tr>
-              <td width="25%">匹配的类</td><td width="30%">匹配的属性</td><td width="45%">匹配的方法</td>
+              <td width="25%">Matched Classes</td><td width="30%">Matched Fields</td><td width="45%">Matched Methods</td>
             </tr>
                 #foreach($clz in $f.value)
                 #set($matchCount = $velocityCount)

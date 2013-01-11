@@ -45,9 +45,6 @@
 	 });
   });
   
-  /**
-   * 提交修改信息
-   */
   function submitForm() {
 	$("#renameConfig").val($("#renameInfo").val());
     $("#rename_form").submit();
@@ -106,16 +103,6 @@
       <form onSubmit="return search();">Goto:<input type="text" id="matchClass"><input type="button" onclick="search();" value="Go"></form>
 		#set($clzInfo = $classMap.getClassInfo($clzName))
         #if($clzInfo)
-        #* <!--
-       <ul class="tabs">
-		  <li class="active"><a href="#baseinfo"  data-toggle="tab">基本信息</a></li>
-		  <li><a href="#fields" data-toggle="tab">属性</a></li>
-		  <li><a href="#methods" data-toggle="tab">方法</a></li>
-		  <li><a href="#asmdump" data-toggle="tab">ASM汇编</a></li>
-		  <li><a href="#depgraph" data-toggle="tab">我的依赖</a></li>
-		  <li><a href="#depsonme" data-toggle="tab">依赖我的</a></li>
-		</ul>
-		--> *#
 		
 		<form id="rename_form" method="POST" action="/renamer/edit.htm?id=$id">
 		   <input type="hidden" name="className" value="$clzInfo.className" id="className">
@@ -124,16 +111,16 @@
 		</form>
 		<div class="tab-pane" id="baseinfo"><!-- tab baseinfo -->
           <div class="span9">
-            <h2>基本信息</h2>
+            <h2>Basic Info</h2>
             <table>
-              <tr><td>类名</td><td><div id="clazzName" class="editable" ftype="class" fdesc="" origValue="$clzInfo.className">$clzInfo.className</div></td></tr>
+              <tr><td>Class Name</td><td><div id="clazzName" class="editable" ftype="class" fdesc="" origValue="$clzInfo.className">$clzInfo.className</div></td></tr>
               <tr><td></td><td>
               <a href="/jarviewer/source.htm?id=$id&clz=${clzInfo.className}.class" target="_blank">Bytecode</a> |
               <a href="/jarviewer/source.htm?id=$id&clz=${clzInfo.className}.class&type=decomp" target="_blank">Source</a> |
               <a href="/jarviewer/graph.htm?id=$id&clz=${clzInfo.className}&type=mydeps" target="_blank">Dependencies</a> |
               <a href="/jarviewer/graph.htm?id=$id&clz=${clzInfo.className}&type=depsonme" target="_blank">DependsOnMe</a>
               </td></tr>
-            <tr><td>标识</td><td>
+            <tr><td>Flags</td><td>
                 #if($clzInfo.public)#red("public")#end
                 #if($clzInfo.abstract && !$clzInfo.interface)#red("abstract")#end
                 #if($clzInfo.final)#red("final")#end
@@ -141,14 +128,14 @@
                 #if($clzInfo.interface)#red("interface")#else #red("class") #end
             </td></tr>
             #if($clzInfo.superClass)
-            <tr><td>基类</td><td>#showClassName($classMap $clzInfo.superClass.className $id)</td></tr>
+            <tr><td>Base Class</td><td>#showClassName($classMap $clzInfo.superClass.className $id)</td></tr>
             #elseif($clzInfo.superClassName)
-            <tr><td>基类</td><td>$clzInfo.superClassName</td>
+            <tr><td>Base Class</td><td>$clzInfo.superClassName</td>
             #else
-            <tr><td>基类</td><td>java/lang/Object</td>
+            <tr><td>Base Class</td><td>java/lang/Object</td>
             #end
             #if($clzInfo.interfaceNames.size()>0)
-            <tr><td>接口列表</td>
+            <tr><td>Interfaces</td>
             <td>
             <ol>
               #foreach($i in $clzInfo.interfaceNames)
@@ -158,10 +145,10 @@
             </td>
             </tr>
             #else
-            <tr><td>接口</td><td>无</td></tr>
+            <tr><td>Interfaces</td><td>None</td></tr>
             #end
             #if($clzInfo.childrenNames.size()>0)
-            <tr><td>子类列表</td>
+            <tr><td>SubClasses</td>
             <td>
             <ol>
               #foreach($i in $clzInfo.childrenNames)
@@ -170,23 +157,23 @@
             </ol>
             </td></tr>
             #else
-            <tr><td>子类</td><td>无</td></tr>
+            <tr><td>SubClasses</td><td>None</td></tr>
             #end
             </table>
-            <p><a class="btn primary" href="#" onclick="return submitForm();">保存修改</a></p>
+            <p><a class="btn primary" href="#" onclick="return submitForm();">Save Modifications</a></p>
           </div>
           <div style="display:none">
-             <h2>编辑信息</h2>
+             <h2>Edit Logs</h2>
              <textarea name="renameInfo" id="renameInfo" cols="150" readonly></textarea>
           </div>
         </div>
         <div class="tab-pane" id="fields"><!-- tab fields -->
           <div class="span9">
-            <h2>属性</h2>
+            <h2>Fields</h2>
             #if($clzInfo.fields.size()>0)
-            <p>属性列表</p>
+            <p>Field List</p>
             <table>
-            <tr><td>标识</td><td>属性名</td><td>类型</td></tr>
+            <tr><td>Flag</td><td>Field Name</td><td>Type</td></tr>
               #foreach($i in $clzInfo.fields)
               <tr>
               <td nowrap>#showFlags($i)</td>
@@ -196,17 +183,17 @@
               #end
             </table>
             #else
-            <p>属性：无</p>
+            <p>No field.</p>
             #end
          </div>
         </div>
         <div class="tab-pane" id="methods"><!-- tab methods -->
           <div class="span9">
-            <h2>方法</h2>
+            <h2>Methods</h2>
             #if($clzInfo.methods.size()>0)
-            <p>方法列表</p>
+            <p>Method List</p>
             <table>
-            <tr><td nowrap>标识</td><td nowrap>方法名(E)</td><td nowrap>返回类型</td><td nowrap>参数列表类型</td><td nowrap>异常</td></tr>
+            <tr><td nowrap>Flags</td><td nowrap>Method Name</td><td nowrap>Return Type</td><td nowrap>Parameter Type</td><td nowrap>Exceptions</td></tr>
               #foreach($i in $clzInfo.methods)
               <tr>
               <td nowrap>#showFlags($i)</td>
@@ -229,7 +216,7 @@
               #end
             </table>
             #else
-            <p>方法：无</p>
+            <p>No Method.</p>
             #end
           </div>
         </div>
@@ -246,7 +233,7 @@
        #else
        <div class="row">
           <div class="span6">
-            <h2>请选择一个类查看...</h2>
+            <h2>Select a class in the tree...</h2>
          </div>
         </div>
        #end

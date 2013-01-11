@@ -31,7 +31,7 @@ $name.replace("<","&lt;").replace(">","&gt;")
         <div class="row">
         <!-- Main hero unit for a primary marketing message or call to action -->
         <div class="hero-unit">
-          <h3>在$jarFile.origName 中执行Rename Script:</h3>
+          <h3>Execute Rename Script in $jarFile.origName:</h3>
             <form id="batch_form" method="POST" action="/renamer/batch.htm?id=$id">
                <textarea name="renameConfig" ></textarea>
                <input type="submit" name="submit" value="Execute Script" class="btn primary">

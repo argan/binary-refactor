@@ -24,7 +24,7 @@
             <h3>Class name match results</h3>
             <table>
             <tr>
-              <td>序号</td><td>类名</td>
+              <td>No.</td><td>Class Name</td>
             </tr>
             #if($matches && $matches.size()>0)
             #foreach($f in $matches)
