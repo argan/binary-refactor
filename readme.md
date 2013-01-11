@@ -10,6 +10,14 @@ Helper to manual de-obfuscate obfuscated jars,some features:
 * class dependency graph
 * all by binary!
 
+Have a try
+===
+* git clone git://github.com/argan/binary-refactor.git
+* cd binary-refactor
+* mvn jetty:run
+* open your browser http://localhost:9090/jarviewer/list.htm
+* Have fun.
+
 #### 简单描述
 有时候，要研究一些java相关的东西，但是没有源代码，只有二进制的jar，同时这个jar呢，又被混淆过了，反编译很困难，为了研究需要，因此写了这么一个小东西，没几行代码，实现的功能有：
 
