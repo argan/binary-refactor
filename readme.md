@@ -10,8 +10,7 @@ Helper to manual de-obfuscate obfuscated jars,some features:
 * class dependency graph
 * all by binary!
 
-Have a try
-===
+#### Have a try
 * git clone git://github.com/argan/binary-refactor.git
 * cd binary-refactor
 * mvn jetty:run
