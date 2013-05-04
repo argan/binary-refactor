@@ -112,7 +112,7 @@
         </repository>
         <repository>
             <id>jboss-repos</id>
-            <url>http://repository.jboss.org/maven2/</url>
+            <url>https://repository.jboss.org/nexus/content/groups/public-jboss/</url>
         </repository>
         <repository>
             <id>proj-repo</id>
