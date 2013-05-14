@@ -1,11 +1,10 @@
 package org.hydra.gui.swing;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -16,17 +15,18 @@ import javax.swing.JSeparator;
 import javax.swing.JTabbedPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import org.hydra.gui.swing.ClosableTabbedPane.TabCreator;
+
 public class Main extends JFrame {
+	private static final long serialVersionUID = -9210020227316296003L;
 	private JFileChooser fileChooser = new JFileChooser();
-	private JTabbedPane tabbedPane;
-	private List<File> openFiles;
+	private ClosableTabbedPane tabbedPane;
 
 	public Main() {
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setSize(800, 600);
 		this.fileChooser.setFileFilter(new FileNameExtensionFilter("Java Binary Files(*.jar,*.class,*.zip)",
 				new String[] { "jar", "class", "zip" }));
-		this.openFiles = new ArrayList<File>();
 
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
@@ -72,7 +72,7 @@ public class Main extends JFrame {
 		JMenuItem mntmAbout = new JMenuItem("About");
 		mnHelp.add(mntmAbout);
 
-		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+		tabbedPane = new ClosableTabbedPane(JTabbedPane.TOP);
 		getContentPane().add(tabbedPane, BorderLayout.CENTER);
 
 	}
@@ -80,18 +80,19 @@ public class Main extends JFrame {
 	protected void openFile() {
 		int status = this.fileChooser.showOpenDialog(this);
 		if (status == JFileChooser.APPROVE_OPTION) {
-			File selectedFile = fileChooser.getSelectedFile();
-			int index = this.openFiles.indexOf(selectedFile);
-			if (index != -1) {
-				// 已经打开了，焦点切过去
-				this.tabbedPane.setSelectedIndex(index);
-			} else {
-				index = this.tabbedPane.getTabCount();
-				JarTab tab = new JarTab(selectedFile);
-				this.openFiles.add(selectedFile);
-				this.tabbedPane.insertTab(tab.getName(), null, tab, null, index);
-				this.tabbedPane.setSelectedIndex(index);
-			}
+			final File selectedFile = fileChooser.getSelectedFile();
+			this.tabbedPane.addOrSelectTab(selectedFile, new TabCreator() {
+
+				@Override
+				public String getName() {
+					return selectedFile.getName();
+				}
+
+				@Override
+				public Component getTabComponent() {
+					return new JarTab(selectedFile);
+				}
+			});
 		} else if (status == JFileChooser.CANCEL_OPTION) {
 			System.out.println(JFileChooser.CANCEL_OPTION);
 		}

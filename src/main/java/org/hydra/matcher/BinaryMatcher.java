@@ -143,6 +143,7 @@ public class BinaryMatcher {
                 reader.accept(extractor, 0);
             }
         }
+        jarFile.close();
         // get the result
         Map<String, ClassSignature> result = extractor.getResult();
         return filter(new ArrayList<ClassSignature>(result.values()));

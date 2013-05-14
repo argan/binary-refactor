@@ -37,47 +37,47 @@ public class Lists {
 			return right;
 		}
 
-        @Override
-        public int hashCode() {
-            final int prime = 31;
-            int result = 1;
-            result = prime * result + ((left == null) ? 0 : left.hashCode());
-            result = prime * result + ((right == null) ? 0 : right.hashCode());
-            return result;
-        }
-
-        @SuppressWarnings("unchecked")
 		@Override
-        public boolean equals(Object obj) {
-            if (this == obj)
-                return true;
-            if (obj == null)
-                return false;
-            if (getClass() != obj.getClass())
-                return false;
-            Pair<Left,Right> other = (Pair<Left, Right>) obj;
-            if (left == null) {
-                if (other.left != null)
-                    return false;
-            } else if (!left.equals(other.left))
-                return false;
-            if (right == null) {
-                if (other.right != null)
-                    return false;
-            } else if (!right.equals(other.right))
-                return false;
-            return true;
-        }
+		public int hashCode() {
+			final int prime = 31;
+			int result = 1;
+			result = prime * result + ((left == null) ? 0 : left.hashCode());
+			result = prime * result + ((right == null) ? 0 : right.hashCode());
+			return result;
+		}
 
-        @Override
-        public String toString() {
-            return "Pair [left=" + left + ", right=" + right + "]";
-        }
+		@SuppressWarnings("unchecked")
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj)
+				return true;
+			if (obj == null)
+				return false;
+			if (getClass() != obj.getClass())
+				return false;
+			Pair<Left, Right> other = (Pair<Left, Right>) obj;
+			if (left == null) {
+				if (other.left != null)
+					return false;
+			} else if (!left.equals(other.left))
+				return false;
+			if (right == null) {
+				if (other.right != null)
+					return false;
+			} else if (!right.equals(other.right))
+				return false;
+			return true;
+		}
+
+		@Override
+		public String toString() {
+			return "Pair [left=" + left + ", right=" + right + "]";
+		}
 
 	}
 
 	/**
-	 * map function 
+	 * map function
 	 * 
 	 * @param <In>
 	 * @param <Out>
@@ -130,4 +130,29 @@ public class Lists {
 		return new Pair<List<Out>, Acc>(list, out);
 	}
 
+	public static String mkString(Object[] list) {
+		return mkString(list, " ");
+	}
+
+	public static String mkString(List<String> list, String delim) {
+		return mkString(list.toArray(new String[list.size()]), delim);
+	}
+
+	public static String mkString(List<String> list) {
+		return mkString(list.toArray(new String[list.size()]), " ");
+	}
+
+	public static String mkString(Object[] list, String delim) {
+		if (list == null) {
+			return "";
+		}
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < list.length; i++) {
+			sb.append(list[i]);
+			if (i < list.length - 1) {
+				sb.append(delim);
+			}
+		}
+		return sb.toString();
+	}
 }

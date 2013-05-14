@@ -1,8 +1,8 @@
 package org.hydra.gui.swing;
 
+import java.awt.Component;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -18,22 +18,23 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeNode;
 
+import org.hydra.gui.swing.ClosableTabbedPane.TabCreator;
 import org.hydra.renamer.ClassInfo;
 import org.hydra.renamer.ClassMap;
 import org.hydra.renamer.RenameConfig;
 
 public class JarTab extends JSplitPane {
+	private static final long serialVersionUID = 5862833774145303335L;
 	private File jarFile;
 	private JTree tree;
-	private List<String> openClasses;
+	private ClassMap classMap;
 
 	public JarTab(File jarFile) {
 		this.jarFile = jarFile;
-		this.openClasses = new ArrayList<String>();
 
 		JScrollPane scrollPane = new JScrollPane();
 		this.setLeftComponent(scrollPane);
-		final JTabbedPane classTabPane = new JTabbedPane(JTabbedPane.TOP);
+		final ClosableTabbedPane classTabPane = new ClosableTabbedPane(JTabbedPane.TOP);
 		this.setRightComponent(classTabPane);
 
 		tree = new JTree(parseFile());
@@ -41,13 +42,7 @@ public class JarTab extends JSplitPane {
 		tree.addTreeSelectionListener(new TreeSelectionListener() {
 			@Override
 			public void valueChanged(TreeSelectionEvent e) {
-				TreeNode treeNode = (TreeNode) tree.getLastSelectedPathComponent();
-				if (treeNode.isLeaf()) {
-					String fullClassName = getFullClassName(treeNode);
-					ClassTab classTab = new ClassTab(fullClassName, classTabPane);
-				}
-				// JOptionPane.showMessageDialog(null, treeNode.getParent(),
-				// "错误", JOptionPane.ERROR_MESSAGE);
+				selectClass(classTabPane);
 			}
 		});
 		scrollPane.setViewportView(tree);
@@ -55,12 +50,13 @@ public class JarTab extends JSplitPane {
 	}
 
 	protected String getFullClassName(TreeNode treeNode) {
-		return treeNode.toString();
+		String pkg = treeNode.getParent().toString();
+		return pkg + "." + treeNode.toString();
 	}
 
 	private DefaultMutableTreeNode parseFile() {
 		// parse file
-		ClassMap classMap;
+
 		DefaultMutableTreeNode node = new DefaultMutableTreeNode(this.getName());
 		try {
 			classMap = ClassMap.build(new JarFile(this.jarFile));
@@ -85,6 +81,26 @@ public class JarTab extends JSplitPane {
 
 	public String getName() {
 		return this.jarFile.getName();
+	}
+
+	private void selectClass(final ClosableTabbedPane classTabPane) {
+		final TreeNode treeNode = (TreeNode) tree.getLastSelectedPathComponent();
+		if (treeNode.isLeaf()) {
+			final String fullClassName = getFullClassName(treeNode);
+			classTabPane.addOrSelectTab(fullClassName, new TabCreator() {
+
+				@Override
+				public String getName() {
+					return treeNode.toString();
+				}
+
+				@Override
+				public Component getTabComponent() {
+					// TODO Auto-generated method stub
+					return new ClassTab(JarTab.this.classMap.getClassInfo(fullClassName));
+				}
+			});
+		}
 	}
 
 }
