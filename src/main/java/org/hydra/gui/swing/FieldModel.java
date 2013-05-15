@@ -3,9 +3,12 @@ package org.hydra.gui.swing;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
+import org.hydra.gui.swing.MethodModel.Point;
 import org.hydra.renamer.FieldInfo;
+import org.hydra.util.Lists;
 
 class FieldModel extends ChangableTableModel {
 	private static final long serialVersionUID = -5575263948964070610L;
@@ -49,5 +52,16 @@ class FieldModel extends ChangableTableModel {
 
 		}
 		return value;
+	}
+
+	@Override
+	public String getChangeScript() {
+		StringBuilder sb = new StringBuilder();
+		for (Map.Entry<Point, Lists.Pair<String, String>> entry : changeSet.entrySet()) {
+			FieldInfo field = this.fields.get(entry.getKey().getRow());
+			sb.append(String.format("field: %s %s to %s\n", entry.getValue().getLeft(), field.getDesc(), entry.getValue()
+					.getRight()));
+		}
+		return sb.toString();
 	}
 }

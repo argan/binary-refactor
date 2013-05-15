@@ -3,10 +3,12 @@ package org.hydra.gui.swing;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.hydra.renamer.MethodInfo;
 import org.hydra.util.Lists;
+import org.hydra.util.Lists.Pair;
 
 class MethodModel extends ChangableTableModel {
 	private static final long serialVersionUID = -5575263948964070610L;
@@ -64,9 +66,13 @@ class MethodModel extends ChangableTableModel {
 			this.col = col;
 		}
 
+		public int getRow() {
+			return row;
+		}
+
 		@Override
 		public int hashCode() {
-			return (31 * row) + col;
+			return toString().hashCode();
 		}
 
 		@Override
@@ -83,5 +89,16 @@ class MethodModel extends ChangableTableModel {
 			return "(" + row + "," + col + ")";
 		}
 
+	}
+
+	@Override
+	public String getChangeScript() {
+		StringBuilder sb = new StringBuilder();
+		for (Map.Entry<Point, Lists.Pair<String, String>> entry : changeSet.entrySet()) {
+			MethodInfo field = this.methods.get(entry.getKey().getRow());
+			Pair<String, String> value = entry.getValue();
+			sb.append(String.format("method: %s %s to %s\n", value.getLeft(), field.getDesc(), value.getRight()));
+		}
+		return sb.toString();
 	}
 }

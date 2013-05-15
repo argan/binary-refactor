@@ -10,14 +10,20 @@ import org.hydra.util.Lists;
 import org.hydra.util.Log;
 import org.hydra.util.Lists.Pair;
 
-public class ChangableTableModel extends DefaultTableModel {
+abstract class ChangableTableModel extends DefaultTableModel {
 	private static final long serialVersionUID = -6633055833724585182L;
 	// 保存修改的内容，保留最原始的值和最新修改的值
-	private Map<Point, Lists.Pair<String, String>> changeSet = new HashMap<Point, Lists.Pair<String, String>>();
+	protected Map<Point, Lists.Pair<String, String>> changeSet = new HashMap<Point, Lists.Pair<String, String>>();
 
 	public ChangableTableModel(String[] title, int size) {
 		super(title, size);
 	}
+
+	public void resetChanges() {
+		this.changeSet.clear();
+	}
+
+	public abstract String getChangeScript();
 
 	@Override
 	public void setValueAt(Object aValue, int row, int column) {
