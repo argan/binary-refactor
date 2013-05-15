@@ -1,6 +1,7 @@
 package org.hydra.gui.swing;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -16,6 +17,7 @@ class FieldModel extends DefaultTableModel {
 	public FieldModel(Set<FieldInfo> info) {
 		super(title, info.size());
 		this.fields = new ArrayList<FieldInfo>(info);
+		Collections.sort(this.fields);
 		this.fireTableStructureChanged();
 		this.fireTableDataChanged();
 	}

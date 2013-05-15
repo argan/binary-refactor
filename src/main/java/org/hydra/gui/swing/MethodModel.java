@@ -1,6 +1,7 @@
 package org.hydra.gui.swing;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -17,6 +18,7 @@ class MethodModel extends DefaultTableModel {
 	public MethodModel(Set<MethodInfo> info) {
 		super(title, info.size());
 		this.methods = new ArrayList<MethodInfo>(info);
+		Collections.sort(this.methods);
 		this.fireTableStructureChanged();
 		this.fireTableDataChanged();
 	}
@@ -41,7 +43,7 @@ class MethodModel extends DefaultTableModel {
 			value = method.getName();
 			break;
 		case 3:
-			value = Lists.mkString(method.getParameterTypes(), ";");
+			value = "(" + Lists.mkString(method.getParameterTypes(), ";") + ")";
 			break;
 		case 4:
 			value = Lists.mkString(method.getExceptions());

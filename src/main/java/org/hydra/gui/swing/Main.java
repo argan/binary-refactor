@@ -24,7 +24,7 @@ public class Main extends JFrame {
 
 	public Main() {
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setSize(800, 600);
+		this.setExtendedState(this.getExtendedState() | JFrame.MAXIMIZED_BOTH);
 		this.fileChooser.setFileFilter(new FileNameExtensionFilter("Java Binary Files(*.jar,*.class,*.zip)",
 				new String[] { "jar", "class", "zip" }));
 

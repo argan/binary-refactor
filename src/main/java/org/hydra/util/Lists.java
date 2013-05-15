@@ -1,6 +1,7 @@
 package org.hydra.util;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class Lists {
@@ -134,11 +135,11 @@ public class Lists {
 		return mkString(list, " ");
 	}
 
-	public static String mkString(List<String> list, String delim) {
+	public static String mkString(Collection<String> list, String delim) {
 		return mkString(list.toArray(new String[list.size()]), delim);
 	}
 
-	public static String mkString(List<String> list) {
+	public static String mkString(Collection<String> list) {
 		return mkString(list.toArray(new String[list.size()]), " ");
 	}
 
