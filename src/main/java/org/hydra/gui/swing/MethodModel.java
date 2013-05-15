@@ -5,12 +5,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-import javax.swing.table.DefaultTableModel;
-
 import org.hydra.renamer.MethodInfo;
 import org.hydra.util.Lists;
 
-class MethodModel extends DefaultTableModel {
+class MethodModel extends ChangableTableModel {
 	private static final long serialVersionUID = -5575263948964070610L;
 	private static String[] title = new String[] { "Flags", "Return Type", "Name", "Parameters", "Exceptions" };
 	private List<MethodInfo> methods;
@@ -25,11 +23,15 @@ class MethodModel extends DefaultTableModel {
 
 	@Override
 	public boolean isCellEditable(int row, int column) {
-		return column == 2;
+		Object v = getValueAt(row, column);
+		return column == 2 && !"<init>".equals(v) && !"<clinit>".equals(v);
 	}
 
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
+		if (super.getChangedValue(rowIndex, columnIndex) != null) {
+			return super.getChangedValue(rowIndex, columnIndex);
+		}
 		String value = "";
 		MethodInfo method = this.methods.get(rowIndex);
 		switch (columnIndex) {
@@ -52,5 +54,34 @@ class MethodModel extends DefaultTableModel {
 			value = "";
 		}
 		return value;
+	}
+
+	static class Point {
+		private int row, col;
+
+		Point(int row, int col) {
+			this.row = row;
+			this.col = col;
+		}
+
+		@Override
+		public int hashCode() {
+			return (31 * row) + col;
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (obj instanceof Point) {
+				Point other = (Point) obj;
+				return other.row == row && other.col == col;
+			}
+			return false;
+		}
+
+		@Override
+		public String toString() {
+			return "(" + row + "," + col + ")";
+		}
+
 	}
 }

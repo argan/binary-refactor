@@ -121,8 +121,8 @@ public class TableCellListener implements PropertyChangeListener, Runnable {
 	@Override
 	public void propertyChange(PropertyChangeEvent e) {
 		// A cell has started/stopped editing
-
 		if ("tableCellEditor".equals(e.getPropertyName())) {
+			System.out.println(e.getOldValue() + " -> " + e.getNewValue());
 			if (table.isEditing())
 				processEditingStarted();
 			else

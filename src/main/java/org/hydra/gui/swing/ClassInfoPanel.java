@@ -7,6 +7,8 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 import org.hydra.renamer.ClassInfo;
 
@@ -26,7 +28,25 @@ public class ClassInfoPanel extends JPanel {
 		add(className);
 		className.setColumns(10);
 		className.setText(this.classInfo.getClassName());
+		className.getDocument().addDocumentListener(new DocumentListener() {
 
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				// TODO Auto-generated method stub
+				System.out.println("insert:" + e);
+			}
+
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				// TODO Auto-generated method stub
+				System.out.println("remove:" + e);
+			}
+
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				System.out.println("update" + e);
+			}
+		});
 		if (this.classInfo.getSuperClass() != null) {
 			add(new JLabel("Super Class:"));
 			add(new JButton(this.classInfo.getSuperClassName()));

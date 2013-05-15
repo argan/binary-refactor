@@ -5,13 +5,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-import javax.swing.table.DefaultTableModel;
-
 import org.hydra.renamer.FieldInfo;
 
-class FieldModel extends DefaultTableModel {
+class FieldModel extends ChangableTableModel {
 	private static final long serialVersionUID = -5575263948964070610L;
-	private static String[] title = new String[] { "Flags", "Type", "Name", "Default" };
+	private static String[] title = new String[] { "Flags", "Type", "Name", "Value" };
 	private List<FieldInfo> fields;
 
 	public FieldModel(Set<FieldInfo> info) {
@@ -24,12 +22,15 @@ class FieldModel extends DefaultTableModel {
 
 	@Override
 	public boolean isCellEditable(int row, int column) {
-		return column == 2;
+		return column == 2 && !"serialVersionUID".equals(getValueAt(row, column));
 	}
 
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
-		String value = "";
+		if (super.getChangedValue(rowIndex, columnIndex) != null) {
+			return super.getChangedValue(rowIndex, columnIndex);
+		}
+		Object value = "";
 		FieldInfo field = this.fields.get(rowIndex);
 		switch (columnIndex) {
 		case 0:
@@ -42,6 +43,8 @@ class FieldModel extends DefaultTableModel {
 			value = field.getName();
 			break;
 		case 3:
+			value = field.getValue();
+			break;
 		default:
 
 		}

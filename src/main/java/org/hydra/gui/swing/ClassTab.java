@@ -3,6 +3,7 @@ package org.hydra.gui.swing;
 import java.awt.GridLayout;
 
 import javax.swing.BoxLayout;
+import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
@@ -28,15 +29,20 @@ public class ClassTab extends JPanel {
 		panels.add(new ClassInfoPanel(this.classInfo));
 
 		if (this.classInfo.getFields().size() > 0) {
-			panels.add(new ListPanel(new FieldModel(this.classInfo.getFields()), "Fields Info"));
+			panels.add(new TablePanel(new FieldModel(this.classInfo.getFields()), "Fields Info"));
 			panels.revalidate();
 		}
 
 		if (this.classInfo.getMethods().size() > 0) {
-			panels.add(new ListPanel(new MethodModel(this.classInfo.getMethods()), "Methods Info"));
+			panels.add(new TablePanel(new MethodModel(this.classInfo.getMethods()), "Methods Info"));
 			panels.revalidate();
 		}
 
+		JPanel buttons = new JPanel();
+		buttons.add(new JButton("Apply Changes"));
+		buttons.add(new JButton("Reset Changes"));
+
+		panels.add(buttons);
 		revalidate();
 	}
 

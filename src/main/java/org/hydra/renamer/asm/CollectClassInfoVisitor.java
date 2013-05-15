@@ -35,7 +35,7 @@ public class CollectClassInfoVisitor extends EmptyVisitor {
     @Override
     public FieldVisitor visitField(int access, String name, String desc, String signature, Object value) {
         if (!"serialVersionUID".equals(name)) {
-            this.map.getClassInfo(this.className).addField(new FieldInfo(name, desc, access));
+            this.map.getClassInfo(this.className).addField(new FieldInfo(name, desc, access,value));
         }
         return null;
     }

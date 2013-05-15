@@ -16,6 +16,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import org.hydra.gui.swing.ClosableTabbedPane.TabCreator;
+import org.hydra.util.Log;
 
 public class Main extends JFrame {
 	private static final long serialVersionUID = -9210020227316296003L;
@@ -24,6 +25,7 @@ public class Main extends JFrame {
 
 	public Main() {
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setVisible(true);
 		this.setExtendedState(this.getExtendedState() | JFrame.MAXIMIZED_BOTH);
 		this.fileChooser.setFileFilter(new FileNameExtensionFilter("Java Binary Files(*.jar,*.class,*.zip)",
 				new String[] { "jar", "class", "zip" }));
@@ -94,7 +96,7 @@ public class Main extends JFrame {
 				}
 			});
 		} else if (status == JFileChooser.CANCEL_OPTION) {
-			System.out.println(JFileChooser.CANCEL_OPTION);
+			Log.debug("Cancel file choose %d",JFileChooser.CANCEL_OPTION);
 		}
 	}
 
