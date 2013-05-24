@@ -2,10 +2,7 @@ package org.hydra.gui.swing;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.event.ActionEvent;
 
-import javax.swing.AbstractAction;
-import javax.swing.Action;
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -26,19 +23,5 @@ public class TablePanel extends JPanel {
 		this.setBorder(BorderFactory.createTitledBorder(name));
 		this.add(new JScrollPane(table), BorderLayout.CENTER);
 		this.revalidate();
-
-		Action action = new AbstractAction() {
-			private static final long serialVersionUID = 3383004392475616535L;
-
-			public void actionPerformed(ActionEvent e) {
-				TableCellListener tcl = (TableCellListener) e.getSource();
-				System.out.println("Row   : " + tcl.getRow());
-				System.out.println("Column: " + tcl.getColumn());
-				System.out.println("Old   : " + tcl.getOldValue());
-				System.out.println("New   : " + tcl.getNewValue());
-			}
-		};
-
-		new TableCellListener(table, action);
 	}
 }

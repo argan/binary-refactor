@@ -14,7 +14,7 @@ public class MethodSignature {
 
     private String name;
     private ClassSignature returnType;
-    private int flags;
+//    private int flags;
     private List<ClassSignature> params = new ArrayList<ClassSignature>();
     private List<ClassSignature> exceptions = new ArrayList<ClassSignature>();
     private int insnCode = 0;
@@ -25,7 +25,7 @@ public class MethodSignature {
     }
 
     public void setFlags(int access) {
-        this.flags = access;
+//        this.flags = access;
         this.isAbstract = Modifier.isAbstract(access);
     }
 

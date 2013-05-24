@@ -7,6 +7,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 
 import org.hydra.renamer.ClassInfo;
 
@@ -37,12 +38,16 @@ public class ClassInfoPanel extends JPanel {
 		}
 
 		if (this.classInfo.getInterfaceNames().size() > 0) {
-			add(new JLabel("Interfaces:"));
+			JLabel label = new JLabel("Interfaces:");
+			label.setVerticalTextPosition(SwingConstants.TOP);
+			add(label);
 
 			add(new MultiClassNamePanel(this.classInfo.getInterfaceNames()));
 		}
 		if (this.classInfo.getChildrenNames().size() > 0) {
-			add(new JLabel("Sub Classes:"));
+			JLabel label = new JLabel("Sub Classes:");
+			label.setVerticalTextPosition(SwingConstants.TOP);
+			add(label);
 
 			add(new MultiClassNamePanel(this.classInfo.getChildrenNames()));
 		}

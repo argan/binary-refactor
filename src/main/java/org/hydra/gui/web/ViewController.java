@@ -23,7 +23,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.hydra.renamer.ClassInfo;
 import org.hydra.renamer.ClassMap;
 import org.hydra.renamer.ClassMap.ClassWalker;
-import org.hydra.renamer.RenameConfig;
 import org.hydra.util.Utils;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.util.TraceClassVisitor;
@@ -59,8 +58,6 @@ public class ViewController {
 		try {
 			ClassMap classMap = ClassMap.build(new JarFile(new File(path.getFullName()).getCanonicalPath()));
 
-			classMap.rebuildConfig(new RenameConfig(), null);
-
 			model.addAttribute("classMap", classMap);
 			model.addAttribute("origName", path.getOrigName());
 
@@ -89,7 +86,6 @@ public class ViewController {
 		FileItem path = (FileItem) Database.get(jar).getObj();
 		try {
 			final ClassMap classMap = ClassMap.build(new JarFile(new File(path.getFullName()).getCanonicalPath()));
-			classMap.rebuildConfig(new RenameConfig(), null);
 			return new View() {
 
 				@Override
@@ -261,8 +257,6 @@ public class ViewController {
 		model.addAttribute("jarFile", path);
 		try {
 			ClassMap classMap = ClassMap.build(new JarFile(new File(path.getFullName()).getCanonicalPath()));
-
-			classMap.rebuildConfig(new RenameConfig(), null);
 
 			model.addAttribute("classMap", classMap);
 

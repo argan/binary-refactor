@@ -3,7 +3,6 @@ package org.hydra.renamer;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
@@ -14,7 +13,6 @@ import java.util.jar.JarFile;
 import org.hydra.renamer.RenameConfig.ClassRenameInfo;
 import org.hydra.renamer.asm.CollectClassInfoVisitor;
 import org.hydra.util.Log;
-import org.hydra.util.Utils;
 import org.objectweb.asm.ClassReader;
 
 public class ClassMap {
@@ -76,7 +74,7 @@ public class ClassMap {
 		this.map.put(info.getClassName(), info);
 	}
 
-	public void rebuildConfig(RenameConfig config, String addPkgs) {
+	public void rebuildConfig(RenameConfig config) {
 		// build the hierarchy and rebuild the Config
 		for (Map.Entry<String, ClassInfo> entry : map.entrySet()) {
 			ClassInfo info = entry.getValue();
@@ -87,12 +85,9 @@ public class ClassMap {
 				intf.addChild(info.getClassName());
 			}
 		}
-		List<String> addPkgsList = Arrays.asList(Utils.tokens(addPkgs));
-		if (addPkgsList != null) {
-			for (String name : map.keySet()) {
-				if (!config.getConfig().containsKey(name)) {
-					config.getConfig().put(name, new ClassRenameInfo());
-				}
+		for (String name : map.keySet()) {
+			if (!config.getConfig().containsKey(name)) {
+				config.getConfig().put(name, new ClassRenameInfo());
 			}
 		}
 		// 重建 config ，主要是根据类／接口的层次结构修改
@@ -136,6 +131,7 @@ public class ClassMap {
 				}
 			}
 		}
+		map.rebuildConfig(new RenameConfig());
 		return map;
 	}
 

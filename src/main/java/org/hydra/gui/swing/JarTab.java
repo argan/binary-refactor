@@ -21,7 +21,6 @@ import javax.swing.tree.TreeNode;
 import org.hydra.gui.swing.ClosableTabbedPane.TabCreator;
 import org.hydra.renamer.ClassInfo;
 import org.hydra.renamer.ClassMap;
-import org.hydra.renamer.RenameConfig;
 
 public class JarTab extends JSplitPane {
 	private static final long serialVersionUID = 5862833774145303335L;
@@ -60,7 +59,6 @@ public class JarTab extends JSplitPane {
 		DefaultMutableTreeNode node = new DefaultMutableTreeNode(this.getName());
 		try {
 			classMap = ClassMap.build(new JarFile(this.jarFile));
-			classMap.rebuildConfig(new RenameConfig(), null);
 
 			for (Map.Entry<String, List<ClassInfo>> entry : classMap.getTree().entrySet()) {
 				node.add(buildNode(entry));

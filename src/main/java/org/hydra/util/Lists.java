@@ -3,6 +3,8 @@ package org.hydra.util;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 
 public class Lists {
 	public static interface MapFunc<In, Out> {
@@ -77,6 +79,20 @@ public class Lists {
 
 	}
 
+	public static <Key, Obj> Map<Key, List<Obj>> groupBy(List<Obj> in, MapFunc<Obj, Key> f) {
+		if (in == null) return null;
+		Map<Key, List<Obj>> result = new HashMap<Key, List<Obj>>();
+		for (Obj obj : in) {
+			Key key = f.apply(obj);
+			List<Obj> list = result.get(key);
+			if (list == null) {
+				list = new ArrayList<Obj>();
+				result.put(key, list);
+			}
+			list.add(obj);
+		}
+		return result;
+	}
 	/**
 	 * map function
 	 * 
