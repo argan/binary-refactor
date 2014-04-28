@@ -13,20 +13,21 @@ import org.objectweb.asm.Type;
 
 public class ClassSignatureCollector implements ClassVisitor {
     private Map<String, ClassSignature> info = new HashMap<String, ClassSignature>();
-    private ClassSignature clazz;
+    private ClassSignature              clazz;
 
     public Map<String, ClassSignature> getResult() {
         return this.info;
     }
 
-    public void visit(int version, int access, String name, String signature, String superName, String[] interfaces) {
+    public void visit(int version, int access, String name, String signature, String superName,
+                      String[] interfaces) {
         // System.out.println("\nvisit class:" + name);
         clazz = this.getClassSignature(name);
         ClassSignature parent = this.getClassSignature(superName);
 
         clazz.setSuper(parent);
         clazz.setFlags(access);
-        
+
         if (interfaces != null) {
             for (String s : interfaces) {
                 clazz.addInterface(this.getClassSignature(s));
@@ -38,7 +39,8 @@ public class ClassSignatureCollector implements ClassVisitor {
         }
     }
 
-    public FieldVisitor visitField(int access, String name, String desc, String signature, Object value) {
+    public FieldVisitor visitField(int access, String name, String desc, String signature,
+                                   Object value) {
         // System.out.println("visit field:" + clazz.getName() + "." + name);
         FieldSignature field = new FieldSignature(name);
         field.setOriginDesc(desc);
@@ -49,7 +51,8 @@ public class ClassSignatureCollector implements ClassVisitor {
         return null;
     }
 
-    public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
+    public MethodVisitor visitMethod(int access, String name, String desc, String signature,
+                                     String[] exceptions) {
         MethodSignature method = new MethodSignature(name);
         method.setOriginDesc(desc);
         method.setFlags(access);

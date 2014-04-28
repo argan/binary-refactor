@@ -18,6 +18,6 @@ public class Application {
 
         model.addAttribute("date", new java.util.Date());
         model.addAttribute("result", result);
-        model.addAttribute("jarfile",jar2);
+        model.addAttribute("jarfile", jar2);
     }
 }

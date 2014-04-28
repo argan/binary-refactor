@@ -4,8 +4,8 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Types {
-    private static List<String> types = Arrays.asList("void", "boolean", "int", "long", "char", "short", "byte",
-            "double", "float");
+    private static List<String> types = Arrays.asList("void", "boolean", "int", "long", "char",
+                                          "short", "byte", "double", "float");
 
     public static boolean isObfucated(String type) {
         return type.startsWith("com.zeroturnaround.javarebel");
@@ -20,7 +20,8 @@ public class Types {
      */
     public static boolean isUnchangableType(String type) {
 
-        if (type.startsWith("java") || type.startsWith("javax") || type.startsWith("com.sun.jdi")|| type.startsWith("sun.reflect")) {
+        if (type.startsWith("java") || type.startsWith("javax") || type.startsWith("com.sun.jdi")
+            || type.startsWith("sun.reflect")) {
             return true;
         }
 

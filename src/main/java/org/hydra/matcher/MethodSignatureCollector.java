@@ -13,32 +13,30 @@ public class MethodSignatureCollector implements MethodVisitor {
     }
 
     public AnnotationVisitor visitAnnotationDefault() {
-        // TODO Auto-generated method stub
+        // TODO annotation visitor
         return null;
     }
 
     public AnnotationVisitor visitAnnotation(String desc, boolean visible) {
-        // TODO Auto-generated method stub
+        // TODO annotation visitor
         return null;
     }
 
     public AnnotationVisitor visitParameterAnnotation(int parameter, String desc, boolean visible) {
-        // TODO Auto-generated method stub
+        // TODO annotation visitor
         return null;
     }
 
     public void visitAttribute(Attribute attr) {
-        // TODO Auto-generated method stub
+        // TODO attribute visitor?
 
     }
 
     public void visitCode() {
-        // TODO Auto-generated method stub
 
     }
 
     public void visitFrame(int type, int nLocal, Object[] local, int nStack, Object[] stack) {
-        // TODO Auto-generated method stub
 
     }
 
@@ -97,7 +95,8 @@ public class MethodSignatureCollector implements MethodVisitor {
 
     }
 
-    public void visitLocalVariable(String name, String desc, String signature, Label start, Label end, int index) {
+    public void visitLocalVariable(String name, String desc, String signature, Label start,
+                                   Label end, int index) {
 
     }
 

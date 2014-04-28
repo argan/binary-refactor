@@ -16,8 +16,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class RenamerController {
 
     @RequestMapping("/edit")
-    public String editClass(Model model, @RequestParam("id") String jar, @RequestParam("className") String clazzName,
-            @RequestParam("newClassName") String newClassName, @RequestParam("renameConfig") String renameConfig) {
+    public String editClass(Model model, @RequestParam("id") String jar,
+                            @RequestParam("className") String clazzName,
+                            @RequestParam("newClassName") String newClassName,
+                            @RequestParam("renameConfig") String renameConfig) {
 
         if (clazzName != null) {
             clazzName = clazzName.replace('.', '/');
@@ -53,7 +55,8 @@ public class RenamerController {
     }
 
     @RequestMapping(value = "/batch", method = RequestMethod.POST)
-    public String batch(Model model, @RequestParam("id") String jar, @RequestParam("renameConfig") String renameConfig) {
+    public String batch(Model model, @RequestParam("id") String jar,
+                        @RequestParam("renameConfig") String renameConfig) {
         model.addAttribute("id", jar);
 
         if (Database.get(jar) != null) {

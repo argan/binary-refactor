@@ -27,8 +27,8 @@ public class MatchResult {
     }
 
     public static class ClassMatchResult {
-        private Pair<String, String> name;
-        private List<Pair<FieldMatchResult, FieldMatchResult>> fields = new ArrayList<Pair<FieldMatchResult, FieldMatchResult>>();
+        private Pair<String, String>                             name;
+        private List<Pair<FieldMatchResult, FieldMatchResult>>   fields  = new ArrayList<Pair<FieldMatchResult, FieldMatchResult>>();
         private List<Pair<MethodMatchResult, MethodMatchResult>> methods = new ArrayList<Pair<MethodMatchResult, MethodMatchResult>>();
 
         ClassMatchResult(String left, String right) {

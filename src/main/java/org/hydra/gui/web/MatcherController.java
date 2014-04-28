@@ -14,7 +14,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class MatcherController {
 
     @RequestMapping("/result")
-    public void scan(Model model, @RequestParam("fromJar") String fromJarId, @RequestParam("libJars") String[] libjarids) {
+    public void scan(Model model, @RequestParam("fromJar") String fromJarId,
+                     @RequestParam("libJars") String[] libjarids) {
 
         File fromJar = null;
         Record rec = Database.get(fromJarId);
@@ -22,7 +23,7 @@ public class MatcherController {
             FileItem fromJarItem = (FileItem) (rec.getObj());
             if (fromJarItem != null) {
                 model.addAttribute("fromJar", fromJarItem);
-                model.addAttribute("fromJarId",fromJarId);
+                model.addAttribute("fromJarId", fromJarId);
                 fromJar = new File(fromJarItem.getFullName());
             }
         }

@@ -13,8 +13,10 @@ public class ClassForNameFixVisitor extends ClassAdapter {
     }
 
     @Override
-    public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
-        return new ClassForNameFixMethodVistor(super.visitMethod(access, name, desc, signature, exceptions), remapper);
+    public MethodVisitor visitMethod(int access, String name, String desc, String signature,
+                                     String[] exceptions) {
+        return new ClassForNameFixMethodVistor(super.visitMethod(access, name, desc, signature,
+            exceptions), remapper);
     }
 
 }

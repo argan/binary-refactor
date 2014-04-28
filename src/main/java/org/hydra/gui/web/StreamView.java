@@ -12,11 +12,11 @@ import org.hydra.util.Utils;
 import org.springframework.web.servlet.View;
 
 public class StreamView implements View {
-    protected int bufferSize = 1024;
-    protected int contentLength = -1;
-    protected String contentType;
+    protected int         bufferSize         = 1024;
+    protected int         contentLength      = -1;
+    protected String      contentType;
     protected InputStream inputStream;
-    protected String contentDisposition = "inline";
+    protected String      contentDisposition = "inline";
 
     public StreamView(String contentType, InputStream inputStream) {
         if (inputStream == null) {
@@ -88,7 +88,8 @@ public class StreamView implements View {
         this.contentDisposition = contentDisposition;
     }
 
-    public void render(Map<String, ?> map, HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public void render(Map<String, ?> map, HttpServletRequest request, HttpServletResponse response)
+                                                                                                    throws Exception {
         OutputStream oOutput = null;
 
         try {
@@ -111,8 +112,9 @@ public class StreamView implements View {
             // Get the outputstream
             oOutput = oResponse.getOutputStream();
 
-            Log.debug("Streaming result [ inputStream ] type=[%s] length=[%d] content-disposition=[%s]", contentType,
-                    contentLength, contentDisposition);
+            Log.debug(
+                "Streaming result [ inputStream ] type=[%s] length=[%d] content-disposition=[%s]",
+                contentType, contentLength, contentDisposition);
 
             // Copy input to output
             Log.debug("Streaming to output buffer +++ START +++");

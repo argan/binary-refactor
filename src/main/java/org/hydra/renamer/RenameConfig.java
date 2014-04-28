@@ -137,7 +137,7 @@ public class RenameConfig {
             String currentClass = null;
             while ((line = reader.readLine()) != null) {
                 line = line.trim().replace('.', '/');
-                
+
                 if (line.length() == 0)
                     continue;
                 String[] tokens = Utils.tokens(line);
@@ -171,18 +171,18 @@ public class RenameConfig {
     }
 
     static class ClassRenameInfo {
-        private String superClassName;
-        private List<String> interfaces;
+        private String               superClassName;
+        private List<String>         interfaces;
 
         private Pair<String, String> classInfo;
         /**
          * Key:格式［fieldName:fieldType] Value:newName
          */
-        private Map<String, String> fieldInfo;
+        private Map<String, String>  fieldInfo;
         /**
          * Key:格式［methodName:fieldDesc]
          */
-        private Map<String, String> methodInfo;
+        private Map<String, String>  methodInfo;
 
         public ClassRenameInfo() {
             this.fieldInfo = new HashMap<String, String>();
@@ -199,9 +199,10 @@ public class RenameConfig {
         }
 
         public String toString() {
-            return String.format(
-                    "ClassRenameInfo %s ,superClass %s,Interfaces %s ,\n fieldInfo:%s,\n methodInfo:%s \n", classInfo,
-                    superClassName, interfaces, fieldInfo, methodInfo);
+            return String
+                .format(
+                    "ClassRenameInfo %s ,superClass %s,Interfaces %s ,\n fieldInfo:%s,\n methodInfo:%s \n",
+                    classInfo, superClassName, interfaces, fieldInfo, methodInfo);
         }
 
         public Pair<String, String> getClassInfo() {

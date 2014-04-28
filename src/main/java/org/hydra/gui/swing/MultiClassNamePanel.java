@@ -7,12 +7,12 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 
 public class MultiClassNamePanel extends JPanel {
-	private static final long serialVersionUID = -8606214971927866480L;
+    private static final long serialVersionUID = -8606214971927866480L;
 
-	public MultiClassNamePanel(Collection<String> names) {
-		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-		for (String name : names) {
-			add(new JButton(name));
-		}
-	}
+    public MultiClassNamePanel(Collection<String> names) {
+        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        for (String name : names) {
+            add(new JButton(name));
+        }
+    }
 }

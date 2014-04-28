@@ -12,20 +12,20 @@ public class MethodSignature {
         this.name = name2;
     }
 
-    private String name;
-    private ClassSignature returnType;
-//    private int flags;
-    private List<ClassSignature> params = new ArrayList<ClassSignature>();
+    private String               name;
+    private ClassSignature       returnType;
+    //    private int flags;
+    private List<ClassSignature> params     = new ArrayList<ClassSignature>();
     private List<ClassSignature> exceptions = new ArrayList<ClassSignature>();
-    private int insnCode = 0;
-    private boolean isAbstract = false;
+    private int                  insnCode   = 0;
+    private boolean              isAbstract = false;
 
     public void addInsn(int code) {
         this.insnCode += insnCode * 47 + code;
     }
 
     public void setFlags(int access) {
-//        this.flags = access;
+        //        this.flags = access;
         this.isAbstract = Modifier.isAbstract(access);
     }
 
@@ -47,7 +47,7 @@ public class MethodSignature {
     }
 
     private boolean ignore = false;
-    private String originDesc;
+    private String  originDesc;
 
     public boolean isIgnore() {
         return this.ignore;

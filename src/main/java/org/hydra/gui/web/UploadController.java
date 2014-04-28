@@ -30,7 +30,7 @@ public class UploadController {
         Database.delete(jarId);
         return "redirect:list.htm";
     }
-    
+
     @RequestMapping(value = "upload", method = RequestMethod.POST)
     public String upload(Model model, @RequestParam("file") MultipartFile file) {
         String id = Database.Util.nextId();
@@ -40,7 +40,8 @@ public class UploadController {
             os = new FileOutputStream(f);
             os.write(file.getBytes());
             os.flush();
-            FileItem item = new FileItem(f.getCanonicalPath(), file.getOriginalFilename(), file.getContentType());
+            FileItem item = new FileItem(f.getCanonicalPath(), file.getOriginalFilename(),
+                file.getContentType());
             Database.save("file", id, item);
         } catch (Exception e) {
             e.printStackTrace();

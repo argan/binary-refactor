@@ -8,7 +8,7 @@ public class Log {
      */
     private static ThreadLocal<Formatter> formatterCache = new FormatterCache();
 
-    private static boolean debug, error;
+    private static boolean                debug, error;
 
     static {
         String logLevel = System.getProperty("Log.Level", "debug");

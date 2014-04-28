@@ -7,9 +7,9 @@ import java.util.Set;
 import org.objectweb.asm.Type;
 
 public class MethodInfo extends AccessableNode implements Comparable<MethodInfo> {
-    private String name;
-    private String desc;
-    private String[] exceptions;
+    private String      name;
+    private String      desc;
+    private String[]    exceptions;
 
     // dependencies in code and signature
     private Set<String> dependencies = new HashSet<String>();

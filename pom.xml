@@ -161,6 +161,11 @@
 			<version>${spring-version}</version>
 		</dependency>
 		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context-support</artifactId>
+			<version>${spring-version}</version>
+		</dependency>
+		<dependency>
 			<groupId>commons-fileupload</groupId>
 			<artifactId>commons-fileupload</artifactId>
 			<version>1.2.2</version>
@@ -170,9 +175,6 @@
 			<artifactId>commons-io</artifactId>
 			<version>2.1</version>
 		</dependency>
-		<!-- <dependency> <groupId>org.apache.velocity</groupId> <artifactId>velocity-tools</artifactId> 
-			<version>2.0</version> </dependency> <dependency> <groupId>de.java2html</groupId> 
-			<artifactId>java2html</artifactId> <version>5.0</version> </dependency> -->
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>servlet-api</artifactId>
@@ -182,7 +184,7 @@
 	</dependencies>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<spring-version>3.2.2.RELEASE</spring-version>
+		<spring-version>3.2.5.RELEASE</spring-version>
 		<servletapi-version>2.5</servletapi-version>
 
 		<jetty-version>6.1.18</jetty-version>

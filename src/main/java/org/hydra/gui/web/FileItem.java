@@ -5,8 +5,8 @@ import java.io.Serializable;
 public class FileItem implements Serializable {
 
     private static final long serialVersionUID = 6258813137889505933L;
-    private String fulleName, origName, mimeType;
-    private int version;
+    private String            fulleName, origName, mimeType;
+    private int               version;
 
     public FileItem(String fulleName, String origName, String mimeType) {
         this.fulleName = fulleName;

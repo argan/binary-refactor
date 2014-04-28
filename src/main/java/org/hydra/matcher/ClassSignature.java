@@ -18,14 +18,14 @@ public class ClassSignature {
         this.name = name2;
     }
 
-    private int flags;
-    private String name;
-    private List<FieldSignature> fields = new ArrayList<FieldSignature>();
-    private List<MethodSignature> methods = new ArrayList<MethodSignature>();
-    private ClassSignature superClass;
-    private List<ClassSignature> interfaces = new ArrayList<ClassSignature>();
-    private boolean isInterface = false;
-    private boolean isAbstract = false;
+    private int                   flags;
+    private String                name;
+    private List<FieldSignature>  fields      = new ArrayList<FieldSignature>();
+    private List<MethodSignature> methods     = new ArrayList<MethodSignature>();
+    private ClassSignature        superClass;
+    private List<ClassSignature>  interfaces  = new ArrayList<ClassSignature>();
+    private boolean               isInterface = false;
+    private boolean               isAbstract  = false;
 
     public void setSuper(ClassSignature parent) {
         this.superClass = parent;
@@ -53,12 +53,13 @@ public class ClassSignature {
         sb.append(isAbstract).append("|");
 
         if (interfaces.size() > 0) {
-            sb.append("I{").append(Lists.acc(this.interfaces, "", new AccFunc<ClassSignature, String>() {
+            sb.append("I{")
+                .append(Lists.acc(this.interfaces, "", new AccFunc<ClassSignature, String>() {
 
-                public String apply(ClassSignature in, String out) {
-                    return out + Types.qualify(in.getName()) + ",";
-                }
-            })).append("}");
+                    public String apply(ClassSignature in, String out) {
+                        return out + Types.qualify(in.getName()) + ",";
+                    }
+                })).append("}");
         }
         if (fields.size() > 0) {
             sb.append("F{");

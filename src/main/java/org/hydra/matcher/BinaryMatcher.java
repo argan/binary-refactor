@@ -73,33 +73,35 @@ public class BinaryMatcher {
      * @param result2
      *            待分析的集合
      */
-    private static void find(MatchResult matchResult, List<ClassSignature> result, List<ClassSignature> result2) {
+    private static void find(MatchResult matchResult, List<ClassSignature> result,
+                             List<ClassSignature> result2) {
         List<Pair<String, ClassSignature>> level0Sig = Lists.map(result2,
-                new MapFunc<ClassSignature, Lists.Pair<String, ClassSignature>>() {
+            new MapFunc<ClassSignature, Lists.Pair<String, ClassSignature>>() {
 
-                    public Pair<String, ClassSignature> apply(ClassSignature in) {
-                        return new Pair<String, ClassSignature>(in.getLevel0Sig(), in);
-                    }
-                });
+                public Pair<String, ClassSignature> apply(ClassSignature in) {
+                    return new Pair<String, ClassSignature>(in.getLevel0Sig(), in);
+                }
+            });
         int count = 0;
         for (ClassSignature c : result) {
             final String sig = c.getLevel0Sig();
             List<Pair<String, ClassSignature>> matches = Lists.filter(level0Sig,
-                    new Predicate<Pair<String, ClassSignature>>() {
+                new Predicate<Pair<String, ClassSignature>>() {
 
-                        public boolean apply(Pair<String, ClassSignature> in) {
-                            return in.getLeft().equals(sig);
-                        }
-                    });
+                    public boolean apply(Pair<String, ClassSignature> in) {
+                        return in.getLeft().equals(sig);
+                    }
+                });
             if (matches.size() == 1) {
                 count++;
                 Log.debug(c.getName() + " = " + matches.get(0).getRight().getName());
-                ClassMatchResult clzz = new ClassMatchResult(c.getName(), matches.get(0).getRight().getName());
+                ClassMatchResult clzz = new ClassMatchResult(c.getName(), matches.get(0).getRight()
+                    .getName());
                 matchResult.addClassMatchResult(clzz);
                 matchMethodsAndFields(clzz, c, matches.get(0).getRight());
             } else if (matches.size() > 1) {
                 // TODO what's the matter?
-                Log.error("TODO : dumplicated matches found for %s", c.getName());
+                Log.error("TODO : duplicated matches found for %s", c.getName());
             }
         }
         Log.debug("Match count:%d ", count);
@@ -113,23 +115,24 @@ public class BinaryMatcher {
      * @param c
      * @param pair
      */
-    private static void matchMethodsAndFields(ClassMatchResult clzz, ClassSignature c, ClassSignature pair) {
+    private static void matchMethodsAndFields(ClassMatchResult clzz, ClassSignature c,
+                                              ClassSignature pair) {
         for (int i = 0; i < c.getFields().size(); i++) {
             FieldSignature f1 = c.getFields().get(i);
             FieldSignature f2 = pair.getFields().get(i);
             assert f1.getOriginDesc() == f2.getOriginDesc();
             Log.debug("\tf " + f1.getName() + " " + f1.getOriginDesc() + " = " + f2.getName() + " "
-                    + f2.getOriginDesc());
+                      + f2.getOriginDesc());
             clzz.addField(new FieldMatchResult(f1.getName(), f1.getOriginDesc()),
-                    new FieldMatchResult(f2.getName(), f2.getOriginDesc()));
+                new FieldMatchResult(f2.getName(), f2.getOriginDesc()));
         }
         for (int i = 0; i < c.getMethods().size(); i++) {
             MethodSignature m1 = c.getMethods().get(i);
             MethodSignature m2 = pair.getMethods().get(i);
             assert m1.getOriginDesc() == m2.getOriginDesc();
             Log.debug("\tm " + m1.getName() + " " + m1.getOriginDesc() + " = " + m2.getName());
-            clzz.addMethod(new MethodMatchResult(m1.getName(), m1.getOriginDesc()), new MethodMatchResult(m2.getName(),
-                    m2.getOriginDesc()));
+            clzz.addMethod(new MethodMatchResult(m1.getName(), m1.getOriginDesc()),
+                new MethodMatchResult(m2.getName(), m2.getOriginDesc()));
         }
     }
 
