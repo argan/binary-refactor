@@ -1,6 +1,6 @@
 package org.hydra.renamer;
 
-import org.springframework.asm.Type;
+import org.objectweb.asm.Type;
 
 public class FieldInfo extends AccessableNode implements Comparable<FieldInfo> {
 
