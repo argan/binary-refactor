@@ -137,7 +137,7 @@
     </dependencies>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <spring-version>3.1.1.RELEASE</spring-version>
+        <spring-version>5.3.18</spring-version>
         <servletapi-version>2.5</servletapi-version>
 
         <jetty-version>6.1.18</jetty-version>
